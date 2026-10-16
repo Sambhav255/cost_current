@@ -7,6 +7,14 @@
 
 **Historical detail** (dated checkpoints, superseded handoffs): [PROGRESS_ARCHIVE.md](PROGRESS_ARCHIVE.md).
 
+## Unified integration milestone P0 — local baseline
+
+The [unified external-intelligence plan](../COST_CURRENT_UNIFIED_INTELLIGENCE_INTEGRATION_CODEX.md) now sets the integration sequence. Local `main` at `eb5e549` is one commit ahead of `origin/main` (`95d6563`); the unified plan file is untracked and was preserved. The four files named in the older hosted formatting failure are already formatted in this newer local commit, so no formatting-only source edit was needed.
+
+**Verified locally:** `npm run check` passed (format, 17-document link check, lint, types, 69 unit tests, production build); `npm run test:e2e` passed (26 desktop/narrow cases). The existing demo event → exposure → decisions flow, Northstar arithmetic, CSV atomicity, Forecast/What if? separation, persistence and memo flows remain covered by those tests. **Hosted CI for this checkpoint is not yet verified.** This milestone makes no new provider or prediction claim.
+
+**Next:** P0.5 semantic corrections: unknown corridor state, separate delay assumption, demo-only policy matching, geographic evidence and immutable event context. Then rerun the gates before P1.
+
 ---
 
 ## Current state

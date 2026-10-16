@@ -3,6 +3,7 @@
 **Status:** active product direction as of October 16, 2026  
 **Primary brief:** [COST_CURRENT_PREDICTIVE_INTELLIGENCE_REALIGNMENT_CODEX.md](../COST_CURRENT_PREDICTIVE_INTELLIGENCE_REALIGNMENT_CODEX.md)  
 **Live verification:** [PROGRESS.md](PROGRESS.md)  
+**External-intelligence execution order:** [unified integration plan](../COST_CURRENT_UNIFIED_INTELLIGENCE_INTEGRATION_CODEX.md). Its P0 → P0.5 → P1 → P2 → P3 gates supersede the older stage labels below.  
 **Older plans** ([master build](../COST_CURRENT_MASTER_BUILD_PLAN.md), [master execution](MASTER_EXECUTION_PLAN.md), [forecasts](FORECASTS.md)) remain references for preserved engines, intake, and calculation invariants — not higher-priority product instructions.
 
 ## Positioning

@@ -1,6 +1,6 @@
 # Engineering guide and future implementation
 
-[Progress](PROGRESS.md) is the source of truth for completed and verified work. The [predictive intelligence plan](PREDICTIVE_INTELLIGENCE_PLAN.md) defines active stage order; the [master build plan](../COST_CURRENT_MASTER_BUILD_PLAN.md) defines the long-term vision. [MASTER_EXECUTION_PLAN](MASTER_EXECUTION_PLAN.md) remains audit/history for intake and forecast foundation. This guide records implementation boundaries rather than a second competing roadmap.
+[Progress](PROGRESS.md) is the source of truth for completed and verified work. The [unified integration plan](../COST_CURRENT_UNIFIED_INTELLIGENCE_INTEGRATION_CODEX.md) defines the external-intelligence stage order; the [predictive intelligence plan](PREDICTIVE_INTELLIGENCE_PLAN.md) defines product direction, and the [master build plan](../COST_CURRENT_MASTER_BUILD_PLAN.md) defines the long-term vision. [MASTER_EXECUTION_PLAN](MASTER_EXECUTION_PLAN.md) remains audit/history for intake and forecast foundation. This guide records implementation boundaries rather than a second competing roadmap.
 
 ## Current architecture
 

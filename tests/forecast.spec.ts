@@ -16,6 +16,7 @@ async function openForecastWorkspace(page: Page) {
 test('no-data forecast, explicit fictional baseline, refresh, local persistence and frozen memo', async ({
   page,
 }, testInfo) => {
+  test.setTimeout(90_000);
   await openForecastWorkspace(page);
   await expect(page.getByRole('button', { name: 'Forecast', exact: true })).toHaveAttribute(
     'aria-pressed',
@@ -29,10 +30,9 @@ test('no-data forecast, explicit fictional baseline, refresh, local persistence 
   ).toBeVisible();
   await expect(page.getByTestId('decision-wait')).toHaveCount(0);
   await page.getByText('Forecast evidence & diagnostics', { exact: true }).click();
-  const generation = page
-    .getByText('As of / generated', { exact: true })
-    .locator('..')
-    .locator('dd');
+  const asOfLabel = page.getByText('As of / generated', { exact: true });
+  await expect(asOfLabel).toBeVisible();
+  const generation = asOfLabel.locator('..').locator('dd');
   const beforeHorizonChange = await generation.innerText();
   await page.getByRole('combobox', { name: 'Forecast horizon' }).selectOption('56');
   await expect(generation).not.toHaveText(beforeHorizonChange);

@@ -1,22 +1,24 @@
 # Engineering guide and future implementation
 
-[Progress](PROGRESS.md) is the source of truth for completed and verified work. The [master build plan](../COST_CURRENT_MASTER_BUILD_PLAN.md) defines the product vision and release stages; the [execution plan](MASTER_EXECUTION_PLAN.md) selects now, next and later. This guide records implementation boundaries rather than a second competing roadmap.
+[Progress](PROGRESS.md) is the source of truth for completed and verified work. The [predictive intelligence plan](PREDICTIVE_INTELLIGENCE_PLAN.md) defines active stage order; the [master build plan](../COST_CURRENT_MASTER_BUILD_PLAN.md) defines the long-term vision. [MASTER_EXECUTION_PLAN](MASTER_EXECUTION_PLAN.md) remains audit/history for intake and forecast foundation. This guide records implementation boundaries rather than a second competing roadmap.
 
 ## Current architecture
 
 React 19 + TypeScript + Vite, react-globe.gl/Three.js, local world-atlas geography, Vitest and Playwright. The runtime is browser-only; no network provider or model inference is required.
 
-| Layer                         | Responsibility                                                                                                                         |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/lib/types.ts`, `data.ts` | Shared shipment/action/memo contracts; fictional seed data and default demo date                                                       |
-| `src/lib/engine.ts`           | Pure validation, deterministic accounting, scenario outcomes and eligible action ranking                                               |
-| `src/lib/csv.ts`              | Bounded strict USD intake; preview errors before atomic commit                                                                         |
-| `src/lib/evidence.ts`         | Six evidence-state contracts, source dates/scope and invalidation on edits                                                             |
-| `src/lib/ledger.ts`           | Itemization and additional-versus-included cost treatment                                                                              |
-| `src/lib/storage.ts`          | Versioned localStorage, schema validation, 25-shipment capacity and additive compatibility                                             |
-| `src/components/`             | Accessible controls, intake, evidence ledger, comparisons, memo and graphics fallback                                                  |
-| `src/App.tsx`                 | Navigation, controlled state, memo snapshots and persistence integration                                                               |
-| `src/lib/forecast.ts`         | Separate local registry, strict observation intake, dated last-observation baseline and time-order evaluation; no event-odds inference |
+| Layer                                              | Responsibility                                                                                                                         |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/lib/types.ts`, `data.ts`                      | Shared shipment/action/memo contracts; fictional seed data and default demo date                                                       |
+| `src/lib/engine.ts`                                | Pure validation, deterministic accounting, scenario outcomes and eligible action ranking                                               |
+| `src/lib/csv.ts`                                   | Bounded strict USD intake; preview errors before atomic commit                                                                         |
+| `src/lib/evidence.ts`                              | Six evidence-state contracts, source dates/scope and invalidation on edits                                                             |
+| `src/lib/ledger.ts`                                | Itemization and additional-versus-included cost treatment                                                                              |
+| `src/lib/storage.ts`                               | Versioned localStorage, schema validation, 25-shipment capacity and additive compatibility                                             |
+| `src/components/`                                  | Accessible controls, intake, evidence ledger, comparisons, memo and graphics fallback                                                  |
+| `src/App.tsx`                                      | Navigation, controlled state, memo snapshots and persistence integration                                                               |
+| `src/lib/forecast.ts`                              | Separate local registry, strict observation intake, dated last-observation baseline and time-order evaluation; no event-odds inference |
+| `src/lib/riskEvents.ts`, `riskExposure.ts`         | Curated demo event registry, corridor/origin exposure rules, conditional impact hooks; illustrative only, no live odds                 |
+| `src/components/Intelligence*.tsx`, exposure views | Intelligence-first navigation, event watchlist, exposure match status, drilldown to Decisions / What if?                               |
 
 The existing `cost-current-demo-v1` storage key is retained. Evidence, cost lines and decision dates are optional additions so legacy samples remain readable. A memo freezes inputs/results and calculator version; it is not yet a durable journal of decisions and outcomes.
 
@@ -41,14 +43,16 @@ Preserve the canonical Northstar totals and timing regression tests in [Progress
 
 1. **Mentor prototype:** complete local flow from welcome/globe through editable scenarios, comparisons, methods and printable memo.
 2. **Quote-backed intake foundation:** strict CSV contract, all-or-none import, typed evidence, cost inclusion, source invalidation, explicit decision dates and backward-compatible storage. Customer-supplied references are claims; they do not establish independent verification.
+3. **Forecast foundation:** separate local observation registry, last-observation baseline, Forecast/What if? separation, and time-order evaluation mechanics ([forecast contract](FORECASTS.md)).
+4. **Illustrative Intelligence vertical slice:** curated demo events → exposure matching → conditional dollars → existing decision engine ([predictive intelligence plan](PREDICTIVE_INTELLIGENCE_PLAN.md)).
 
 The [CSV contract](CSV_INTAKE.md) documents the implemented schema. Do not redesign it casually or silently change its inclusion defaults.
 
-## Current audit milestone: forecast foundation
+## Current milestone: predictive intelligence (post-slice P2+)
 
-The [code audit](../COST_CURRENT_CODE_AUDIT_NEXT_STEPS.md) changes the engineering priority to provenance and an automatic evidenced baseline before the journal. The [forecast contract](FORECASTS.md) describes the implemented local registry, conservative unavailable states, manual-mode separation, frozen exports, known-at-time filtering and outstanding real-data gate. Source observation history is separate from shipment form state; scenario override records preserve the original forecast context. Money remains cents and probabilities basis points. No baseline rate is promoted to event odds or automatically ranked action costs.
+Follow [Progress](PROGRESS.md) and the [predictive intelligence plan](PREDICTIVE_INTELLIGENCE_PLAN.md). The forecast foundation above is **delivered**; it is not the sole “current audit milestone.” Next engineering focus is **P2** (lawful read-only signal path with exact IDs and failure states), then **P3** (one rights-reviewed lane forecast study vs naive baseline). Preserve forecast invariants: conservative unavailable states, manual-mode separation, frozen exports, known-at-time filtering. Source observation history stays separate from shipment form state; scenario override records preserve the original forecast context. Money remains cents and probabilities basis points. No baseline rate is promoted to event odds or automatically ranked action costs.
 
-## Following milestone: prospective decision journal
+## Following milestone: prospective decision journal (P4)
 
 Write a bounded design before implementation. Define a versioned record containing decision ID, immutable input/evidence snapshot, calculator version, as-of date, horizon, selected action, user override and separately timestamped outcomes. Export and reload must preserve prior versions. Handle absent invoices, unknown outcomes, duplicate records and storage limits explicitly.
 
@@ -68,4 +72,4 @@ A production backend, tenant isolation, reviewed tariff coverage, integrations, 
 
 Run `npm run check` for formatting, local documentation links, lint, types, unit tests and build. Run `npm run test:e2e` for changed user flows; desktop and narrow touch projects exercise the demo and intake. Recheck the generated PDF visually after changes to memo layout. Browser viewport tests do not establish physical-device compatibility.
 
-After each meaningful batch, update Progress with changes, commands actually run, failures/limitations and next action. Update README for run-command or readiness changes, and update the execution plan when priorities change. Preserve historical checkpoints. A file or interface alone does not establish an integrated capability.
+After each meaningful batch, update Progress with changes, commands actually run, failures/limitations and next action. Update README for run-command or readiness changes, and update the predictive plan when stage order changes. Preserve historical checkpoints. A file or interface alone does not establish an integrated capability.

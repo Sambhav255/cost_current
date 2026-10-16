@@ -1,5 +1,7 @@
 # Master plan execution: prototype audit → first product milestone
 
+> **Priority superseded:** Live product priority order is defined by [PREDICTIVE_INTELLIGENCE_PLAN.md](PREDICTIVE_INTELLIGENCE_PLAN.md) and [PROGRESS.md](PROGRESS.md). This file remains an **audit and history** record for the delivered quote-backed intake, cost ledger, and forecast foundation—not the sole source of “what to build next.”
+
 Prepared October 15, 2026 against master plan v1.0; updated alongside [v1.1](../COST_CURRENT_MASTER_BUILD_PLAN.md). The initial plan was written before Part II product changes. The user authorized the staged master plan; preserve the free local demo.
 
 **Current state:** prototype audit closed and the first intake/ledger engineering milestone delivered. **Current audit priority:** the [forecast foundation](FORECASTS.md), followed by authorized lane observations and a time-ordered evaluation. The prospective decision journal follows that evidence work. Interviews, data rights, expert review and commercial validation remain open; see [Progress](PROGRESS.md) for actual verification.

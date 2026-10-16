@@ -15,14 +15,14 @@
 
 ## At a glance
 
-| The question                                 | Cost Current's answer                                                                                                                                                           |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Who is it for?**                           | US businesses that import products repeatedly, especially owners and purchasing, operations, or finance managers.                                                               |
-| **What problem does it solve?**              | Tariffs, freight volatility, and delays make it difficult to know true landed cost or choose when and how to import.                                                            |
-| **What does a user provide?**                | Shipment details, origin and destination, customs value, freight costs, dates, relevant duty assumptions, and possible alternatives.                                            |
-| **What does the current prototype produce?** | An itemized cost estimate, transparent what-if scenarios, a comparison of eligible decisions, a break-even threshold, and a printable memo.                                     |
-| **What will the complete product add?**      | Official trade-rule context, usable freight history and forecasts, carefully mapped prediction-market signals, uncertainty estimates, alerts, backtests, and decision tracking. |
-| **What is the proposed business model?**     | Start with paid shipment analysis or pilots, then test subscription pricing. All prices below are **hypotheses**, not established offerings.                                    |
+| The question                                 | Cost Current's answer                                                                                                                                                                                                  |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Who is it for?**                           | US businesses that import products repeatedly, especially owners and purchasing, operations, or finance managers.                                                                                                      |
+| **What problem does it solve?**              | Tariffs, freight volatility, and delays make it difficult to know true landed cost or choose when and how to import.                                                                                                   |
+| **What does a user provide?**                | Shipment details, origin and destination, customs value, freight costs, dates, relevant duty assumptions, and possible alternatives.                                                                                   |
+| **What does the current prototype produce?** | An illustrative **Intelligence** watchlist linked to shipment exposure, plus itemized cost estimates, transparent **What if?** scenarios, eligible decision comparisons, a break-even threshold, and a printable memo. |
+| **What will the complete product add?**      | Official trade-rule context, usable freight history and forecasts, carefully mapped prediction-market signals, uncertainty estimates, alerts, backtests, and decision tracking.                                        |
+| **What is the proposed business model?**     | Start with paid shipment analysis or pilots, then test subscription pricing. All prices below are **hypotheses**, not established offerings.                                                                           |
 
 ## The problem, in plain English
 
@@ -105,7 +105,7 @@ The break-even tariff probability is therefore approximately **23.33%**. Below t
 | Trained ML or econometric forecasting     | **Not built**          | Planned research depends on legal, sufficiently complete historical data and measurable target definitions.                                               |
 | Accounts, shared workspaces, billing      | **Not built**          | Today the prototype stores its data locally in the browser.                                                                                               |
 
-The application currently supports three illustrative lanes: **Shanghai → Los Angeles, Haiphong → Savannah, and Hamburg → Newark**. It limits the local workspace to 25 shipments. The built-in companies, rates, and disruption assumptions are fictional.
+The application currently supports four illustrative lanes: **Shanghai → Los Angeles, Haiphong → Savannah, Hamburg → Newark, and Shanghai → Rotterdam** (declared Suez corridor for the corridor demo). It limits the local workspace to 25 shipments. The built-in companies, rates, and disruption assumptions are fictional.
 
 ### A crucial distinction: Forecast vs. What if?
 
@@ -226,14 +226,14 @@ For browser setup, see the existing [engineering guide](docs/IMPLEMENTATION_PLAN
 
 Our goal is **not** to add more dashboard cards before proving the predictive and economic value.
 
-| Priority | Workstream                                             | Definition of progress                                                                                                                                                                                               |
-| -------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **1**    | **Complete event-to-decision intelligence loop**       | Authorized or curated events mapped to shipment exposure with explicit match status, conditional impacts, evidence timestamps, drilldown to **What if?**, and honest **unavailable** odds—not live feeds by default. |
-| **2**    | **Get one usable real freight dataset**                | Licensed or customer-authorized repeated observations for one lane, with units, date, quote scope, and usage rights documented.                                                                                      |
-| **3**    | **Test forecasting against a baseline**                | Time-ordered evaluation of last-observation and seasonal naive methods; only then test more complex models—still without claiming live market feeds in the prototype.                                                |
-| **4**    | **Prove customer value**                               | Interviews with actual importers/brokers and at least one real shipment decision or paid pilot test.                                                                                                                 |
-| **5**    | **Add relevant event signals where evidence supports** | Exact policy/market event mapping, data-quality gates, unavailable states when unmatched, and calibrated probabilities only when sourcing and definitions are defensible.                                            |
-| **6**    | **Make the product repeatable**                        | Prospective decision journal, observed outcomes, vetted tariff coverage, trustworthy alerts, shared workspaces and integrations.                                                                                     |
+| Priority | Workstream                                             | Definition of progress                                                                                                                                                                                                                                                                           |
+| -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **1**    | **Complete event-to-decision intelligence loop**       | The **illustrative Intelligence slice** (curated demo events → exposure → **What if?**) is **delivered locally**. Next is **P2: authorized real signals** with exact IDs, timestamps, and failure states—not another UI-only redesign. Live feeds stay gated until rights and definitions exist. |
+| **2**    | **Get one usable real freight dataset**                | Licensed or customer-authorized repeated observations for one lane, with units, date, quote scope, and usage rights documented.                                                                                                                                                                  |
+| **3**    | **Test forecasting against a baseline**                | Time-ordered evaluation of last-observation and seasonal naive methods; only then test more complex models—still without claiming live market feeds in the prototype.                                                                                                                            |
+| **4**    | **Prove customer value**                               | Interviews with actual importers/brokers and at least one real shipment decision or paid pilot test.                                                                                                                                                                                             |
+| **5**    | **Add relevant event signals where evidence supports** | Exact policy/market event mapping, data-quality gates, unavailable states when unmatched, and calibrated probabilities only when sourcing and definitions are defensible.                                                                                                                        |
+| **6**    | **Make the product repeatable**                        | Prospective decision journal, observed outcomes, vetted tariff coverage, trustworthy alerts, shared workspaces and integrations.                                                                                                                                                                 |
 
 The initial focus is **one repeat importer segment and one defensible lane**, not a claim to predict every geopolitical shock on earth.
 
@@ -252,14 +252,18 @@ These are deliberate boundaries. A useful model should be able to explain when i
 
 If you're joining this project, the fastest way to understand it is to run the Northstar example, switch between Forecast and What if?, and inspect the decision memo. After that:
 
-| Read this                                                           | For                                                                                  |
-| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| [Progress and actual implementation status](docs/PROGRESS.md)       | What's working and what remains unverified.                                          |
-| [Forecast specification](docs/FORECASTS.md)                         | What the baseline does, data-quality rules, and why auto event odds are unavailable. |
-| [Master product plan](COST_CURRENT_MASTER_BUILD_PLAN.md)            | Long-term scope, research models, customers, commercial hypotheses and major risks.  |
-| [Implementation and next milestones](docs/MASTER_EXECUTION_PLAN.md) | Development order and acceptance criteria.                                           |
-| [CSV intake contract](docs/CSV_INTAKE.md)                           | Supported imports, validation, and source handling.                                  |
-| [Engineering guide](docs/IMPLEMENTATION_PLAN.md)                    | Calculation invariants, architecture, tests, and safety boundaries.                  |
+| Read this                                                            | For                                                                                  |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| [Progress and actual implementation status](docs/PROGRESS.md)        | What's working, next priorities, and what remains unverified.                        |
+| [Predictive intelligence plan](docs/PREDICTIVE_INTELLIGENCE_PLAN.md) | Active product direction and stage order (P2+).                                      |
+| [Progress archive](docs/PROGRESS_ARCHIVE.md)                         | Dated checkpoints and superseded handoff history.                                    |
+| [Forecast specification](docs/FORECASTS.md)                          | What the baseline does, data-quality rules, and why auto event odds are unavailable. |
+| [Master product plan](COST_CURRENT_MASTER_BUILD_PLAN.md)             | Long-term scope, research models, customers, commercial hypotheses and major risks.  |
+| [Master execution plan](docs/MASTER_EXECUTION_PLAN.md)               | Historical audit and intake/forecast foundation gates—not the live priority order.   |
+| [CSV intake contract](docs/CSV_INTAKE.md)                            | Supported imports, validation, and source handling.                                  |
+| [Engineering guide](docs/IMPLEMENTATION_PLAN.md)                     | Calculation invariants, architecture, tests, and safety boundaries.                  |
+
+For **what to build next**, follow [Progress](docs/PROGRESS.md) and the [predictive intelligence plan](docs/PREDICTIVE_INTELLIGENCE_PLAN.md); treat [MASTER_EXECUTION_PLAN](docs/MASTER_EXECUTION_PLAN.md) as reference history for delivered intake and forecast foundation work.
 
 ### Suggested division of work
 

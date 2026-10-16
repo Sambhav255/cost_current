@@ -39,10 +39,10 @@ Prior PROGRESS/open-work lists ordered: lane series → journal → interviews �
 
 ## Checkpoint log (compressed)
 
-| When | What |
-| --- | --- |
+| When           | What                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------- |
 | Oct 15 evening | Scaffold recovery; engine timing fixes; README/PROGRESS/plan created; UI assembly; 8→16 e2e |
-| Oct 15 | Master execution plan; CSV/ledger milestone; repo prep |
-| Oct 16 | Forecast foundation; UI redesign + product README; predictive intelligence slice |
+| Oct 15         | Master execution plan; CSV/ledger milestone; repo prep                                      |
+| Oct 16         | Forecast foundation; UI redesign + product README; predictive intelligence slice            |
 
 Full narrative paragraphs from earlier PROGRESS revisions were removed from the live file to prevent conflicting “resume here” instructions.

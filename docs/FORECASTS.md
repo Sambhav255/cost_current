@@ -38,7 +38,7 @@ The lightweight evaluation repeats the baseline at earlier as-of cutoffs for tar
 
 No rights-reviewed real historical lane series was supplied with the audit or found in this repository. The built-in series is authored fiction. Consequently there is no real-data backtest, seasonal model, SARIMAX/LightGBM training, artifact, inference endpoint, event model or empirical accuracy/coverage claim. Do not enable those claims until lawful data, precise quote basis and a time-ordered baseline comparison exist.
 
-Next: obtain one authorized repeated lane series, document display/training/retention/redistribution rights and known-at-time revisions, run the baseline evaluation, and only then compare seasonal naive and statistical models. Keep adverse results. The prospective decision journal follows this evidence milestone; a frozen downloadable memo is not a durable outcomes journal.
+Next priorities follow [Progress](PROGRESS.md): **P2** (one lawful read-only event or market signal path with exact IDs and failure states) may precede **P3** (one rights-reviewed repeated lane series, documented display/training/retention/redistribution rights, known-at-time revisions, baseline evaluation, and only then seasonal naive or statistical comparisons—keeping adverse results). The prospective decision journal (**P4**) follows that evidence work; a frozen downloadable memo is not a durable outcomes journal.
 
 ## Vigil integration assessment
 

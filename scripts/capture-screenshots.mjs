@@ -8,9 +8,7 @@ import { existsSync, mkdirSync, readdirSync, unlinkSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
-process.env.PLAYWRIGHT_BROWSERS_PATH ??= fileURLToPath(
-  new URL('../.playwright', import.meta.url),
-);
+process.env.PLAYWRIGHT_BROWSERS_PATH ??= fileURLToPath(new URL('../.playwright', import.meta.url));
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const outDir = path.join(root, 'screenshots');
@@ -57,12 +55,11 @@ try {
   await page.goto(baseURL, { waitUntil: 'networkidle' });
   await shot(page, '01-welcome');
 
-  // 02 Intelligence (default after explore)
+  // 02 Intelligence
   await page.getByRole('button', { name: 'Explore supply-chain risks' }).click();
   await page.waitForTimeout(600);
   await shot(page, '02-intelligence');
 
-  // Open a tariff event if present for a second intelligence angle
   const eventButton = page
     .getByRole('button')
     .filter({ hasText: /tariff|China|home.?goods|Suez|corridor/i })
@@ -91,7 +88,6 @@ try {
   await page.waitForTimeout(500);
   await shot(page, '04-decisions-what-if');
 
-  // Assumptions tab on same page
   const assumptions = page.getByRole('tab', { name: 'Shipment & assumptions' });
   if (await assumptions.isVisible().catch(() => false)) {
     await assumptions.click();
@@ -101,17 +97,18 @@ try {
     await page.waitForTimeout(300);
   }
 
-  // 05 Decisions — Forecast (unavailable / empty first)
+  // 05 Decisions — Forecast
   await page.getByRole('button', { name: 'Forecast', exact: true }).click();
   await page.waitForTimeout(500);
   await shot(page, '05-decisions-forecast');
 
-  // Load fictional baseline if available
-  const loadBaseline = page.getByRole('button', { name: 'Load fictional observations', exact: true });
-  const openImportObs = page.getByText(
-    'Import observations or preview a fictional baseline',
-    { exact: true },
-  );
+  const loadBaseline = page.getByRole('button', {
+    name: 'Load fictional observations',
+    exact: true,
+  });
+  const openImportObs = page.getByText('Import observations or preview a fictional baseline', {
+    exact: true,
+  });
   if (await openImportObs.isVisible().catch(() => false)) {
     await openImportObs.click();
     await page.waitForTimeout(300);
@@ -129,14 +126,18 @@ try {
     }
   }
 
-  // Back to What if for a clean memo with demo defaults
+  // Memo from What if with demo defaults
   await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await page.waitForTimeout(300);
 
   // 06 Decision memo
   await navigate(page, 'Decision memo');
-  // If nav disabled, use in-page button
-  if (!(await page.getByTestId('decision-memo').isVisible().catch(() => false))) {
+  if (
+    !(await page
+      .getByTestId('decision-memo')
+      .isVisible()
+      .catch(() => false))
+  ) {
     await navigate(page, 'Decisions');
     await page.getByRole('button', { name: 'What if?', exact: true }).click();
     await page.getByRole('button', { name: 'Create decision memo' }).click();
@@ -149,8 +150,13 @@ try {
   await page.waitForTimeout(400);
   await shot(page, '07-import');
 
+  const useSample = page.getByRole('button', { name: 'Use fictional sample', exact: true });
+  if (await useSample.isVisible().catch(() => false)) {
+    await useSample.click();
+    await page.waitForTimeout(300);
+  }
   const preview = page.getByRole('button', { name: 'Preview shipments', exact: true });
-  if (await preview.isVisible().catch(() => false)) {
+  if ((await preview.isVisible()) && (await preview.isEnabled())) {
     await preview.click();
     await page.waitForTimeout(500);
     await shot(page, '07b-import-preview');
@@ -160,11 +166,14 @@ try {
   await navigate(page, 'Methods & evidence');
   await page.waitForTimeout(400);
   await shot(page, '08-methods');
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
+  await page.evaluate(() => {
+    const doc = globalThis.document;
+    globalThis.scrollTo(0, doc.body.scrollHeight / 2);
+  });
   await page.waitForTimeout(300);
   await shot(page, '08b-methods-mid');
 
-  // Mobile welcome + intelligence for responsive reference
+  // Mobile welcome + intelligence
   await context.close();
   const mobile = await browser.newContext({
     viewport: { width: 390, height: 844 },

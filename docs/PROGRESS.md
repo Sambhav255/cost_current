@@ -13,15 +13,15 @@
 
 Local prototype for smaller importers. Core story is **event → exposure → conditional dollars → decisions**, with the existing landed-cost calculator as the downstream engine.
 
-| Layer | Status |
-| --- | --- |
-| Mentor demo + deterministic cost engine | **Implemented and tested** |
-| CSV intake, ledger, evidence, memos | **Implemented and tested** |
-| Forecast / What if? separation | **Implemented and tested** (auto event odds stay unavailable) |
-| Illustrative intelligence vertical slice | **Implemented and tested locally** (curated demo events only) |
-| Live market/official event odds | **Not implemented** |
-| Trained ML / rights-reviewed lane backtests | **Not implemented** |
-| Decision journal, accounts, deployment | **Not implemented** |
+| Layer                                       | Status                                                        |
+| ------------------------------------------- | ------------------------------------------------------------- |
+| Mentor demo + deterministic cost engine     | **Implemented and tested**                                    |
+| CSV intake, ledger, evidence, memos         | **Implemented and tested**                                    |
+| Forecast / What if? separation              | **Implemented and tested** (auto event odds stay unavailable) |
+| Illustrative intelligence vertical slice    | **Implemented and tested locally** (curated demo events only) |
+| Live market/official event odds             | **Not implemented**                                           |
+| Trained ML / rights-reviewed lane backtests | **Not implemented**                                           |
+| Decision journal, accounts, deployment      | **Not implemented**                                           |
 
 ---
 
@@ -53,31 +53,29 @@ Local prototype for smaller importers. Core story is **event → exposure → co
 
 ## Tested and verified
 
-Commands run for this documentation cleanup (working tree including the intelligence slice):
+| Check              | Status                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| `npm run check`    | **PASSED** — format, docs (16 Markdown docs), lint, types, 69 unit tests, production build. |
+| `npm run test:e2e` | **PASSED** — 26/26 desktop+mobile (intelligence + hardened forecast specs).                 |
 
-| Check | Result |
-| --- | --- |
-| `npm run check` | Passed — format, docs links, lint, types, **69** unit tests, production build |
-| `npm run test:e2e` | Previously **26/26** (desktop + narrow) after the slice, including `tests/intelligence.spec.ts`; reconfirmed in this session as available |
+**Last pushed `main`:** `bc20e9c` — Hosted CI [38861182119](https://github.com/Sambhav255/cost_current/actions/runs/38861182119) **success** (pre-slice hosted baseline). Do not claim hosted CI for this commit until Actions runs after push.
 
-**Last pushed `main`:** `bc20e9c` — Hosted CI [38861182119](https://github.com/Sambhav255/cost_current/actions/runs/38861182119) **success** (pre-slice baseline: 60 unit / 20 e2e). Hosted CI for the intelligence + docs commit is not claimed until the Actions run completes after push.
-
-**Honesty gates covered by unit/e2e:** Suez does not tag Northstar; Suez odds unavailable; tariff demo odds are illustrative assumptions; Northstar wait/early **$123,600 / $121,100**.
+**Intelligence honesty gates (unit tests, 69):** Suez does not tag Northstar; Suez odds unavailable; tariff demo odds are illustrative assumptions; Northstar wait/early **$123,600 / $121,100**.
 
 ---
 
 ## Incomplete, experimental, or illustrative only
 
-| Item | Notes |
-| --- | --- |
-| Event registry | Curated fictional demos (`isDemoScenario`); not a live threat feed |
-| Automatic event probabilities | Always unavailable unless labeled user assumption |
-| 3D globe event zones | Not wired; zone markers are 2D-only |
-| Real prediction-market / official notice connectors | Deferred (P2 in predictive plan) |
-| Rights-reviewed freight history + time-ordered model study | Deferred (P3); local last-observation baseline only |
-| Prospective decision / outcomes journal | Deferred (P4) |
-| Customer interviews / paid pilots | Research outside this repo |
-| Accounts, multi-tenant SaaS, licensed feeds | Deferred (P5) |
+| Item                                                       | Notes                                                              |
+| ---------------------------------------------------------- | ------------------------------------------------------------------ |
+| Event registry                                             | Curated fictional demos (`isDemoScenario`); not a live threat feed |
+| Automatic event probabilities                              | Always unavailable unless labeled user assumption                  |
+| 3D globe event zones                                       | Not wired; zone markers are 2D-only                                |
+| Real prediction-market / official notice connectors        | Deferred (P2 in predictive plan)                                   |
+| Rights-reviewed freight history + time-ordered model study | Deferred (P3); local last-observation baseline only                |
+| Prospective decision / outcomes journal                    | Deferred (P4)                                                      |
+| Customer interviews / paid pilots                          | Research outside this repo                                         |
+| Accounts, multi-tenant SaaS, licensed feeds                | Deferred (P5)                                                      |
 
 Do not describe illustrative cards, Forecast mode, or UI polish as calibrated prediction or legal duty determination.
 
@@ -109,17 +107,17 @@ Do not spend a sprint only on visual redesign. Do not invent live odds or ML acc
 
 Illustrative Northstar defaults (not a calibrated forecast):
 
-| Metric | Expected |
-| --- | ---: |
-| Goods / customs value | $100,000 / $100,000 |
-| Current duty / freight | $10,000 / $7,000 |
-| Base landed cost | $117,000 |
-| Tariff event impact / probability | $15,000 / 40% |
-| Expected extra tariff / freight | $6,000 / $600 |
-| Wait / early expected totals | $123,600 / $121,100 |
-| Early savings vs wait | $2,500 |
-| Break-even tariff probability | 23.3333% |
-| Wait at 10% tariff probability | $119,100 |
+| Metric                            |            Expected |
+| --------------------------------- | ------------------: |
+| Goods / customs value             | $100,000 / $100,000 |
+| Current duty / freight            |    $10,000 / $7,000 |
+| Base landed cost                  |            $117,000 |
+| Tariff event impact / probability |       $15,000 / 40% |
+| Expected extra tariff / freight   |       $6,000 / $600 |
+| Wait / early expected totals      | $123,600 / $121,100 |
+| Early savings vs wait             |              $2,500 |
+| Break-even tariff probability     |            23.3333% |
+| Wait at 10% tariff probability    |            $119,100 |
 
 Four waiting outcomes under independence: $117,000 (48%), $120,000 (12%), $132,000 (32%), $135,000 (8%).
 
@@ -127,12 +125,12 @@ Four waiting outcomes under independence: $117,000 (48%), $120,000 (12%), $132,0
 
 ## Document map
 
-| Doc | Role |
-| --- | --- |
-| [README](../README.md) | Product overview, setup, walkthrough |
-| [PREDICTIVE_INTELLIGENCE_PLAN](PREDICTIVE_INTELLIGENCE_PLAN.md) | Active stage plan |
-| [FORECASTS](FORECASTS.md) | Freight baseline contract and data gates |
-| [CSV_INTAKE](CSV_INTAKE.md) | Import schema |
-| [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | Architecture and calculation invariants |
-| [MASTER_EXECUTION_PLAN](MASTER_EXECUTION_PLAN.md) | Historical audit / execution notes (superseded priority order) |
-| [PROGRESS_ARCHIVE](PROGRESS_ARCHIVE.md) | Dated handoffs and checkpoint history |
+| Doc                                                             | Role                                                           |
+| --------------------------------------------------------------- | -------------------------------------------------------------- |
+| [README](../README.md)                                          | Product overview, setup, walkthrough                           |
+| [PREDICTIVE_INTELLIGENCE_PLAN](PREDICTIVE_INTELLIGENCE_PLAN.md) | Active stage plan                                              |
+| [FORECASTS](FORECASTS.md)                                       | Freight baseline contract and data gates                       |
+| [CSV_INTAKE](CSV_INTAKE.md)                                     | Import schema                                                  |
+| [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md)                   | Architecture and calculation invariants                        |
+| [MASTER_EXECUTION_PLAN](MASTER_EXECUTION_PLAN.md)               | Historical audit / execution notes (superseded priority order) |
+| [PROGRESS_ARCHIVE](PROGRESS_ARCHIVE.md)                         | Dated handoffs and checkpoint history                          |

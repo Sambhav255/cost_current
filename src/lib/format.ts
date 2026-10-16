@@ -1,0 +1,4 @@
+export const usd = (cents: number, digits=0) => Number.isFinite(cents) ? new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:digits,maximumFractionDigits:digits}).format(Math.round(cents)/100) : 'Needs inputs';
+export const compactUSD = (cents: number) => Number.isFinite(cents) ? new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',notation:'compact',maximumFractionDigits:1}).format(cents/100) : 'Needs inputs';
+export const percent = (n: number) => Number.isFinite(n) ? new Intl.NumberFormat('en-US',{style:'percent',maximumFractionDigits:2}).format(n) : 'Needs inputs';
+export const dateLabel = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d)&&!Number.isNaN(Date.parse(d)) ? new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'Date needed';

@@ -2,7 +2,7 @@ import { Component, lazy, Suspense, useState, useSyncExternalStore } from 'react
 import type { ReactNode } from 'react';
 import { Globe2, Map, Minus, Plus, RotateCcw } from 'lucide-react';
 import type { Route } from '../lib/types';
-import MapFallback from './MapFallback';
+import MapFallback, { type EventPolygonOverlay } from './MapFallback';
 const GlobeView = lazy(() => import('./GlobeView'));
 const media =
   typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
@@ -36,6 +36,7 @@ export default function RouteGlobe({
   onSelect,
   compact = false,
   eventZones,
+  eventPolygons,
   initialFlat = false,
 }: {
   routes: Route[];
@@ -43,6 +44,7 @@ export default function RouteGlobe({
   onSelect: (id: string) => void;
   compact?: boolean;
   eventZones?: { id: string; label: string; points: { lat: number; lng: number }[] }[];
+  eventPolygons?: EventPolygonOverlay[];
   initialFlat?: boolean;
 }) {
   const reduced = useSyncExternalStore(subscribe, () => media?.matches ?? false);
@@ -50,7 +52,13 @@ export default function RouteGlobe({
     [reset, setReset] = useState(0),
     [zoom, setZoom] = useState(1);
   const fallback = (
-    <MapFallback routes={routes} selected={selected} onSelect={onSelect} eventZones={eventZones} />
+    <MapFallback
+      routes={routes}
+      selected={selected}
+      onSelect={onSelect}
+      eventZones={eventZones}
+      eventPolygons={eventPolygons}
+    />
   );
   return (
     <div className={`route-globe ${compact ? 'compact-globe' : ''}`}>

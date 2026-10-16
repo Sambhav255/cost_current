@@ -3,7 +3,7 @@
 **Updated:** October 16, 2026  
 **Canonical status record.** Prefer this file over dated handoffs, session recovery notes, or older execution-plan “next” sections.
 
-**Primary product direction:** [Predictive intelligence plan](PREDICTIVE_INTELLIGENCE_PLAN.md) and [realignment brief](../COST_CURRENT_PREDICTIVE_INTELLIGENCE_REALIGNMENT_CODEX.md). Older plans ([master build](../COST_CURRENT_MASTER_BUILD_PLAN.md), [master execution](MASTER_EXECUTION_PLAN.md), [forecast contract](FORECASTS.md)) remain references for preserved engines and gates—not higher-priority instructions.
+**Primary integration direction:** [Unified external-intelligence plan](../COST_CURRENT_UNIFIED_INTELLIGENCE_INTEGRATION_CODEX.md). The [predictive intelligence plan](PREDICTIVE_INTELLIGENCE_PLAN.md) and older plans remain references for the preserved product and engine.
 
 **Historical detail** (dated checkpoints, superseded handoffs): [PROGRESS_ARCHIVE.md](PROGRESS_ARCHIVE.md).
 
@@ -29,11 +29,21 @@ The official-observations filter fetches the fixed USGS past-day GeoJSON URL dir
 
 Shipments can save a customer-confirmed port or supplier-site coordinate; Northstar has a clearly fictional test asset. Great-circle distance within a stated 100 km screening radius yields only a **possible** match. A user must supply additional delay days, per-day inventory/stockout cost and handling cost before incremental dollars appear. The observed event and exact user assumptions follow the shipment to Decisions and a frozen What if? memo; the existing tariff/freight scenario totals remain separate. The 2D map plots the reported epicenter as a point, not a damage polygon.
 
-**Verified locally:** `npm run check` passed with 76 unit tests, lint, types, docs and build; the repeat full Playwright suite passed **30/30 desktop/narrow cases**. The first full browser run had 29 passes and one desktop click failure: the three source buttons overflowed their narrow column and the detail panel intercepted the third button. The controls now wrap; the affected Intelligence suite passed 10/10 before the clean full rerun. A real browser GET returned a fresh USGS feed (158 normalized events, one incomplete record skipped; generated 2026-10-16T09:04:29Z, retrieved 09:04:39Z), and 30 cards rendered. This is a one-time observed snapshot, not a prediction or ongoing monitoring guarantee. **Hosted CI for the P1 tree remains pending commit/push.**
+**Verified locally:** `npm run check` passed with 76 unit tests, lint, types, docs and build; the repeat full Playwright suite passed **30/30 desktop/narrow cases**. The first full browser run had 29 passes and one desktop click failure: the three source buttons overflowed their narrow column and the detail panel intercepted the third button. The controls now wrap; the affected Intelligence suite passed 10/10 before the clean full rerun. A real browser GET returned a fresh USGS feed (158 normalized events, one incomplete record skipped; generated 2026-10-16T09:04:29Z, retrieved 09:04:39Z), and 30 cards rendered. This is a one-time observed snapshot, not a prediction or ongoing monitoring guarantee. [Hosted CI for `42c4c3f`](https://github.com/Sambhav255/cost_current/actions/runs/38878332222) passed.
 
 **Incomplete:** No observed earthquake implies actual damage or delay. The current feed covers only its rolling past-day window; no historical archive, automatic odds, carrier route, live alert service or calibrated impact model exists. Commercial reuse, retention and model-training rights remain pending source-specific review. The map's 3D view does not yet show the earthquake point.
 
-**Next:** commit and verify hosted P1 CI; then inspect official NOAA/NHC GIS advisory formats for P2. If reliable active geometry cannot be consumed within a bounded adapter, show an honest limited/unavailable state and document the technical gate.
+**Next:** inspect official NOAA/NHC GIS advisory formats for P2. If reliable active geometry cannot be consumed within a bounded adapter, show an honest limited/unavailable state and document the technical gate.
+
+## Unified integration milestone P2 — NHC cyclone forecasts
+
+The **Official forecasts** Intelligence filter reads NHC's current-storm summary through a fixed same-origin endpoint and fetches only linked official cone KMZs. The endpoint bounds time, bytes, storm count and extracted geometry; KML is checked against the storm and advisory version. The client keeps issuance time, retrieval time, basin and source link, and reports fresh, stale, invalid, unavailable and valid-empty states. Missing or mismatched geometry leaves a readable advisory with unknown geographic exposure. Stale cones are suppressed. The 2D map shows a documented official forecast cone and known-asset overlap; a cone describes potential storm-center location, not wind extent or port closure. The user supplies delay/cost assumptions before conditional dollars appear, and the advisory context is frozen into the What if? memo.
+
+**Verified locally:** `npm run check` passed (format, docs, lint, types, **83 unit tests**, production build). The full Playwright desktop/narrow suite passed **34/34**; targeted Intelligence tests passed 14/14. Unit cases cover empty/outage/malformed/stale responses, ambiguous basin, advisory mismatch, polygon holes and antimeridian crossing. A read-only local GET of the same-origin endpoint returned two active NHC advisories with version-matched cone geometry on October 16; the browser rendered them and classified Northstar's fictional test asset outside the selected cone. This is a dated source check, not a forecast of shipment outcome. **Hosted deployment/function behavior remains unverified.**
+
+**Incomplete:** NHC coverage is limited to supported Atlantic/Eastern/Central Pacific summary items. The app does not ingest forecast point time steps, wind/rain/surge extents, operational closures, international cyclones, or closure probabilities; the 3D globe does not render cone geometry. Source rights for commercial redistribution, retention and model training need separate review. Static hosting without the same-origin endpoint reports unavailable.
+
+**Next:** P3 PortWatch rights and field review, then only permissioned historical ingestion/backtesting. If permission is unavailable, implement a typed research boundary and honest unavailable evidence panel with no claimed model metrics.
 
 ---
 

@@ -16,6 +16,8 @@ import {
   type ObservedEarthquake,
 } from '../lib/usgs';
 import { quakeExposure, type DelayScenario } from '../lib/quakeExposure';
+import { fetchNHC, nhcExposure, type NHCFeed, type NHCSummary } from '../lib/nhc';
+import NHCPanel from './NHCPanel';
 
 function likelihoodShort(eventId: string): string {
   const signal = probabilityFor(eventId);
@@ -31,6 +33,7 @@ export default function Intelligence({
   onOpenDecisions,
   onOpenExposure,
   onOpenObservedDecisions,
+  onOpenForecastDecisions,
 }: {
   shipments: Shipment[];
   selectedEventId: string;
@@ -43,9 +46,12 @@ export default function Intelligence({
     event: ObservedEarthquake,
     scenario: DelayScenario,
   ) => void;
+  onOpenForecastDecisions: (shipmentId: string, storm: NHCSummary, scenario: DelayScenario) => void;
 }) {
-  const [sourceMode, setSourceMode] = useState<'demo' | 'official' | 'fixture'>('demo');
+  const [sourceMode, setSourceMode] = useState<'demo' | 'official' | 'fixture' | 'weather'>('demo');
   const [feed, setFeed] = useState<EarthquakeFeed | null>(null);
+  const [nhcFeed, setNhcFeed] = useState<NHCFeed | null>(null);
+  const [selectedStormId, setSelectedStormId] = useState('');
   const [selectedQuakeId, setSelectedQuakeId] = useState('');
   const [refreshKey, setRefreshKey] = useState(0);
   const [relevantOnly, setRelevantOnly] = useState(false);
@@ -59,6 +65,16 @@ export default function Intelligence({
       active = false;
     };
   }, [sourceMode, refreshKey]);
+  useEffect(() => {
+    if (sourceMode !== 'weather') return;
+    let active = true;
+    fetchNHC().then((result) => {
+      if (active) setNhcFeed(result);
+    });
+    return () => {
+      active = false;
+    };
+  }, [sourceMode, refreshKey]);
   const events = listDemoEvents();
   const event = events.find((e) => e.id === selectedEventId) ?? events[0];
   const fixture = fictionalEarthquakeFixture();
@@ -67,12 +83,14 @@ export default function Intelligence({
     ? quakes.filter((quake) => shipments.some((s) => quakeExposure(quake, s).state === 'possible'))
     : quakes;
   const quake = visibleQuakes.find((item) => item.id === selectedQuakeId) ?? visibleQuakes[0];
+  const storm = nhcFeed?.storms.find((item) => item.id === selectedStormId) ?? nhcFeed?.storms[0];
+  const stormMatch = storm && shipments.find((s) => nhcExposure(storm, s).state === 'possible');
   const zones =
     sourceMode === 'demo'
       ? event
         ? zonesForEvent(event)
         : []
-      : quake
+      : sourceMode !== 'weather' && quake
         ? [
             {
               id: quake.id,
@@ -93,7 +111,9 @@ export default function Intelligence({
   const focusRoute =
     sourceMode === 'demo'
       ? (shipments.find((s) => s.id === focusShipment?.shipmentId)?.routeId ?? '')
-      : (quakeMatch?.routeId ?? '');
+      : sourceMode === 'weather'
+        ? (stormMatch?.routeId ?? '')
+        : (quakeMatch?.routeId ?? '');
 
   return (
     <>
@@ -123,7 +143,9 @@ export default function Intelligence({
                 ? 'Curated fictional scenarios.'
                 : sourceMode === 'fixture'
                   ? 'Explicit fictional test fixture.'
-                  : 'USGS past-day observed earthquake reports.'
+                  : sourceMode === 'weather'
+                    ? 'NHC official advisory summaries; forecast geometry unavailable.'
+                    : 'USGS past-day observed earthquake reports.'
             }
           />
           <div className="button-row" role="group" aria-label="Intelligence source">
@@ -151,6 +173,14 @@ export default function Intelligence({
             >
               Fictional test
             </button>
+            <button
+              type="button"
+              className="button secondary"
+              aria-pressed={sourceMode === 'weather'}
+              onClick={() => setSourceMode('weather')}
+            >
+              Official forecasts
+            </button>
           </div>
           {sourceMode === 'official' && (
             <div className="notice" data-testid="usgs-feed-status">
@@ -169,7 +199,24 @@ export default function Intelligence({
               </button>
             </div>
           )}
-          {sourceMode !== 'demo' && (
+          {sourceMode === 'weather' && (
+            <div className="notice" data-testid="nhc-feed-status">
+              {nhcFeed
+                ? `NHC advisory feed: ${nhcFeed.status}. Retrieved ${nhcFeed.retrievedAt}. ${nhcFeed.detail}`
+                : 'Loading NHC advisory summaries…'}{' '}
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => {
+                  setNhcFeed(null);
+                  setRefreshKey((x) => x + 1);
+                }}
+              >
+                Refresh
+              </button>
+            </div>
+          )}
+          {(sourceMode === 'official' || sourceMode === 'fixture') && (
             <label className="quiet-caption">
               <input
                 type="checkbox"
@@ -198,31 +245,63 @@ export default function Intelligence({
                     </button>
                   </li>
                 ))
-              : visibleQuakes.slice(0, 30).map((item) => (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      className={item.id === quake?.id ? 'event-card active' : 'event-card'}
-                      data-testid={`quake-card-${item.id}`}
-                      onClick={() => setSelectedQuakeId(item.id)}
-                    >
-                      <span className="event-card-kind">
-                        {item.sourceMode === 'observed' ? 'USGS observed report' : 'Fictional test'}
-                      </span>
-                      <strong>{item.title}</strong>
-                      <span className="event-card-meta">{item.eventTime}</span>
-                      <span className="event-card-odds">Odds: Not available</span>
-                    </button>
-                  </li>
-                ))}
+              : sourceMode === 'weather'
+                ? nhcFeed?.storms.map((item) => (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        className={item.id === storm?.id ? 'event-card active' : 'event-card'}
+                        onClick={() => setSelectedStormId(item.id)}
+                      >
+                        <span className="event-card-kind">NHC official forecast</span>
+                        <strong>
+                          {item.name} · advisory {item.advisoryNumber}
+                        </strong>
+                        <span className="event-card-meta">Issued {item.issuedAt}</span>
+                        <span className="event-card-odds">
+                          {shipments.some((s) => nhcExposure(item, s).state === 'possible')
+                            ? 'Possible known-site overlap'
+                            : 'No verified cone overlap'}
+                        </span>
+                      </button>
+                    </li>
+                  ))
+                : visibleQuakes.slice(0, 30).map((item) => (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        className={item.id === quake?.id ? 'event-card active' : 'event-card'}
+                        data-testid={`quake-card-${item.id}`}
+                        onClick={() => setSelectedQuakeId(item.id)}
+                      >
+                        <span className="event-card-kind">
+                          {item.sourceMode === 'observed'
+                            ? 'USGS observed report'
+                            : 'Fictional test'}
+                        </span>
+                        <strong>{item.title}</strong>
+                        <span className="event-card-meta">{item.eventTime}</span>
+                        <span className="event-card-odds">Odds: Not available</span>
+                      </button>
+                    </li>
+                  ))}
           </ul>
-          {sourceMode !== 'demo' && !visibleQuakes.length && feed && (
+          {(sourceMode === 'official' || sourceMode === 'fixture') &&
+            !visibleQuakes.length &&
+            feed && (
+              <p className="notice">
+                {relevantOnly
+                  ? 'No reported earthquakes matched a known location in the current feed window.'
+                  : feed.status === 'fresh'
+                    ? 'USGS returned no reported earthquakes in this feed window.'
+                    : 'No usable earthquake reports are available from this feed.'}
+              </p>
+            )}
+          {sourceMode === 'weather' && nhcFeed && !nhcFeed.storms.length && (
             <p className="notice">
-              {relevantOnly
-                ? 'No reported earthquakes matched a known location in the current feed window.'
-                : feed.status === 'fresh'
-                  ? 'USGS returned no reported earthquakes in this feed window.'
-                  : 'No usable earthquake reports are available from this feed.'}
+              {nhcFeed.status === 'fresh'
+                ? 'NHC lists no active storms in this summary. This is not an all-clear for other weather hazards.'
+                : 'NHC advisory summaries are unavailable or invalid.'}
             </p>
           )}
         </aside>
@@ -234,6 +313,17 @@ export default function Intelligence({
               onSelectShipment={onSelectShipment}
               onOpenDecisions={onOpenDecisions}
             />
+          ) : sourceMode === 'weather' ? (
+            storm ? (
+              <NHCPanel
+                key={storm.id}
+                storm={storm}
+                shipments={shipments}
+                onReview={onOpenForecastDecisions}
+              />
+            ) : (
+              <p className="notice">No active NHC advisory selected.</p>
+            )
           ) : quake ? (
             <EarthquakePanel
               key={quake.id}
@@ -253,7 +343,9 @@ export default function Intelligence({
             description={
               sourceMode === 'demo'
                 ? 'Schematic lanes and illustrative watch locations — not vessel tracks or hazard boundaries.'
-                : 'Reported epicenter point and schematic customer lanes; point is not damage extent.'
+                : sourceMode === 'weather'
+                  ? 'Official NHC forecast cone if validated; shipment lanes remain schematic. The cone is not storm impact extent.'
+                  : 'Reported epicenter point and schematic customer lanes; point is not damage extent.'
             }
           />
           <RouteGlobe
@@ -266,6 +358,18 @@ export default function Intelligence({
             }}
             compact
             eventZones={zones}
+            eventPolygons={
+              sourceMode === 'weather' && storm?.cone
+                ? [
+                    {
+                      id: storm.id,
+                      label: `NHC advisory ${storm.advisoryNumber} cone`,
+                      outer: storm.cone.outer,
+                      holes: storm.cone.holes,
+                    },
+                  ]
+                : []
+            }
             initialFlat={sourceMode !== 'demo'}
           />
         </div>

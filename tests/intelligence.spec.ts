@@ -113,3 +113,92 @@ test('official observations keep empty and failed feed states honest', async ({ 
   await expect(page.getByTestId('usgs-feed-status')).toContainText('unavailable');
   await expect(page.getByTestId('earthquake-detail')).toHaveCount(0);
 });
+
+test('NHC forecast advisory stays separate from observed events and has no invented exposure', async ({
+  page,
+}) => {
+  await page.route('**/api/nhc', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        activeStorms: [
+          {
+            id: 'ep212026',
+            name: 'Trudy',
+            classification: 'HU',
+            lastUpdate: new Date().toISOString(),
+            forecastAdvisory: {
+              advNum: '012',
+              issuance: new Date().toISOString(),
+              url: 'https://www.nhc.noaa.gov/text/MIATCMEP1.shtml',
+            },
+            trackCone: {
+              kmzFile: 'https://www.nhc.noaa.gov/storm_graphics/api/EP212026_012adv_CONE.kmz',
+            },
+          },
+        ],
+      }),
+    });
+  });
+  await openIntelligence(page);
+  await page.getByRole('button', { name: 'Official forecasts' }).click();
+  await expect(page.getByTestId('nhc-feed-status')).toContainText('fresh');
+  await expect(page.getByTestId('nhc-exposure-northstar')).toContainText('Exposure unknown');
+  await expect(
+    page.getByTestId('nhc-detail').getByRole('link', { name: 'Read NHC forecast advisory' }),
+  ).toHaveAttribute('href', /nhc.noaa.gov/);
+  await expect(page.getByTestId('nhc-detail')).not.toContainText(/\d+%/);
+});
+
+test('NHC cone overlap leads only to a conditional user scenario and memo', async ({ page }) => {
+  await page.route('**/api/nhc', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        activeStorms: [
+          {
+            id: 'ep212026',
+            name: 'Trudy',
+            classification: 'HU',
+            lastUpdate: new Date().toISOString(),
+            forecastAdvisory: {
+              advNum: '012',
+              issuance: new Date().toISOString(),
+              url: 'https://www.nhc.noaa.gov/text/MIATCMEP1.shtml',
+            },
+            costCurrentCone: {
+              stormId: 'ep212026',
+              advisoryNumber: '012',
+              forecastHours: 120,
+              outer: [
+                [-119, 33],
+                [-117, 33],
+                [-117, 35],
+                [-119, 35],
+                [-119, 33],
+              ],
+              holes: [],
+            },
+          },
+        ],
+      }),
+    });
+  });
+  await openIntelligence(page);
+  await page.getByRole('button', { name: 'Official forecasts' }).click();
+  await expect(page.getByTestId('nhc-exposure-northstar')).toContainText(
+    'Possible forecast-area overlap',
+  );
+  await expect(page.locator('[data-testid^="event-polygon-"]')).toBeVisible();
+  await page.getByRole('spinbutton', { name: 'Forecast additional delay days' }).fill('3');
+  await page.getByRole('spinbutton', { name: 'Forecast delay cost per day' }).fill('100');
+  await page.getByRole('spinbutton', { name: 'Forecast additional handling cost' }).fill('25');
+  await expect(page.getByTestId('nhc-conditional-cost')).toContainText('$325');
+  await page.getByRole('button', { name: 'Review shipment decisions' }).click();
+  await expect(page.getByTestId('forecast-context-banner')).toContainText('advisory 012');
+  await navigate(page, 'Decision memo');
+  await expect(page.getByTestId('decision-memo')).toContainText('NHC official forecast');
+  await expect(page.getByTestId('decision-memo')).toContainText('$325');
+});

@@ -10,13 +10,15 @@
     "typecheck": "tsc -b",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "lint": "eslint src tests scripts vite.config.ts playwright.config.ts eslint.config.mjs",
+    "lint": "eslint src tests scripts api server vite.config.ts playwright.config.ts eslint.config.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:docs": "node scripts/check-docs.mjs",
     "check": "npm run format:check && npm run check:docs && npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
+    "fast-xml-parser": "^5.11.2",
+    "fflate": "^0.8.3",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -36,6 +36,7 @@ import Intelligence from './components/Intelligence';
 import { getEvent, probabilityFor } from './lib/riskEvents';
 import type { ObservedEarthquake } from './lib/usgs';
 import type { DelayScenario } from './lib/quakeExposure';
+import type { NHCSummary } from './lib/nhc';
 type View = 'welcome' | 'intelligence' | 'overview' | 'shipment' | 'methods' | 'memo' | 'import';
 export default function App() {
   const [shipments, setShipments] = useState(loadShipments),
@@ -45,6 +46,9 @@ export default function App() {
   const [selectedEventId, setSelectedEventId] = useState('demo-tariff-china-home');
   const [decisionContext, setDecisionContext] = useState<MemoSnapshot['eventContext'] | null>(null);
   const [observedContext, setObservedContext] = useState<MemoSnapshot['observedContext'] | null>(
+    null,
+  );
+  const [forecastContext, setForecastContext] = useState<MemoSnapshot['forecastContext'] | null>(
     null,
   );
   const [mode, setMode] = useState<'forecast' | 'what-if'>('forecast');
@@ -166,6 +170,7 @@ export default function App() {
       }),
     );
     setObservedContext(null);
+    setForecastContext(null);
     setMode('what-if');
     setTab('analysis');
     navigate('shipment');
@@ -177,8 +182,24 @@ export default function App() {
   ) => {
     setSelectedId(shipmentId);
     setDecisionContext(null);
+    setForecastContext(null);
     setObservedContext(
       structuredClone({ shipmentId, event, scenario, capturedAt: new Date().toISOString() }),
+    );
+    setMode('what-if');
+    setTab('analysis');
+    navigate('shipment');
+  };
+  const openDecisionsFromForecast = (
+    shipmentId: string,
+    storm: NHCSummary,
+    scenario: DelayScenario,
+  ) => {
+    setSelectedId(shipmentId);
+    setDecisionContext(null);
+    setObservedContext(null);
+    setForecastContext(
+      structuredClone({ shipmentId, storm, scenario, capturedAt: new Date().toISOString() }),
     );
     setMode('what-if');
     setTab('analysis');
@@ -215,6 +236,7 @@ export default function App() {
         analysis,
         eventContext: decisionContext?.shipmentId === selected.id ? decisionContext : undefined,
         observedContext: observedContext?.shipmentId === selected.id ? observedContext : undefined,
+        forecastContext: forecastContext?.shipmentId === selected.id ? forecastContext : undefined,
         timestamp: new Date().toISOString(),
         calculatorVersion: '2.0.0-ledger',
       }),
@@ -371,6 +393,7 @@ export default function App() {
                 setSelectedId(event.target.value);
                 setDecisionContext(null);
                 setObservedContext(null);
+                setForecastContext(null);
               }}
             >
               {shipments.map((item) => (
@@ -409,6 +432,7 @@ export default function App() {
               onSelectShipment={setSelectedId}
               onOpenDecisions={openDecisionsFromEvent}
               onOpenObservedDecisions={openDecisionsFromObserved}
+              onOpenForecastDecisions={openDecisionsFromForecast}
               onOpenExposure={() => navigate('overview')}
             />
           )}
@@ -516,6 +540,25 @@ export default function App() {
                   </button>
                 </div>
               )}
+              {forecastContext?.shipmentId === selected.id && (
+                <div className="notice event-context-banner" data-testid="forecast-context-banner">
+                  NHC official forecast: <strong>{forecastContext.storm.name}</strong> advisory{' '}
+                  {forecastContext.storm.advisoryNumber}, issued {forecastContext.storm.issuedAt}.
+                  User scenario: {forecastContext.scenario.assumedDelayDays} additional days ×{' '}
+                  {forecastContext.scenario.dailyCostCents / 100} USD/day +{' '}
+                  {forecastContext.scenario.handlingCents / 100} USD handling ={' '}
+                  {forecastContext.scenario.impactCents / 100} USD conditional cost. The cone does
+                  not estimate port closure, delay or loss odds. The tariff/freight What if?
+                  comparison below uses separate assumptions.
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => setForecastContext(null)}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              )}
               <div className="mode-switch" role="group" aria-label="Estimate mode">
                 <button
                   className={mode === 'forecast' ? 'active' : ''}
@@ -603,7 +646,12 @@ export default function App() {
                         }
                       : observedContext?.shipmentId === selected.id
                         ? { name: observedContext.event.title, oddsUnavailable: true }
-                        : undefined
+                        : forecastContext?.shipmentId === selected.id
+                          ? {
+                              name: `${forecastContext.storm.name} advisory ${forecastContext.storm.advisoryNumber}`,
+                              oddsUnavailable: true,
+                            }
+                          : undefined
                   }
                   onEdit={() => {
                     setTab('details');

@@ -1,22 +1,39 @@
 import { countries } from '../lib/geography';
 import type { Route } from '../lib/types';
+import type { LonLat } from '../lib/nhcKml';
 const point = (lng: number, lat: number) => [(lng + 180) * 2, (90 - lat) * 2];
+function polygonPath(ring: LonLat[], baseLon: number): string {
+  let prior = baseLon;
+  return (
+    ring
+      .map(([longitude, latitude], index) => {
+        const shifted = prior + (((longitude - prior + 540) % 360) - 180);
+        prior = shifted;
+        const [x, y] = point(shifted, latitude);
+        return `${index ? 'L' : 'M'}${x},${y}`;
+      })
+      .join(' ') + 'Z'
+  );
+}
 export type EventZoneOverlay = {
   id: string;
   label: string;
   points: { lat: number; lng: number }[];
 };
+export type EventPolygonOverlay = { id: string; label: string; outer: LonLat[]; holes: LonLat[][] };
 
 export default function MapFallback({
   routes,
   selected,
   onSelect,
   eventZones = [],
+  eventPolygons = [],
 }: {
   routes: Route[];
   selected: string;
   onSelect: (id: string) => void;
   eventZones?: EventZoneOverlay[];
+  eventPolygons?: EventPolygonOverlay[];
 }) {
   return (
     <div className="flat-map" data-testid="map-fallback">
@@ -59,6 +76,23 @@ export default function MapFallback({
             />
           );
         })}
+        {eventPolygons.map((polygon) => (
+          <g key={polygon.id} data-testid={`event-polygon-${polygon.id}`}>
+            {[-720, 0, 720].map((offset) => (
+              <path
+                key={offset}
+                d={[polygon.outer, ...polygon.holes]
+                  .map((ring) => polygonPath(ring, polygon.outer[0][0]))
+                  .join(' ')}
+                transform={`translate(${offset},0)`}
+                fill="#eac18a55"
+                stroke="#eac18a"
+                strokeWidth="1.2"
+                fillRule="evenodd"
+              />
+            ))}
+          </g>
+        ))}
         {eventZones.map((zone) => (
           <g key={zone.id} className="map-event-zone" data-testid={`event-zone-${zone.id}`}>
             {zone.points.map((pt, i) => {

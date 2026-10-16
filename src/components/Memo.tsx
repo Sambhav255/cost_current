@@ -143,6 +143,21 @@ export default function Memo({
             )}
           </p>
         )}
+        {snapshot.forecastContext && (
+          <p className="memo-provenance">
+            NHC official forecast: {snapshot.forecastContext.storm.name} advisory{' '}
+            {snapshot.forecastContext.storm.advisoryNumber}, issued{' '}
+            {snapshot.forecastContext.storm.issuedAt}; linked to shipment{' '}
+            {snapshot.forecastContext.shipmentId} at {snapshot.forecastContext.capturedAt}. Known
+            asset overlapped the version-checked forecast cone; this does not establish storm
+            effects. User-entered conditional delay{' '}
+            {snapshot.forecastContext.scenario.assumedDelayDays} days ×{' '}
+            {usd(snapshot.forecastContext.scenario.dailyCostCents)} per day +{' '}
+            {usd(snapshot.forecastContext.scenario.handlingCents)} handling ={' '}
+            {usd(snapshot.forecastContext.scenario.impactCents)}. No closure or delay probability
+            was inferred. <a href={snapshot.forecastContext.storm.advisoryUrl}>NHC advisory</a>
+          </p>
+        )}
         <div className="memo-summary">
           <div>
             <span>BASE MODELED COST</span>

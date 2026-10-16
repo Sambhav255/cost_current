@@ -57,7 +57,7 @@ export default function App() {
     route = routes.find((r) => r.id === selected.routeId) || routes[0];
   const forecastAsOf = decisionDate(selected);
   const forecast = useMemo(
-    () => baselineForecast(signals.series, selected.routeId, forecastAsOf, horizon, generatedAt),
+    () => baselineForecast(signals.series, selected.routeId, forecastAsOf, horizon),
     [signals.series, selected.routeId, forecastAsOf, horizon, generatedAt],
   );
   const changeSeries = (series: FreightSeries | null) => {

@@ -2,7 +2,7 @@
 
 Prepared October 15, 2026 against master plan v1.0; updated alongside [v1.1](../COST_CURRENT_MASTER_BUILD_PLAN.md). The initial plan was written before Part II product changes. The user authorized the staged master plan; preserve the free local demo.
 
-**Current state:** prototype audit closed and the first intake/ledger engineering milestone delivered. **Next engineering milestone:** a prospective decision journal. Interviews, data rights, expert review and commercial validation remain open; see [Progress](PROGRESS.md) for actual verification.
+**Current state:** prototype audit closed and the first intake/ledger engineering milestone delivered. **Current audit priority:** the [forecast foundation](FORECASTS.md), followed by authorized lane observations and a time-ordered evaluation. The prospective decision journal follows that evidence work. Interviews, data rights, expert review and commercial validation remain open; see [Progress](PROGRESS.md) for actual verification.
 
 ## Product to build toward
 
@@ -42,6 +42,12 @@ Deliver one complete path: **download template → select/paste CSV → preview 
 - Verify pure intake/ledger logic, storage compatibility, existing demo regressions, browser import/error/duplicate flows, source edits, memo consistency, narrow viewport, lint, typecheck and build.
 
 **Done gate met locally:** a fictional CSV fixture exercises the entire path with reproducible totals, no partial imports or false provenance. The aggregate `npm run check` (formatting, doc links, lint, types, 50 unit tests and build) and all 16 browser cases pass. The quote-backed memo was exported and visually reviewed as one page. This gate does not establish customer willingness to pay, legally correct duties, licensed data rights, or trained forecasts.
+
+## Audit priority update — October 16
+
+The user authorized the [prediction-first audit](../COST_CURRENT_CODE_AUDIT_NEXT_STEPS.md), superseding the previous journal-first engineering order. P0 formatting repair and P1 Forecast/What if? separation are implemented, with strict local observation intake, an automatic last-observation baseline and evaluation mechanics. [Forecast contracts](FORECASTS.md) record source states, rights declarations, data gaps and the refreshed Vigil integration assessment. No licensed real series or qualified market mapping is present; trained models and live odds remain gated. Verify the current results in [Progress](PROGRESS.md).
+
+Next: obtain one authorized real lane dataset, establish observation/retrieval/revision history and quote comparability, evaluate naive baselines in time order, then decide whether statistical modeling is justified. The local fictional preview is not that data milestone. The prospective journal and customer validation work below remain required.
 
 ## Next — prospective decisions and customer validation
 

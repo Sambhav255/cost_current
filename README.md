@@ -4,7 +4,7 @@
 
 Cost Current helps US importers compare shipment costs and feasible actions under explicit tariff and freight scenarios. It runs locally in the browser with no credentials, backend, paid feed or model API.
 
-The **mentor prototype is complete**, and the first post-demo engineering milestone is implemented: CSV intake, an itemized cost ledger, source references and dated memo snapshots. This is an assumption-driven decision tool. Customer validation, reviewed duty coverage, live data and trained forecasting remain future work.
+The **mentor prototype is complete**, and the first post-demo engineering milestone is implemented: CSV intake, an itemized cost ledger, source references and dated memo snapshots. Forecast and What if? modes now separate a dated local freight baseline from the manual scenario calculator. The baseline uses explicitly imported or fictional observations; automatic event odds remain unavailable. Customer validation, reviewed duty coverage, live data and trained forecasting remain future work.
 
 ## Project references
 
@@ -34,8 +34,8 @@ Open the URL printed by Vite, normally `http://127.0.0.1:5173`. No environment v
 ## Checks
 
 ```sh
-npm run check          # Formatting, doc links, lint, types, 50 unit tests, production build
-npm run test:e2e       # 16 browser cases across desktop and narrow touch layouts
+npm run check          # Formatting, doc links, lint, types, unit tests, production build
+npm run test:e2e       # Browser cases across desktop and narrow touch layouts
 npm run format        # Apply the shared formatting rules
 npm run preview       # Serve dist/ after a successful build
 ```
@@ -48,7 +48,7 @@ PLAYWRIGHT_BROWSERS_PATH=.playwright npx playwright install chromium
 
 On Linux CI, use `npx playwright install --with-deps chromium` with the same environment variable. On macOS, the config can use an already installed Brave browser if bundled Chromium is unavailable. `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select another compatible Chromium executable. Local verification used Brave after the browser-download host could not resolve. The narrow project is a 390 × 844 Chromium touch viewport, not a physical iOS/Android device.
 
-[GitHub Actions](.github/workflows/ci.yml) is configured to run these checks on pushes and pull requests. Its hosted execution has not been verified in this session.
+[GitHub Actions](.github/workflows/ci.yml) is configured to run these checks on pushes and pull requests. The full hosted gate, including browser tests, passed on the forecast implementation commit; see [verified progress](docs/PROGRESS.md).
 
 ## What works
 
@@ -58,6 +58,7 @@ On Linux CI, use `npx playwright install --with-deps chromium` with the same env
 - Strict local CSV preview/import with row errors, duplicate detection, capacity limits and all-or-none commit. See the [CSV contract](docs/CSV_INTAKE.md).
 - Cost scope for insurance, brokerage, port and inland charges, including explicit treatment of charges already in goods or freight.
 - Customer-supplied references and dates, with evidence invalidation after value or quote-context edits. A supplied reference is not independent verification.
+- Local freight-series JSON intake with unit/rights/freshness checks, automatic last-observation baseline, and separate forecast evidence memo; see the [forecast contract](docs/FORECASTS.md).
 - Browser-local persistence, frozen memo snapshots with calculator version, JSON download and a printable one-page memo.
 
 Money inputs are **USD cents**; rates and probabilities are **basis points** (`4000` means 40%). Customs value is the duty calculation basis and is not added again as an acquisition cost. Incoterms provide context; they do not automatically unbundle quotes. Optional cost lines add to the total only when marked separately incurred.
@@ -65,7 +66,7 @@ Money inputs are **USD cents**; rates and probabilities are **basis points** (`4
 ## Five-minute mentor walkthrough
 
 1. Open the app, choose **Try an example shipment**, then Northstar on Shanghai → Los Angeles. Reset demo data first if the samples were edited; reset preserves added/imported shipments.
-2. Confirm base cost **$117,000**, expected tariff exposure **$6,000** and expected freight exposure **$600**.
+2. Analysis opens in **Forecast**: with no imported observations, automatic estimates and event probabilities are unavailable. Optionally load explicitly fictional observations to inspect the dated baseline. Switch to **What if?** and confirm base cost **$117,000**, expected tariff exposure **$6,000** and expected freight exposure **$600**.
 3. Compare waiting at **$123,600** with ordering early at **$121,100**: an expected **$2,500** early advantage.
 4. Change tariff event probability from **40% to 10%**. Waiting becomes **$119,100**, cheaper than early by **$2,000**.
 5. Explain the **23.33%** break-even probability and the assumption that early entry avoids only the hypothetical tariff increase. Set avoidance to unknown to exclude that action from recommendations.
@@ -91,7 +92,7 @@ Earlier purchasing alone does not establish tariff avoidance. Rerouting alone do
 
 ## Limits and next work
 
-The next engineering milestone is a **prospective decision journal**: preserve dated input/evidence snapshots, a selected action and later actual outcomes without rewriting history. In parallel, the founder needs importer/broker interviews and a rights-reviewed lane dataset before research or paid-product claims. The [execution plan](docs/MASTER_EXECUTION_PLAN.md) defines the gates.
+The audit reprioritized the next milestone to an authorized lane dataset and time-ordered baseline evaluation; see the [forecast contract and integration assessment](docs/FORECASTS.md). **Refresh signals** refreshes local observations; no live service is connected. A **prospective decision journal** then needs to preserve dated input/evidence snapshots, a selected action and later actual outcomes without rewriting history. In parallel, the founder needs importer/broker interviews and a rights-reviewed lane dataset before research or paid-product claims. The [execution plan](docs/MASTER_EXECUTION_PLAN.md) defines the gates.
 
 There is no automatic HTS classification, legally complete duty engine, independently verified quote feed, trained model, server database, account system, cross-device sync, payment schedule optimization or commercial production readiness. The workspace is bounded to 25 shipments. Route arcs are illustrative connections, not vessel tracks.
 

@@ -1,10 +1,10 @@
 # Progress and handoff
 
-**Checkpoint:** October 15, 2026 — intake foundation and new-repository preparation.
+**Checkpoint:** October 16, 2026 — prediction-first audit implementation and local verification.
 
 **Overall state:** mentor prototype complete; first post-demo engineering milestone complete. Stage 1 customer/research validation and the commercial product remain unfinished.
 
-**Next engineering milestone:** prospective decision journal, scoped in [the execution plan](MASTER_EXECUTION_PLAN.md).
+**Current milestone:** Forecast/What if? separation, local observation registry and automatic last-observation freight baseline, described in the [forecast contract](FORECASTS.md). **Next:** authorized real lane data and time-ordered baseline evaluation; the prospective journal follows.
 
 This is the canonical status record. [Master plan](../COST_CURRENT_MASTER_BUILD_PLAN.md) holds requirements; [engineering guide](IMPLEMENTATION_PLAN.md) holds architecture; [README](../README.md) holds setup and demo instructions. Append dated checkpoints and keep this current-state summary accurate.
 
@@ -24,7 +24,19 @@ This is the canonical status record. [Master plan](../COST_CURRENT_MASTER_BUILD_
 
 CSV customer references are user claims, not independently verified quotes or official duty determinations. Future official/licensed/model contracts do not establish active providers.
 
-## Verification actually run
+## October 16 forecast batch
+
+Implemented the user-authorized prediction-first audit priority without changing `engine.ts`, canonical samples or date-boundary regressions. Added a separate typed local freight registry, bounded JSON validation, declared rights and measurement basis, known-at-time retrieval/revision filtering, history-gap and freshness gates, and a versioned 28/56-day last-observation baseline. Automatic event odds remain null. Forecast mode is the default, with no sliders or unsupported action rankings; What if? preserves the manual calculator and saves reversible probability overrides with original forecast context. Local refresh re-reads persisted observations and reports unavailable/corrupt-storage states without sample fallback. An explicitly selected fictional preview remains illustrative. Frozen forecast/manual memo exports preserve source state and as-of context. Baseline evaluation mechanics report only eligible held-out targets and MAE; no trained model or real-data metrics exist.
+
+Confirmed hosted CI run `38853607438` failed on formatting of the bundled frontend skill. Excluded third-party skills from project formatting and formatted the newly supplied audit. Saved the passing existing 50-test local baseline in commit `8f41da0` before forecast changes. The audit's baseline release is a commit, not a release tag.
+
+Local verification: full `npm run check` passed with **60 unit tests**, documentation links, lint, typecheck and production build. All **20 desktop/narrow browser cases passed**; after print spacing and integer-precision refinements, the affected demo/forecast subset passed **12/12**. Connected Brave inspection confirms the default unavailable forecast has no manual sliders and preserves the $117,000 entered cost ledger. Forecast and manual memos were exported, rendered with Ghostscript and visually checked as one page each; a long manual provenance badge was shortened to fit the margin. The final timestamp regression confirms a changed horizon receives a new generation time and passed **2/2** on desktop/narrow; its initial locator was corrected to use the visible date field.
+
+Current limitations: no rights-reviewed real dataset supplied or present in the repository; no live feed, exact market mapping, seasonal/SARIMAX/LightGBM model, real historical score, learned intervals, automatically estimated event probability, durable decision/outcomes journal or customer validation. The refreshed [Vigil assessment](FORECASTS.md#vigil-integration-assessment) rejects its max-price/title/fallback shortcuts; no adapter code was copied. Rate sensitivity is user-confirmed exploratory math and is excluded from frozen forecast memos. Hosted [GitHub Actions run 38856506608](https://github.com/Sambhav255/cost_current/actions/runs/38856506608) passed `npm run check` and all 20 browser cases on implementation commit `a99aa69`; the timestamp follow-up is additionally verified locally as above.
+
+Next action: obtain one lawful repeated lane series before any empirical model claim. Retain the local naive baseline and explicit unavailable event odds until data and qualified event mapping support more.
+
+## Prior verification actually run
 
 | Check                    | Result                                                                                          |
 | ------------------------ | ----------------------------------------------------------------------------------------------- |
@@ -44,7 +56,7 @@ Final post-format verification passed: `npm run check` completed formatting, loc
 
 ## Open work and product gates
 
-1. Implement a bounded prospective decision journal: immutable known-at-time snapshots, selected action/override and separately recorded actual outcomes.
+1. Obtain an authorized lane series and run a time-ordered baseline evaluation under the [forecast contract](FORECASTS.md), then implement a bounded prospective decision journal with immutable known-at-time snapshots and separately recorded outcomes.
 2. Founder interviews 5–10 relevant importer/broker decision owners; choose one lane and segment from evidence. No outreach or customer traction is claimed by this work.
 3. Establish lane-data rights and quote comparability; define a historical case study with simple baselines and a frozen cutoff. No historical dataset or backtest result exists yet.
 4. Reconcile a narrowly scoped tariff case against dated official rules and broker review before adding verified-duty claims.
@@ -97,3 +109,5 @@ The four waiting outcomes are $117,000 (48%), $120,000 (12%), $132,000 (32%), an
 - **October 15, intake milestone:** delivered strict CSV preview/atomic import, explicit cost inclusion, six-state evidence contracts, customer references and scope, source invalidation, editable decision dates, memo versioning and legacy-compatible storage. Added explicit edge-case regressions; 50 unit tests and 16 browser cases pass. Mobile sidebar overflow was corrected after a real browser failure. Original and intake memo layouts were exported and reviewed. Customer validation, source rights, reviewed duties and trained models remain open.
 
 - **October 15, repository preparation:** organized master plan v1.1 with navigation, status and completion gates; reconciled README, engineering/execution guides and historical handoff; formatted source/config/docs; added Prettier, a local documentation-link check, CI, Node pin and Git hygiene. Full `npm run check` and post-format browser suite pass; diff whitespace and file-inclusion review are clean. A separate workflow established the new `Sambhav255/cost_current` remote during cleanup. Latest changes remain uncommitted; this session cannot write `.git`. Next: review/commit/push using the repository guide, then design the prospective journal milestone.
+
+- **October 16, forecast foundation:** implemented the prediction-first audit milestone in ordered commits (CI baseline `8f41da0`, integrated forecast foundation `a99aa69`, then timestamp/handoff follow-up). Full local checks passed with 60 unit tests; 20 browser cases passed, followed by 12 affected-flow and 2 timestamp-flow passes after refinements. Rendered forecast/manual memos fit one page and were visually reviewed. Hosted Actions run `38856506608` passed its complete check and 20 browser cases. No live feed, trained model, real-data accuracy or customer adoption is claimed. Next: rights-reviewed real lane data and a time-ordered baseline evaluation.

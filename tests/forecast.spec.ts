@@ -18,6 +18,14 @@ test('no-data forecast, explicit fictional baseline, refresh, local persistence 
     }),
   ).toBeVisible();
   await expect(page.getByTestId('decision-wait')).toHaveCount(0);
+  const generation = page
+    .getByText('As of / generated', { exact: true })
+    .locator('..')
+    .locator('dd');
+  const beforeHorizonChange = await generation.innerText();
+  await page.getByRole('combobox', { name: 'Forecast horizon' }).selectOption('56');
+  await expect(generation).not.toHaveText(beforeHorizonChange);
+  await page.getByRole('combobox', { name: 'Forecast horizon' }).selectOption('28');
   await page.getByRole('button', { name: 'Refresh signals', exact: true }).click();
   await expect(page.getByRole('status', { name: 'Signal refresh status' })).toContainText(
     'No sample fallback',

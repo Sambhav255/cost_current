@@ -1,96 +1,87 @@
 # Progress and handoff
 
-**Checkpoint:** October 15, 2026, 23:15 CDT.  
-**Overall state:** local mentor prototype implemented and verified; trained models and production integrations remain future work.  
-**Immediate milestone:** local mentor demo, October 16.  
-**Current working directory:** `/Users/sambhav/cost_current`.
+**Checkpoint:** October 15, 2026 — intake foundation and new-repository preparation.
 
-This is the canonical status document. Update the current-state sections when work changes; append dated checkpoints with actual commands and outcomes. Source existence, successful integration, and passing verification are separate milestones.
+**Overall state:** mentor prototype complete; first post-demo engineering milestone complete. Stage 1 customer/research validation and the commercial product remain unfinished.
 
-## Context recovered
+**Next engineering milestone:** prospective decision journal, scoped in [the execution plan](MASTER_EXECUTION_PLAN.md).
 
-The prior task, **Review file and plan execution**, confirmed a local browser-only demo and began implementation. Its thread ID is `01a142d2-5066-7980-93e8-d20446909366`. It was still marked active and writing UI files during the initial recovery checkpoint. During final QA it was waiting on an approval; coordination messages assigned browser tests and documentation to this continuation. This continuation recovered that context and performed independent calculator review.
+This is the canonical status record. [Master plan](../COST_CURRENT_MASTER_BUILD_PLAN.md) holds requirements; [engineering guide](IMPLEMENTATION_PLAN.md) holds architecture; [README](../README.md) holds setup and demo instructions. Append dated checkpoints and keep this current-state summary accurate.
 
-**Concurrency caution:** establish whether that task is still running before taking ownership of its files. Do not replace working modules wholesale or assume an incomplete UI file has been abandoned. No Git repository was present when checked, so there is no commit or branch reference for this checkpoint.
+## Delivered and integrated
 
-## Implemented in source
+| Area                   | Implemented behavior                                                                                                                                                  |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Mentor prototype       | Welcome, overview, selectable globe/2D fallback, editor, action comparisons, methods and printable memo                                                               |
+| Deterministic engine   | Itemized landed cost, four independent-event states, expected costs, early/wait threshold, feasible same-arrival alternatives and explicit invalid-input rejection    |
+| CSV intake             | Local file/paste/template flow; strict USD numbers/dates/headers; row errors; duplicate and capacity checks; no partial imports                                       |
+| Cost ledger            | Insurance, brokerage, port and inland costs; inclusion in goods/freight versus separate charges; customs value shown as a basis without double counting               |
+| Evidence               | Six-state typed contracts; implemented assumption/customer-supplied/unknown states; dated references and quote scope; sourced value/context edits invalidate evidence |
+| Dates                  | Editable scenario decision date; legacy demo fallback; source-date and arrival feasibility checks                                                                     |
+| Persistence            | Backward-compatible localStorage key `cost-current-demo-v1`; 25-shipment limit; reset restores samples and preserves additions                                        |
+| Memo                   | Frozen input/evidence/results snapshot with calculator version; JSON download; printable cost scope and references                                                    |
+| Repository preparation | Master plan navigation/status, coherent reference docs, Prettier, ESLint, ignore rules, Node pin, documentation check and GitHub Actions configuration                |
 
-| Area | State and evidence |
-| --- | --- |
-| Project scaffold | React 19, TypeScript, Vite, globe dependencies, Vitest, and Playwright installed; package lock present |
-| Shipment contracts and samples | `types.ts` and `data.ts`; three fictional companies and three lanes; fixed decision date `2026-10-16` |
-| Cost engine | `engine.ts`; input validation, itemized costs, independent event outcomes, early/wait comparison, eligible route/supplier actions, carrying cost modes, break-even calculation |
-| Persistence | `storage.ts` plus App integration; versioned localStorage schema, fallback to fresh samples, save status, reset; edited probability survives reload in desktop/mobile tests |
-| Globe and fallback | `GlobeView.tsx`, `RouteGlobe.tsx`, `MapFallback.tsx`; selectable route arcs, controls, reduced-motion handling, lazy loading/error boundary, 2D fallback; 3D rendering and dragging verified in the connected browser; 2D switching and selection covered by automated tests |
-| Screen components | `Welcome.tsx`, `Overview.tsx`, `ShipmentForm.tsx`, `Analysis.tsx`, `Methods.tsx`, `Memo.tsx`, and shared `ui.tsx` exist; integrated through `App.tsx` and `styles.css`; core navigation, edits, comparisons, methods, and memo verified |
-| Browser acceptance suite | `playwright.config.ts` and `tests/demo.spec.ts`; 4 flows × 2 viewports = 8 passing cases |
-| Print export | One-page letter PDF and rendered PNG in `output/pdf/`; final print fonts enlarged for readability |
-| Future model contract | `ForecastProvider` and `ForecastEvidence` interfaces exist; no implementation or trained model |
-| Agent reference docs | README, this progress log, implementation plan, root AGENTS entry point, and historical recovery notes |
+CSV customer references are user claims, not independently verified quotes or official duty determinations. Future official/licensed/model contracts do not establish active providers.
 
 ## Verification actually run
 
-| Command / check | Result |
-| --- | --- |
-| `npm run test` | **Passed: 9 tests in 1 file** |
-| `npm run typecheck` | **Passed** after app assembly and adding `@types/node` for the test config |
-| `npm run build` | **Passed**; lazy globe bundle separated from main app; final CSS included |
-| `npm run test:e2e` | **Passed: 8 tests**; desktop 1440×1000 and narrow touch 390×844, 4 flows each |
-| `npm run test:e2e -- --project=desktop -g 'default costs'` | **Passed** after final print-size adjustment; regenerated sample PDF |
-| PDF export and render | Expected shipment/cost text checked; **one letter page**; rendered with PyMuPDF for visual QA |
-| Connected browser | Welcome, overview, analysis, probability change, memo, narrow viewport, watchlist selection, and true globe dragging checked |
-| App console | No app errors observed; connected browser had unrelated extension warnings |
-| Runtime | Node 22.13.1; npm 10.9.2 |
-| Local URL | `http://127.0.0.1:5173/`; existing Vite process was reused |
+| Check                    | Result                                                                                          |
+| ------------------------ | ----------------------------------------------------------------------------------------------- |
+| `npm run test`           | Passed: **50 tests across 3 files**                                                             |
+| `npm run lint`           | Passed                                                                                          |
+| `npm run typecheck`      | Passed                                                                                          |
+| `npm run build`          | Passed; globe loaded as a separate large bundle                                                 |
+| `npm run test:e2e`       | Passed: **16 cases**, desktop 1440 × 1000 and narrow touch 390 × 844                            |
+| Print export             | Original and intake-fixture memo exported; one-page letter layout checked and visually reviewed |
+| Connected browser        | Globe interaction, demo comparison and CSV preview/import/ledger inspected                      |
+| Dependency install audit | Reported zero vulnerabilities after tooling installation                                        |
+| Runtime                  | Node 22.13.1, npm 10.9.2                                                                        |
 
-The automated browser installer could not resolve `cdn.playwright.dev`. The suite then passed with installed macOS Brave in an isolated test profile. The config supports that local fallback, a custom Chromium executable, or a workspace-local Playwright browser installation. Narrow viewport coverage does not establish real-device iOS/Android compatibility.
+The expanded browser suite covers the canonical flip, persistence, unknown avoidance, import preview/commit, invalid and duplicate batches, extra-charge inclusion, memo consistency, manual required inputs, source invalidation and WebGL fallback. Local runs use installed macOS Brave because the optional browser-download host could not resolve. Viewport coverage is not real-device certification. Generated artifacts are intentionally ignored by Git and recreated by browser tests.
 
-Earlier failures are retained in the checkpoint history: missing App integration, the globe callback type, ambiguous test selectors, and a Safari-device emulation mismatch with the available Chromium browser were resolved. The final narrow project tests responsive layout with touch support directly.
+Final post-format verification passed: `npm run check` completed formatting, local links/anchors in 10 Markdown documents, lint (including the documentation-check script), types, all 50 unit tests and production build. The post-format browser rerun passed all 16 cases. `git diff --check` is clean. A review of 56 non-ignored tracked/untracked files found no generated/environment files or credential-pattern matches. Hosted GitHub Actions results have not been verified in this session.
 
-## Independent review fixes completed
+## Open work and product gates
 
-1. **Alternative route entry timing:** a baseline arrival before the event previously caused a later route to inherit zero tariff exposure. The alternative now uses its own arrival date.
-2. **Alternative supplier entry timing:** supplier tariff exposure now uses the supplier's arrival date rather than the baseline arrival date.
-3. **Early arrival when baseline is already unexposed:** the early action no longer acquires tariff exposure when the baseline also arrives before the event, even if the tariff-avoidance selector says not avoided.
-4. **Explanation consistency:** route text now explains that origin/duty assumptions remain the same while entry timing may affect exposure; early text explains when there is no exposure to avoid.
-5. **TypeScript callback:** the globe arc color callback parameter was explicitly typed.
+1. Implement a bounded prospective decision journal: immutable known-at-time snapshots, selected action/override and separately recorded actual outcomes.
+2. Founder interviews 5–10 relevant importer/broker decision owners; choose one lane and segment from evidence. No outreach or customer traction is claimed by this work.
+3. Establish lane-data rights and quote comparability; define a historical case study with simple baselines and a frozen cutoff. No historical dataset or backtest result exists yet.
+4. Reconcile a narrowly scoped tariff case against dated official rules and broker review before adding verified-duty claims.
+5. Add trained models, market adapters and secure multi-tenant operations only after the master plan's data, evaluation and customer-value gates.
 
-Regression tests reproduce all three timing fixes. The remaining tests cover the canonical arithmetic, 10% decision flip, probability normalization and expected value, unknown early tariff eligibility, origin-duty invariance for same-date rerouting, and supplier comparability.
+Known limits: no trained forecasting, live tariff/freight feed, legal classification engine, independently validated prices, accounts, server storage, cross-device sync or payment-date optimization. Costs reflect only the entered scope. Browser storage is local. Long arbitrary text and physical-device print dialogs have not been exhaustively verified. Prototype completion does not establish commercial readiness.
+
+## Git and publishing state
+
+The owner confirmed a **new repository**. This session's initialization attempt was denied by the `.git` write restriction. A separate workflow subsequently created/linked [Sambhav255/cost_current](https://github.com/Sambhav255/cost_current) while cleanup was in progress. Read-only inspection found `main` tracking `origin/main`, initial local commit `144526d` and merge `624e728` incorporating the remote placeholder. The latest documentation and formatting changes remain uncommitted locally; this session has not committed or pushed them. Commit identity was absent from the inspected configuration. [Repository setup](REPOSITORY_SETUP.md) gives the current review, commit and push commands; do not reinitialize or duplicate `origin`.
+
+## Context recovered
+
+The original task, “Review file and plan execution,” was still building UI during recovery. Independent continuation work added timing regressions, verified the integrated prototype, then advanced to the authorized master plan. [SESSION_HANDOFF](../SESSION_HANDOFF.md) is a historical snapshot; do not interpret its original prototype-only scope or unfinished UI as current status. Check for active concurrent tasks before overwriting files.
 
 ## Acceptance numbers to preserve
 
 All values are illustrative and use the Northstar defaults.
 
-| Metric | Expected value |
-| --- | ---: |
-| Goods / customs value | $100,000 / $100,000 |
-| Current duty / freight | $10,000 / $7,000 |
-| Base landed cost | $117,000 |
-| Tariff event impact / probability | $15,000 / 40% |
-| Expected extra tariff cost | $6,000 |
-| Freight surcharge / probability | $3,000 / 20% |
-| Expected extra freight cost | $600 |
-| Wait expected total | $123,600 |
-| Early incremental cost | $3,500 |
-| Early expected total | $121,100 |
-| Early savings versus waiting | $2,500 |
-| Break-even tariff probability | 23.3333% |
-| Wait expected total at 10% tariff probability | $119,100 |
-| Wait advantage at 10% | $2,000 |
+| Metric                                        |      Expected value |
+| --------------------------------------------- | ------------------: |
+| Goods / customs value                         | $100,000 / $100,000 |
+| Current duty / freight                        |    $10,000 / $7,000 |
+| Base landed cost                              |            $117,000 |
+| Tariff event impact / probability             |       $15,000 / 40% |
+| Expected extra tariff cost                    |              $6,000 |
+| Freight surcharge / probability               |        $3,000 / 20% |
+| Expected extra freight cost                   |                $600 |
+| Wait expected total                           |            $123,600 |
+| Early incremental cost                        |              $3,500 |
+| Early expected total                          |            $121,100 |
+| Early savings versus waiting                  |              $2,500 |
+| Break-even tariff probability                 |            23.3333% |
+| Wait expected total at 10% tariff probability |            $119,100 |
+| Wait advantage at 10%                         |              $2,000 |
 
 The four waiting outcomes are $117,000 (48%), $120,000 (12%), $132,000 (32%), and $135,000 (8%). This is an explicit discrete scenario distribution under independence, not a calibrated forecast.
-
-## Remaining product work
-
-1. Rehearse the five-minute walkthrough in README; use **Reset demo data** to return to the 40% Northstar baseline before presenting.
-2. Treat the current local demo as complete. Do not add model/API complexity before the mentor review and customer interviews.
-3. Follow Phase 2 of IMPLEMENTATION_PLAN: customer decision interviews, paid memo/pilot validation, permitted lane-data inventory, and a prospective decision journal.
-4. Add CSV import only when an actual format is agreed. It is optional and intentionally deferred.
-5. Address production requirements later: real data provenance/licensing, expert-reviewed duty treatment, model evaluation, authentication/permissions, private server storage, and cross-device behavior.
-
-Known limits: calculations use explicit fictional/user assumptions; no trained model, live regulatory/freight feed, database, payment schedule, present value, or delay/lost-sales model is active. The scenario decision date is fixed at October 16, 2026. The standalone memo export is a tested sample at 10% probability, not a regulatory report. The app can generate a fresh snapshot for other edited assumptions. Extremely long custom text and physical-device print dialogs have not been exhaustively tested.
-
-No public deployment was requested or performed. The default experience remains local with no credentials or paid services.
 
 ## Checkpoint history
 
@@ -102,3 +93,7 @@ No public deployment was requested or performed. The default experience remains 
 - **October 15, 23:06–23:15 CDT:** app and styling integrated; production build and calculator checks passed. Added a desktop/narrow-touch browser suite, corrected selectors, used the installed Brave fallback after browser-download DNS failure, and reached 8/8 passing cases. Fixed analysis/memo highlighting so a valid cheaper alternative stays recommended when early entry is unconfirmed; added a regression flow for it. Exported and visually reviewed a one-page memo; enlarged print text and reran the export flow. Added Node type declarations for config typechecking. README and this log now reflect verified local-demo readiness.
 
 - **Master-plan kickoff, October 15:** reread the 910-line master blueprint, rechecked current source and current Vigil connectors read-only, and wrote `docs/MASTER_EXECUTION_PLAN.md` before product changes. Prototype calculations/typecheck/build pass again. Next: close explicit edge-test/lint gaps, then implement strict CSV intake, typed cost evidence, and an auditable cost ledger as the first post-demo milestone. Full commercial readiness remains gated on customer/data/legal evidence.
+
+- **October 15, intake milestone:** delivered strict CSV preview/atomic import, explicit cost inclusion, six-state evidence contracts, customer references and scope, source invalidation, editable decision dates, memo versioning and legacy-compatible storage. Added explicit edge-case regressions; 50 unit tests and 16 browser cases pass. Mobile sidebar overflow was corrected after a real browser failure. Original and intake memo layouts were exported and reviewed. Customer validation, source rights, reviewed duties and trained models remain open.
+
+- **October 15, repository preparation:** organized master plan v1.1 with navigation, status and completion gates; reconciled README, engineering/execution guides and historical handoff; formatted source/config/docs; added Prettier, a local documentation-link check, CI, Node pin and Git hygiene. Full `npm run check` and post-format browser suite pass; diff whitespace and file-inclusion review are clean. A separate workflow established the new `Sambhav255/cost_current` remote during cleanup. Latest changes remain uncommitted; this session cannot write `.git`. Next: review/commit/push using the repository guide, then design the prospective journal milestone.

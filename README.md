@@ -8,17 +8,17 @@ The **mentor prototype is complete**, and the first post-demo engineering milest
 
 ## Project references
 
-| Document | Purpose |
-| --- | --- |
+| Document                                               | Purpose                                                                     |
+| ------------------------------------------------------ | --------------------------------------------------------------------------- |
 | [Master build plan](COST_CURRENT_MASTER_BUILD_PLAN.md) | Product requirements, complete vision, staged releases and completion gates |
-| [Progress](docs/PROGRESS.md) | Current verified state, limitations and checkpoint history |
-| [Execution plan](docs/MASTER_EXECUTION_PLAN.md) | Prototype audit, delivered milestone, next work and Vigil inspection |
-| [Engineering guide](docs/IMPLEMENTATION_PLAN.md) | Architecture, calculation boundaries and acceptance discipline |
-| [CSV contract](docs/CSV_INTAKE.md) | Supported columns, validation, cost inclusion and evidence handling |
-| [Repository setup](docs/REPOSITORY_SETUP.md) | Initial Git commit and push to a new repository |
-| [Agent instructions](AGENTS.md) | Read order and working conventions |
-| [Original founder brief](COST_CURRENT_CODEX_BRIEF.md) | Original vision and assumptions; see maintained docs for current status |
-| [Session recovery](SESSION_HANDOFF.md) | Historical context only |
+| [Progress](docs/PROGRESS.md)                           | Current verified state, limitations and checkpoint history                  |
+| [Execution plan](docs/MASTER_EXECUTION_PLAN.md)        | Prototype audit, delivered milestone, next work and Vigil inspection        |
+| [Engineering guide](docs/IMPLEMENTATION_PLAN.md)       | Architecture, calculation boundaries and acceptance discipline              |
+| [CSV contract](docs/CSV_INTAKE.md)                     | Supported columns, validation, cost inclusion and evidence handling         |
+| [Repository setup](docs/REPOSITORY_SETUP.md)           | Current repository state and commands to commit/push                        |
+| [Agent instructions](AGENTS.md)                        | Read order and working conventions                                          |
+| [Original founder brief](COST_CURRENT_CODEX_BRIEF.md)  | Original vision and assumptions; see maintained docs for current status     |
+| [Session recovery](SESSION_HANDOFF.md)                 | Historical context only                                                     |
 
 ## Run locally
 
@@ -48,7 +48,7 @@ PLAYWRIGHT_BROWSERS_PATH=.playwright npx playwright install chromium
 
 On Linux CI, use `npx playwright install --with-deps chromium` with the same environment variable. On macOS, the config can use an already installed Brave browser if bundled Chromium is unavailable. `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select another compatible Chromium executable. Local verification used Brave after the browser-download host could not resolve. The narrow project is a 390 × 844 Chromium touch viewport, not a physical iOS/Android device.
 
-[GitHub Actions](.github/workflows/ci.yml) is configured to run these checks on pushes and pull requests. Its hosted execution has not yet been observed because the new remote repository has not been created here.
+[GitHub Actions](.github/workflows/ci.yml) is configured to run these checks on pushes and pull requests. Its hosted execution has not been verified in this session.
 
 ## What works
 
@@ -77,17 +77,17 @@ Earlier purchasing alone does not establish tariff avoidance. Rerouting alone do
 
 ## Source map
 
-| Location | Responsibility |
-| --- | --- |
-| `src/lib/types.ts`, `data.ts` | Shared contracts and fictional seeds |
-| `src/lib/engine.ts` | Deterministic validation, costs, scenarios and action ranking |
-| `src/lib/csv.ts` | Strict parsing, preview and atomic import |
-| `src/lib/evidence.ts`, `ledger.ts` | Evidence states, source invalidation and cost inclusion |
-| `src/lib/storage.ts` | Bounded, backward-compatible local persistence |
-| `src/lib/*.test.ts` | Arithmetic, date, intake, evidence and storage regressions |
-| `src/components/` | Screens, editors, ledger, memo, globe and fallback |
-| `src/App.tsx`, `src/styles.css` | State, navigation, persistence and responsive/print layout |
-| `tests/`, `playwright.config.ts` | Desktop/narrow browser acceptance and generated print artifacts |
+| Location                           | Responsibility                                                  |
+| ---------------------------------- | --------------------------------------------------------------- |
+| `src/lib/types.ts`, `data.ts`      | Shared contracts and fictional seeds                            |
+| `src/lib/engine.ts`                | Deterministic validation, costs, scenarios and action ranking   |
+| `src/lib/csv.ts`                   | Strict parsing, preview and atomic import                       |
+| `src/lib/evidence.ts`, `ledger.ts` | Evidence states, source invalidation and cost inclusion         |
+| `src/lib/storage.ts`               | Bounded, backward-compatible local persistence                  |
+| `src/lib/*.test.ts`                | Arithmetic, date, intake, evidence and storage regressions      |
+| `src/components/`                  | Screens, editors, ledger, memo, globe and fallback              |
+| `src/App.tsx`, `src/styles.css`    | State, navigation, persistence and responsive/print layout      |
+| `tests/`, `playwright.config.ts`   | Desktop/narrow browser acceptance and generated print artifacts |
 
 ## Limits and next work
 

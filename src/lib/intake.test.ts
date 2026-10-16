@@ -12,11 +12,15 @@ function fixture(changes: Record<string, string> = {}) {
   const { cells } = parseCsv(sampleCsv());
   const values = Object.fromEntries(cells[0].map((c, i) => [c, cells[1][i]]));
   Object.assign(values, changes);
-  const quote = (s: string) => /[",\r\n]/.test(s) ? '"'+s.replaceAll('"','""')+'"' : s;
-  return CSV_COLUMNS.join(',')+'\r\n'+CSV_COLUMNS.map(c => quote(values[c])).join(',')+'\r\n';
+  const quote = (s: string) => (/[",\r\n]/.test(s) ? '"' + s.replaceAll('"', '""') + '"' : s);
+  return (
+    CSV_COLUMNS.join(',') + '\r\n' + CSV_COLUMNS.map((c) => quote(values[c])).join(',') + '\r\n'
+  );
 }
 function calculate(s: Shipment): ValidAnalysis {
-  const a = analyzeShipment(s); if (!a.valid) throw new Error(a.errors.join('; ')); return a;
+  const a = analyzeShipment(s);
+  if (!a.valid) throw new Error(a.errors.join('; '));
+  return a;
 }
 function imported(changes: Record<string, string> = {}) {
   const preview = previewCsv(fixture(changes), freshSamples(), context);
@@ -35,8 +39,18 @@ describe('strict local CSV intake', () => {
     expect(s.intake?.sourceType).toBe('scenario_assumption');
   });
   it('records quote reference, claimed source date, capture time and customer provenance', () => {
-    const s = imported({ source_type: 'customer_supplied', source_reference: 'Quote ACME-001', source_as_of: '2026-10-14' });
-    expect(s.evidence?.freightCents).toEqual({ state: 'customer_supplied', reference: 'Quote ACME-001', observedOn: '2026-10-14', capturedAt: context.capturedAt, scope: {routeId:'sha-lax',originCountry:'China',units:5000,currency:'USD'} });
+    const s = imported({
+      source_type: 'customer_supplied',
+      source_reference: 'Quote ACME-001',
+      source_as_of: '2026-10-14',
+    });
+    expect(s.evidence?.freightCents).toEqual({
+      state: 'customer_supplied',
+      reference: 'Quote ACME-001',
+      observedOn: '2026-10-14',
+      capturedAt: context.capturedAt,
+      scope: { routeId: 'sha-lax', originCountry: 'China', units: 5000, currency: 'USD' },
+    });
     expect(s.evidence?.tariffProbabilityBps).toBeUndefined();
     expect(s.tariffProbabilityBps).toBe(4000);
   });
@@ -46,8 +60,8 @@ describe('strict local CSV intake', () => {
     expect(result.cells[1]).toEqual(['A, B', 'two "quotes"\nand a newline']);
   });
   it('bounds header width and individual fields before creating a large error preview', () => {
-    expect(parseCsv(Array(1000).fill('x').join(',')+'\n').error).toMatch(/64 columns/);
-    expect(parseCsv('id,name\n1,'+'x'.repeat(4001)).error).toMatch(/parsing limit/);
+    expect(parseCsv(Array(1000).fill('x').join(',') + '\n').error).toMatch(/64 columns/);
+    expect(parseCsv('id,name\n1,' + 'x'.repeat(4001)).error).toMatch(/parsing limit/);
   });
   it('rejects malformed quoting without accepting partial data', () => {
     expect(parseCsv('id,name\n1,"unfinished').error).toMatch(/not closed/);
@@ -77,13 +91,21 @@ describe('strict local CSV intake', () => {
     expect(result.shipments).toBe(current);
   });
   it('blocks existing and within-file duplicate IDs', () => {
-    expect(previewCsv(fixture({ shipment_id: 'northstar' }), freshSamples(), context).rows[0].errors.join(' ')).toMatch(/Duplicate/);
-    const csv = sampleCsv(), row = csv.trimEnd().split('\r\n')[1];
+    expect(
+      previewCsv(
+        fixture({ shipment_id: 'northstar' }),
+        freshSamples(),
+        context,
+      ).rows[0].errors.join(' '),
+    ).toMatch(/Duplicate/);
+    const csv = sampleCsv(),
+      row = csv.trimEnd().split('\r\n')[1];
     const preview = previewCsv(csv + row + '\r\n', freshSamples(), context);
     expect(preview.rows[1].errors.join(' ')).toMatch(/Duplicate/);
   });
   it('rechecks duplicates at commit and deep-clones accepted records', () => {
-    const current = freshSamples(), preview = previewCsv(sampleCsv(), current, context);
+    const current = freshSamples(),
+      preview = previewCsv(sampleCsv(), current, context);
     const result = commitImport(preview, current);
     expect(result.shipments).toHaveLength(4);
     expect(commitImport(preview, result.shipments).error).toMatch(/duplicated/);
@@ -91,16 +113,25 @@ describe('strict local CSV intake', () => {
     expect(result.shipments[3].name).toBe('Northstar CSV Example');
   });
   it('rejects a whole batch when one row fails', () => {
-    const good = sampleCsv(), badRow = fixture({ shipment_id: 'bad-2', goods_usd: '-1' }).trimEnd().split('\r\n')[1];
-    const current = freshSamples(), preview = previewCsv(good + badRow + '\r\n', current, context);
+    const good = sampleCsv(),
+      badRow = fixture({ shipment_id: 'bad-2', goods_usd: '-1' }).trimEnd().split('\r\n')[1];
+    const current = freshSamples(),
+      preview = previewCsv(good + badRow + '\r\n', current, context);
     expect(preview.rows[0].errors).toEqual([]);
     expect(preview.rows[1].errors.length).toBeGreaterThan(0);
     expect(commitImport(preview, current).shipments).toBe(current);
   });
   it('rejects unknown or duplicate normalized headers and enforces capacity/size', () => {
-    expect(previewCsv(sampleCsv().replace('shipment_name', 'surprise'), [], context).errors.join()).toMatch(/Unknown column/);
-    expect(previewCsv(sampleCsv().replace('product,', 'shipment_name,'), [], context).errors.join()).toMatch(/unique/);
-    const existing = Array.from({ length: 25 }, (_, i) => ({ ...freshSamples()[0], id: 'existing-'+i }));
+    expect(
+      previewCsv(sampleCsv().replace('shipment_name', 'surprise'), [], context).errors.join(),
+    ).toMatch(/Unknown column/);
+    expect(
+      previewCsv(sampleCsv().replace('product,', 'shipment_name,'), [], context).errors.join(),
+    ).toMatch(/unique/);
+    const existing = Array.from({ length: 25 }, (_, i) => ({
+      ...freshSamples()[0],
+      id: 'existing-' + i,
+    }));
     expect(previewCsv(sampleCsv(), existing, context).errors.join()).toMatch(/capacity/);
     expect(parseCsv('x'.repeat(1_000_001)).error).toMatch(/1 MB/);
   });
@@ -118,18 +149,25 @@ describe('itemized cost ledger and timing', () => {
     const a = calculate(s);
     expect(a.baseCents).toBe(11_710_000);
     expect(otherCosts(s)).toBe(10_000);
-    expect(a.ledger.reduce((sum, line) => sum+line.contributionCents, 0)).toBe(a.baseCents);
-    expect(a.ledger.find(line => line.id === 'customs_basis')?.contributionCents).toBe(0);
+    expect(a.ledger.reduce((sum, line) => sum + line.contributionCents, 0)).toBe(a.baseCents);
+    expect(a.ledger.find((line) => line.id === 'customs_basis')?.contributionCents).toBe(0);
   });
   it('includes optional additional CSV charges and preserves them in supplier comparisons', () => {
-    const s = imported({ insurance_usd: '100', brokerage_usd: '200', port_usd: '300', inland_usd: '400' });
+    const s = imported({
+      insurance_usd: '100',
+      brokerage_usd: '200',
+      port_usd: '300',
+      inland_usd: '400',
+    });
     const a = calculate(s);
     expect(a.baseCents).toBe(11_800_000);
-    s.alternativeSupplier.enabled = true; s.alternativeSupplier.comparable = true;
+    s.alternativeSupplier.enabled = true;
+    s.alternativeSupplier.comparable = true;
     expect(calculate(s).actions[3].baseCents).toBe(12_050_000);
   });
   it('uses the explicit decision date for lead-time eligibility', () => {
-    const s = freshSamples()[0]; s.decisionDate = '2026-11-01';
+    const s = freshSamples()[0];
+    s.decisionDate = '2026-11-01';
     expect(calculate(s).actions[1].eligible).toBe(false);
   });
   it('blocks future quote evidence when the decision date is moved earlier', () => {
@@ -138,25 +176,40 @@ describe('itemized cost ledger and timing', () => {
     expect(analyzeShipment(s).valid).toBe(false);
   });
   it('invalidates evidence when a value or quote context changes', () => {
-    const s = imported({source_type:'customer_supplied'});
-    const priceEdit = {...s,...invalidateEvidenceForEdit(s,'freightCents'),freightCents:800000};
+    const s = imported({ source_type: 'customer_supplied' });
+    const priceEdit = {
+      ...s,
+      ...invalidateEvidenceForEdit(s, 'freightCents'),
+      freightCents: 800000,
+    };
     expect(priceEdit.evidence?.freightCents.state).toBe('unknown');
     expect(priceEdit.evidence?.goodsCents.state).toBe('customer_supplied');
-    const routeEdit = {...s,...invalidateEvidenceForEdit(s,'routeId'),routeId:'ham-ewr'};
+    const routeEdit = { ...s, ...invalidateEvidenceForEdit(s, 'routeId'), routeId: 'ham-ewr' };
     expect(routeEdit.originCountry).toBe('China');
-    expect(Object.values(routeEdit.evidence ?? {}).every(e=>e.state==='unknown')).toBe(true);
+    expect(Object.values(routeEdit.evidence ?? {}).every((e) => e.state === 'unknown')).toBe(true);
     expect(routeEdit.evidence?.freightCents.scope?.routeId).toBe('sha-lax');
   });
   it('rejects malformed source records without throwing during validation', () => {
-    const s = freshSamples()[0]; s.evidence = JSON.parse('{"goodsCents":"malformed"}');
+    const s = freshSamples()[0];
+    s.evidence = JSON.parse('{"goodsCents":"malformed"}');
     expect(() => analyzeShipment(s)).not.toThrow();
     expect(analyzeShipment(s).valid).toBe(false);
   });
   it('rejects duplicate cost categories and malformed evidence', () => {
     const s = freshSamples()[0];
-    s.costLines = [{ category: 'insurance', amountCents: 0, inclusion: 'separate' }, { category: 'insurance', amountCents: 0, inclusion: 'goods' }];
+    s.costLines = [
+      { category: 'insurance', amountCents: 0, inclusion: 'separate' },
+      { category: 'insurance', amountCents: 0, inclusion: 'goods' },
+    ];
     expect(analyzeShipment(s).valid).toBe(false);
-    expect(validEvidence({ state: 'customer_supplied', reference: 'Quote', observedOn: 'invalid', capturedAt: context.capturedAt })).toBe(false);
+    expect(
+      validEvidence({
+        state: 'customer_supplied',
+        reference: 'Quote',
+        observedOn: 'invalid',
+        capturedAt: context.capturedAt,
+      }),
+    ).toBe(false);
     expect(Object.keys(evidenceLabels)).toHaveLength(6);
   });
 });
@@ -164,13 +217,19 @@ describe('itemized cost ledger and timing', () => {
 describe('additive local storage compatibility', () => {
   it('loads legacy samples and round-trips new cost/source fields', () => {
     const memory = new Map<string, string>();
-    vi.stubGlobal('localStorage', { getItem: (k: string) => memory.get(k) ?? null, setItem: (k: string, v: string) => memory.set(k, v), removeItem: (k: string) => memory.delete(k) });
+    vi.stubGlobal('localStorage', {
+      getItem: (k: string) => memory.get(k) ?? null,
+      setItem: (k: string, v: string) => memory.set(k, v),
+      removeItem: (k: string) => memory.delete(k),
+    });
     try {
       expect(saveShipments(freshSamples())).toBe(true);
       expect(loadShipments()[0].id).toBe('northstar');
       const s = imported({ source_type: 'customer_supplied', insurance_usd: '100' });
       expect(saveShipments([s])).toBe(true);
       expect(loadShipments()[0]).toEqual(s);
-    } finally { vi.unstubAllGlobals(); }
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });

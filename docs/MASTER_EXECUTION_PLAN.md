@@ -1,6 +1,8 @@
 # Master plan execution: prototype audit → first product milestone
 
-Prepared October 15, 2026 against `COST_CURRENT_MASTER_BUILD_PLAN.md` v1.0. This plan is written before product code changes for Part II. Current authorization expands the earlier prototype-only scope to the staged master plan; keep the free local demo working.
+Prepared October 15, 2026 against master plan v1.0; updated alongside [v1.1](../COST_CURRENT_MASTER_BUILD_PLAN.md). The initial plan was written before Part II product changes. The user authorized the staged master plan; preserve the free local demo.
+
+**Current state:** prototype audit closed and the first intake/ledger engineering milestone delivered. **Next engineering milestone:** a prospective decision journal. Interviews, data rights, expert review and commercial validation remain open; see [Progress](PROGRESS.md) for actual verification.
 
 ## Product to build toward
 
@@ -10,22 +12,22 @@ The eventual platform adds reviewed, limited tariff coverage; licensed lane obse
 
 ## Prototype audit against Part I
 
-| Requirement | Evidence / current finding |
-| --- | --- |
-| Local, credential-free setup and visible illustrative labels | Implemented; Vite app, local geography/system fonts, no API required |
-| Connected 3D globe, route selection and fallback | Implemented; previous connected-browser rotation check and automated route/2D tests |
-| Canonical cost example and 40% → 10% flip | 9 unit checks and prior 8 browser cases; arithmetic and build rerun at this checkpoint pass |
-| Scenario distribution and threshold | Exact four states; independent-event assumption visible; 23.33% threshold |
-| Memo matches current inputs | Frozen snapshot, JSON download and browser print; one-page PDF previously rendered and reviewed |
-| Honest methods and source boundaries | Implemented; no active trained model, live feed or legal classification claim |
-| README, limitations and handoff | Implemented and maintained |
-| Explicit zero-impact/zero-cost/invalid-input edge checks | Some covered indirectly; add the named master-plan cases explicitly before closing audit |
-| Lint command | Missing; add a real ESLint check rather than aliasing typecheck as lint |
-| CSV intake | Deferred in the prototype; make this the first useful post-demo capability |
+| Requirement                                                  | Evidence / current finding                                                                                                      |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| Local, credential-free setup and visible illustrative labels | Implemented; Vite app, local geography/system fonts, no API required                                                            |
+| Connected 3D globe, route selection and fallback             | Implemented; previous connected-browser rotation check and automated route/2D tests                                             |
+| Canonical cost example and 40% → 10% flip                    | Canonical regression checks retained in the expanded 50-test unit suite; demo flows included in 16 desktop/narrow browser cases |
+| Scenario distribution and threshold                          | Exact four states; independent-event assumption visible; 23.33% threshold                                                       |
+| Memo matches current inputs                                  | Frozen snapshot, JSON download and browser print; one-page PDF previously rendered and reviewed                                 |
+| Honest methods and source boundaries                         | Implemented; no active trained model, live feed or legal classification claim                                                   |
+| README, limitations and handoff                              | Implemented and maintained                                                                                                      |
+| Explicit zero-impact/zero-cost/invalid-input edge checks     | Explicit zero-impact, zero-cost, invalid-value and timing cases added and passing                                               |
+| Lint command                                                 | Real ESLint configuration and passing lint command added                                                                        |
+| CSV intake                                                   | Delivered as the first post-demo engineering capability; strict local preview and atomic commit                                 |
 
-**Conclusion:** core mentor prototype is complete. Close the lint/explicit-test gaps, then advance to Stage 1. CSV was optional for tomorrow; it is valuable now because it reduces the burden of testing an actual shipment.
+**Conclusion:** the mentor prototype and audit are complete. The Stage 1 intake foundation is delivered; Stage 1 business/research gates remain open.
 
-## Now — quote-backed intake and cost scope (this implementation milestone)
+## Delivered — quote-backed intake and cost scope
 
 Deliver one complete path: **download template → select/paste CSV → preview and repair errors → commit valid shipments → inspect source-backed cost ledger → compare actions → print the same values**.
 
@@ -39,9 +41,9 @@ Deliver one complete path: **download template → select/paste CSV → preview 
 - Preserve existing local data through additive schema handling. Keep the default demo badge and no-network setup. Bound additions/imports consistently with storage capacity.
 - Verify pure intake/ledger logic, storage compatibility, existing demo regressions, browser import/error/duplicate flows, source edits, memo consistency, narrow viewport, lint, typecheck and build.
 
-**Done gate:** a fictional CSV fixture exercises the entire path with reproducible totals, no partial imports or false provenance, and all checks pass. This gate does not establish customer willingness to pay, legally correct duties, licensed data rights, or trained forecasts.
+**Done gate met locally:** a fictional CSV fixture exercises the entire path with reproducible totals, no partial imports or false provenance. The aggregate `npm run check` (formatting, doc links, lint, types, 50 unit tests and build) and all 16 browser cases pass. The quote-backed memo was exported and visually reviewed as one page. This gate does not establish customer willingness to pay, legally correct duties, licensed data rights, or trained forecasts.
 
-## Next — evidence and customer validation
+## Next — prospective decisions and customer validation
 
 1. Founder conducts 5–10 importer/broker interviews using one actual upcoming decision per participant; record authority to act, available data, money at stake, current workflow and a defined pilot/payment response. No outreach is sent by this implementation task.
 2. Add a prospective decision journal: immutable input/evidence/calculator-version snapshots, as-of date and horizon, selected action and user override, then separately timestamp actual invoices/outcomes. Never overwrite a past forecast after learning the result.
@@ -53,13 +55,13 @@ Deliver one complete path: **download template → select/paste CSV → preview 
 
 ## Later — credible MVP and platform
 
-| Stage | What ships | Gate |
-| --- | --- | --- |
-| Limited MVP | Private customer workspace, typed cost/evidence ledger, reviewed duty scope, real quote scenarios, versioned memos/outcomes | Customer decision value; retention/access/export/deletion requirements established |
-| Quantitative research | Model A shock impact, Model B freight/transit targets, Model C event likelihood plus explicit decision costs | Dataset rights, target/horizon definitions, time-ordered baseline evaluations and coverage limits |
-| Market context | Read-only curated Kalshi/Polymarket browser and event-to-exposure mappings | Exact YES/outcome IDs, resolution criteria, bid/ask/depth/freshness, timing and usage rights; unmatched/stale means unavailable |
-| Portfolio and alerts | Correlated scenarios, meaningful monitored thresholds and feasible constrained actions | Valid dependence assumptions and observed user utility; no duplicated shock channels |
-| Commercial SaaS | Tenant isolation, teams, permissions, billing, integrations, backups and operations | Repeated paid use, data/security/legal review and operational economics |
+| Stage                 | What ships                                                                                                                  | Gate                                                                                                                            |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Limited MVP           | Private customer workspace, typed cost/evidence ledger, reviewed duty scope, real quote scenarios, versioned memos/outcomes | Customer decision value; retention/access/export/deletion requirements established                                              |
+| Quantitative research | Model A shock impact, Model B freight/transit targets, Model C event likelihood plus explicit decision costs                | Dataset rights, target/horizon definitions, time-ordered baseline evaluations and coverage limits                               |
+| Market context        | Read-only curated Kalshi/Polymarket browser and event-to-exposure mappings                                                  | Exact YES/outcome IDs, resolution criteria, bid/ask/depth/freshness, timing and usage rights; unmatched/stale means unavailable |
+| Portfolio and alerts  | Correlated scenarios, meaningful monitored thresholds and feasible constrained actions                                      | Valid dependence assumptions and observed user utility; no duplicated shock channels                                            |
+| Commercial SaaS       | Tenant isolation, teams, permissions, billing, integrations, backups and operations                                         | Repeated paid use, data/security/legal review and operational economics                                                         |
 
 ## Quantitative contracts and evaluation
 
@@ -72,14 +74,14 @@ Deliver one complete path: **download template → select/paste CSV → preview 
 
 Read-only review of the current default `main` branch through the GitHub connector on October 15, 2026. No Vigil files were edited or copied into Cost Current. Repository metadata returned no declared license; check ownership/dependency rights before copying implementation code.
 
-| Inspected file | Finding and reuse decision |
-| --- | --- |
-| [kalshi.ts](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/data/kalshi.ts) | AbortController timeout and timer cleanup are useful patterns. Macro title/Jaccard matching, last-price probability, and mixed volume/liquidity fallbacks are insufficient for shipment exposure. Require explicit contract/outcome IDs and qualified event mapping. Blob `dc6c01b74660a7d0ef3949ac2d94b4f8ed7e3931`. |
-| [polymarket.ts](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/data/polymarket.ts) | Requests five events and may choose the maximum outcome price. Reuse only fetch/error-handling ideas; replace discovery and parsing with verified YES-token mapping and settlement metadata. Blob `349528775c756958103c6c28a190b5a4868e8474`. |
-| [gpr.ts](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/data/gpr.ts) | `.xls` response is treated as text and failure returns 120. Validate actual source format independently; never carry that fallback into a measured/live field. Blob `6eacd5524169ea3fdcc0dda7aac7e3bbff29fbb4`. |
-| [sources.ts](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/data/sources.ts) | Parallel source collection is useful. Seed merging and unconditional healthy/fresh statuses must be redesigned with per-field evidence and unavailable states. Blob `c7eea11528c4e572dfec5d1b2f05537f23f71282`. |
-| [dashboard route](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/app/api/dashboard/route.ts) | Single-flight refresh, cache age and ETag patterns are candidates for a future server. The seeded initial cache must never masquerade as external observations. Blob `deafe72533afae66418c45cda3362f16ec49e9fe`. |
-| [backtest harness](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/backtesting/harness.ts) | Neutral records count as directional hits. Replace with importer-specific cost/calibration/regret evaluation; do not inherit an accuracy claim. Blob `ff38d4e1d1f34fcfaf6f38c3f5b6c4decf17c059`. |
+| Inspected file                                                                                         | Finding and reuse decision                                                                                                                                                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [kalshi.ts](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/data/kalshi.ts)                | AbortController timeout and timer cleanup are useful patterns. Macro title/Jaccard matching, last-price probability, and mixed volume/liquidity fallbacks are insufficient for shipment exposure. Require explicit contract/outcome IDs and qualified event mapping. Blob `dc6c01b74660a7d0ef3949ac2d94b4f8ed7e3931`. |
+| [polymarket.ts](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/data/polymarket.ts)        | Requests five events and may choose the maximum outcome price. Reuse only fetch/error-handling ideas; replace discovery and parsing with verified YES-token mapping and settlement metadata. Blob `349528775c756958103c6c28a190b5a4868e8474`.                                                                         |
+| [gpr.ts](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/data/gpr.ts)                      | `.xls` response is treated as text and failure returns 120. Validate actual source format independently; never carry that fallback into a measured/live field. Blob `6eacd5524169ea3fdcc0dda7aac7e3bbff29fbb4`.                                                                                                       |
+| [sources.ts](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/data/sources.ts)              | Parallel source collection is useful. Seed merging and unconditional healthy/fresh statuses must be redesigned with per-field evidence and unavailable states. Blob `c7eea11528c4e572dfec5d1b2f05537f23f71282`.                                                                                                       |
+| [dashboard route](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/app/api/dashboard/route.ts)  | Single-flight refresh, cache age and ETag patterns are candidates for a future server. The seeded initial cache must never masquerade as external observations. Blob `deafe72533afae66418c45cda3362f16ec49e9fe`.                                                                                                      |
+| [backtest harness](https://github.com/Sambhav255/Vigil/blob/main/vigil-app/lib/backtesting/harness.ts) | Neutral records count as directional hits. Replace with importer-specific cost/calibration/regret evaluation; do not inherit an accuracy claim. Blob `ff38d4e1d1f34fcfaf6f38c3f5b6c4decf17c059`.                                                                                                                      |
 
 A current read-only source inspection is not an API schema or licensing verification. Future adapters must be checked against official provider documentation when implemented. Do not merge codebases, start exchange integrations, add paid services, or publish customer data as a shortcut to this milestone.
 

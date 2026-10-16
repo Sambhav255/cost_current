@@ -4,18 +4,25 @@ async function openAnalysis(page: Page) {
   await page.goto('/');
   await page.getByRole('button', { name: 'Try an example shipment' }).click();
   await page.getByRole('button', { name: 'Analyze this shipment' }).click();
-  await expect(page.getByRole('heading', { name: 'Northstar Home Goods', exact: true })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Northstar Home Goods', exact: true }),
+  ).toBeVisible();
 }
 
 async function navigate(page: Page, name: string) {
   const menu = page.getByRole('button', { name: 'Open navigation' });
   if (await menu.isVisible()) await menu.click();
-  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name, exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('button', { name, exact: true })
+    .click();
 }
 
-test('default costs, keyboard sensitivity, persistence, and memo stay consistent', async ({ page }, testInfo) => {
+test('default costs, keyboard sensitivity, persistence, and memo stay consistent', async ({
+  page,
+}, testInfo) => {
   const errors: string[] = [];
-  page.on('pageerror', error => errors.push(error.message));
+  page.on('pageerror', (error) => errors.push(error.message));
   await openAnalysis(page);
   await expect(page.getByTestId('decision-wait')).toContainText('$123,600');
   await expect(page.getByTestId('decision-early')).toContainText('$121,100');
@@ -38,13 +45,19 @@ test('default costs, keyboard sensitivity, persistence, and memo stay consistent
   await expect(page.getByRole('slider', { name: 'Tariff event probability' })).toHaveValue('1000');
   await page.getByRole('button', { name: 'Create decision memo' }).click();
   await expect(page.getByTestId('decision-memo')).toContainText('$119,100');
-  await expect(page.getByTestId('decision-memo')).toContainText('Wait has the lowest modeled expected cost.');
+  await expect(page.getByTestId('decision-memo')).toContainText(
+    'Wait has the lowest modeled expected cost.',
+  );
   await expect(page.getByRole('button', { name: 'Print / Save PDF' })).toBeVisible();
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download assumptions' }).click();
   expect((await download).suggestedFilename()).toMatch(/memo\.json$/);
   if (testInfo.project.name === 'desktop') {
-    await page.pdf({ path: 'output/pdf/cost-current-decision-memo.pdf', preferCSSPageSize: true, printBackground: true });
+    await page.pdf({
+      path: 'output/pdf/cost-current-decision-memo.pdf',
+      preferCSSPageSize: true,
+      printBackground: true,
+    });
     await page.emulateMedia({ media: 'print' });
     await expect(page.locator('.sidebar')).not.toBeVisible();
     await expect(page.getByTestId('decision-memo')).toBeVisible();
@@ -52,7 +65,9 @@ test('default costs, keyboard sensitivity, persistence, and memo stay consistent
   expect(errors).toEqual([]);
 });
 
-test('unknown tariff avoidance and bundled quotes pause unsupported recommendations', async ({ page }) => {
+test('unknown tariff avoidance and bundled quotes pause unsupported recommendations', async ({
+  page,
+}) => {
   await openAnalysis(page);
   await page.getByRole('tab', { name: 'Shipment & assumptions' }).click();
   await page.getByLabel('Does early entry avoid the tariff?').selectOption('unknown');
@@ -61,8 +76,12 @@ test('unknown tariff avoidance and bundled quotes pause unsupported recommendati
   await expect(page.getByTestId('decision-early')).toContainText('Not ranked');
   await page.getByRole('tab', { name: 'Shipment & assumptions' }).click();
   await page.getByLabel('Quote cost basis').selectOption('bundled');
-  await expect(page.getByRole('alert')).toContainText('Separate goods, freight, duty, and other costs');
-  await expect(page.locator('#main-content').getByRole('button', { name: 'Decision memo', exact: true })).toBeDisabled();
+  await expect(page.getByRole('alert')).toContainText(
+    'Separate goods, freight, duty, and other costs',
+  );
+  await expect(
+    page.locator('#main-content').getByRole('button', { name: 'Decision memo', exact: true }),
+  ).toBeDisabled();
 });
 
 test('route selection, 2D fallback, methods, and responsive shell work', async ({ page }) => {
@@ -71,12 +90,23 @@ test('route selection, 2D fallback, methods, and responsive shell work', async (
   const switchTo2D = page.getByRole('button', { name: 'Switch to 2D map' });
   if (await switchTo2D.isVisible()) await switchTo2D.click();
   await expect(page.getByTestId('map-fallback')).toBeVisible();
-  await page.getByRole('button', { name: 'Fieldwork Outdoor Woven outdoor chairs · Spring collection', exact: true }).click();
-  await expect(page.locator('.selected-company').getByRole('heading', { name: 'Fieldwork Outdoor' })).toBeVisible();
+  await page
+    .getByRole('button', {
+      name: 'Fieldwork Outdoor Woven outdoor chairs · Spring collection',
+      exact: true,
+    })
+    .click();
+  await expect(
+    page.locator('.selected-company').getByRole('heading', { name: 'Fieldwork Outdoor' }),
+  ).toBeVisible();
   await navigate(page, 'Methods & evidence');
-  await expect(page.getByRole('heading', { name: /methods|understand|model|clarity/i }).first()).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: /methods|understand|model|clarity/i }).first(),
+  ).toBeVisible();
   await expect(page.getByText(/not trained|not yet trained|planned/i).first()).toBeVisible();
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth + 1,
+  );
   expect(overflow).toBe(false);
 });
 
@@ -90,8 +120,12 @@ test('a complete route alternative stays ranked when early entry is unknown', as
   await page.getByLabel('Include this route in the comparison under these assumptions').check();
   await expect(page.getByTestId('decision-route')).toContainText('$120,700');
   await expect(page.getByTestId('decision-route')).toHaveClass(/best-card/);
-  await expect(page.getByRole('heading', { name: 'Different route has the lowest expected cost.' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Different route has the lowest expected cost.' }),
+  ).toBeVisible();
   await page.getByRole('button', { name: 'Create decision memo' }).click();
-  await expect(page.getByTestId('decision-memo')).toContainText('Different route has the lowest modeled expected cost.');
+  await expect(page.getByTestId('decision-memo')).toContainText(
+    'Different route has the lowest modeled expected cost.',
+  );
   await expect(page.getByTestId('decision-memo')).toContainText('Early purchase is excluded:');
 });

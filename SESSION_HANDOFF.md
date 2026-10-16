@@ -4,7 +4,9 @@ Historical recovery record. Read [README](README.md), [current progress](docs/PR
 
 Recovered October 15, 2026 from the prior task, “Review file and plan execution.”
 
-## Confirmed scope
+**Historical snapshot:** the prototype and first intake milestone were completed after the events below. Prototype-only scope and “remaining” items here describe recovery time; they do not override the maintained execution plan or current user authorization.
+
+## Original confirmed scope (historical)
 
 Build a local browser-only mentor demonstration for October 16. No credentials, paid feeds, login, or deployment are needed. The product and data principles are in `COST_CURRENT_CODEX_BRIEF.md`. React, Vite, TypeScript, react-globe.gl, Vitest, and Playwright are already installed.
 
@@ -27,7 +29,7 @@ An earlier purchase date by itself does not establish tariff avoidance. Make the
 
 The scaffold contains package metadata, TypeScript/Vite configuration, HTML, favicon, and installed dependencies. At recovery, `src/lib`, `src/components`, and `tests` were empty. No build or test had passed yet. The prior task was still marked active; check for concurrent work before overwriting files.
 
-## Remaining delivery
+## Delivery remaining at recovery (subsequently completed)
 
 Working overview and selectable interactive globe with a usable 2D fallback; editable shipment and assumptions; reproducible scenario distribution; early/wait and eligible route/supplier comparisons; methods and evidence page; printable decision memo; calculation and browser verification; run instructions and demo script.
 

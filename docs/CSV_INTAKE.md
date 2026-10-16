@@ -14,30 +14,30 @@ Implemented as the first engineering milestone after the mentor prototype. Start
 
 ## Columns
 
-| Columns | Meaning / limits |
-| --- | --- |
-| `shipment_id` | Required; unique 1–80 letters/digits/hyphens/underscores, starting with a letter or digit |
-| `shipment_name` | Required; up to 200 characters |
-| `product`, `supplier` | Optional text; up to 200 characters each |
-| `country_of_origin` | Required country text; actual goods origin is separate from the chosen route |
-| `hts_code` | Optional 8 or 10 digits; dots are removed. Syntactic validation is not classification or duty verification |
-| `route_id` | `sha-lax`, `hph-sav`, or `ham-ewr`; these are the three configured schematic lanes |
-| `currency` | Required literal `USD` |
-| `incoterm` | EXW, FCA, FOB, CFR, CIF, DAP, DDP, or `Other / unknown`. This does not automatically determine inclusions |
-| `decision_date` | Explicit scenario as-of date; lead-time feasibility uses it |
-| `arrival_date`, `early_arrival_date`, `tariff_event_date` | Required scenario dates |
-| `lead_days` | Whole days, 0–3650 |
-| `goods_usd`, `customs_value_usd`, `freight_usd`, `other_usd` | Required plain USD numbers; zero must be entered explicitly where appropriate |
-| `insurance_usd`, `brokerage_usd`, `port_usd`, `inland_usd` | Optional **additional** charges. Blank/omitted means outside this cost scope, not a measured zero |
-| `units` | Required positive whole number, at most one billion |
-| `duty_rate_pct`, `tariff_increase_pp` | Percentage / additional percentage points; supported illustrative range 0–1000 |
-| `tariff_probability_pct`, `freight_probability_pct` | Scenario probabilities 0–100; `40` means 40% |
-| `freight_surcharge_usd`, `early_cost_usd` | Required hypothetical surcharge and total incremental early action cost |
-| `tariff_avoidance` | `assumed`, `unknown`, or `not-avoided`; purchase date alone does not establish legal avoidance |
-| `early_feasible` | Literal `true` or `false` |
-| `source_type` | `scenario_assumption` or `customer_supplied`; official/licensed/model verification cannot be claimed by CSV |
-| `source_reference` | Required 1–500 character quote/invoice/assumption reference |
-| `source_as_of` | Date supplied by the user for that source or assumption; must not follow the decision date |
+| Columns                                                      | Meaning / limits                                                                                            |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `shipment_id`                                                | Required; unique 1–80 letters/digits/hyphens/underscores, starting with a letter or digit                   |
+| `shipment_name`                                              | Required; up to 200 characters                                                                              |
+| `product`, `supplier`                                        | Optional text; up to 200 characters each                                                                    |
+| `country_of_origin`                                          | Required country text; actual goods origin is separate from the chosen route                                |
+| `hts_code`                                                   | Optional 8 or 10 digits; dots are removed. Syntactic validation is not classification or duty verification  |
+| `route_id`                                                   | `sha-lax`, `hph-sav`, or `ham-ewr`; these are the three configured schematic lanes                          |
+| `currency`                                                   | Required literal `USD`                                                                                      |
+| `incoterm`                                                   | EXW, FCA, FOB, CFR, CIF, DAP, DDP, or `Other / unknown`. This does not automatically determine inclusions   |
+| `decision_date`                                              | Explicit scenario as-of date; lead-time feasibility uses it                                                 |
+| `arrival_date`, `early_arrival_date`, `tariff_event_date`    | Required scenario dates                                                                                     |
+| `lead_days`                                                  | Whole days, 0–3650                                                                                          |
+| `goods_usd`, `customs_value_usd`, `freight_usd`, `other_usd` | Required plain USD numbers; zero must be entered explicitly where appropriate                               |
+| `insurance_usd`, `brokerage_usd`, `port_usd`, `inland_usd`   | Optional **additional** charges. Blank/omitted means outside this cost scope, not a measured zero           |
+| `units`                                                      | Required positive whole number, at most one billion                                                         |
+| `duty_rate_pct`, `tariff_increase_pp`                        | Percentage / additional percentage points; supported illustrative range 0–1000                              |
+| `tariff_probability_pct`, `freight_probability_pct`          | Scenario probabilities 0–100; `40` means 40%                                                                |
+| `freight_surcharge_usd`, `early_cost_usd`                    | Required hypothetical surcharge and total incremental early action cost                                     |
+| `tariff_avoidance`                                           | `assumed`, `unknown`, or `not-avoided`; purchase date alone does not establish legal avoidance              |
+| `early_feasible`                                             | Literal `true` or `false`                                                                                   |
+| `source_type`                                                | `scenario_assumption` or `customer_supplied`; official/licensed/model verification cannot be claimed by CSV |
+| `source_reference`                                           | Required 1–500 character quote/invoice/assumption reference                                                 |
+| `source_as_of`                                               | Date supplied by the user for that source or assumption; must not follow the decision date                  |
 
 Per monetary input, the supported cap is $10 billion. This is a validation bound, not a meaningful shipment-size recommendation.
 

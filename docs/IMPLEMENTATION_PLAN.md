@@ -6,17 +6,17 @@
 
 React 19 + TypeScript + Vite, react-globe.gl/Three.js, local world-atlas geography, Vitest and Playwright. The runtime is browser-only; no network provider or model inference is required.
 
-| Layer | Responsibility |
-| --- | --- |
-| `src/lib/types.ts`, `data.ts` | Shared shipment/action/memo contracts; fictional seed data and default demo date |
-| `src/lib/engine.ts` | Pure validation, deterministic accounting, scenario outcomes and eligible action ranking |
-| `src/lib/csv.ts` | Bounded strict USD intake; preview errors before atomic commit |
-| `src/lib/evidence.ts` | Six evidence-state contracts, source dates/scope and invalidation on edits |
-| `src/lib/ledger.ts` | Itemization and additional-versus-included cost treatment |
-| `src/lib/storage.ts` | Versioned localStorage, schema validation, 25-shipment capacity and additive compatibility |
-| `src/components/` | Accessible controls, intake, evidence ledger, comparisons, memo and graphics fallback |
-| `src/App.tsx` | Navigation, controlled state, memo snapshots and persistence integration |
-| `ForecastProvider`, `ForecastEvidence` | Future interface boundaries only; no trained or active inference |
+| Layer                                  | Responsibility                                                                             |
+| -------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `src/lib/types.ts`, `data.ts`          | Shared shipment/action/memo contracts; fictional seed data and default demo date           |
+| `src/lib/engine.ts`                    | Pure validation, deterministic accounting, scenario outcomes and eligible action ranking   |
+| `src/lib/csv.ts`                       | Bounded strict USD intake; preview errors before atomic commit                             |
+| `src/lib/evidence.ts`                  | Six evidence-state contracts, source dates/scope and invalidation on edits                 |
+| `src/lib/ledger.ts`                    | Itemization and additional-versus-included cost treatment                                  |
+| `src/lib/storage.ts`                   | Versioned localStorage, schema validation, 25-shipment capacity and additive compatibility |
+| `src/components/`                      | Accessible controls, intake, evidence ledger, comparisons, memo and graphics fallback      |
+| `src/App.tsx`                          | Navigation, controlled state, memo snapshots and persistence integration                   |
+| `ForecastProvider`, `ForecastEvidence` | Future interface boundaries only; no trained or active inference                           |
 
 The existing `cost-current-demo-v1` storage key is retained. Evidence, cost lines and decision dates are optional additions so legacy samples remain readable. A memo freezes inputs/results and calculator version; it is not yet a durable journal of decisions and outcomes.
 

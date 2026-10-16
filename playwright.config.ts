@@ -5,8 +5,9 @@ import { existsSync } from 'node:fs';
 // Keep the optional test browser inside the workspace; no global install is needed.
 process.env.PLAYWRIGHT_BROWSERS_PATH ??= fileURLToPath(new URL('./.playwright', import.meta.url));
 const bravePath = '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser';
-const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
-  ?? (!existsSync(chromium.executablePath()) && existsSync(bravePath) ? bravePath : undefined);
+const executablePath =
+  process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ??
+  (!existsSync(chromium.executablePath()) && existsSync(bravePath) ? bravePath : undefined);
 
 export default defineConfig({
   testDir: './tests',
@@ -22,8 +23,14 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 1000 } } },
-    { name: 'mobile', use: { browserName: 'chromium', viewport: { width: 390, height: 844 }, hasTouch: true } },
+    {
+      name: 'desktop',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 1000 } },
+    },
+    {
+      name: 'mobile',
+      use: { browserName: 'chromium', viewport: { width: 390, height: 844 }, hasTouch: true },
+    },
   ],
   webServer: {
     command: 'npm run dev -- --port 5173 --strictPort',

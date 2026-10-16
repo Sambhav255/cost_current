@@ -1,47 +1,37 @@
-# New repository setup
+# Repository setup and push guide
 
-The project is prepared for a **new, separate Cost Current repository**. No remote URL or visibility has been chosen, and no push has been performed. This session attempted `git init -b main`, but the environment denied writes to `.git` with `Operation not permitted`; no local Git repository or commit was created. Source and documentation preparation does not depend on that restriction.
+Cost Current now has a separate repository at **[Sambhav255/cost_current](https://github.com/Sambhav255/cost_current)**. The local branch is `main`, tracking `origin/main`; the configured remote is `https://github.com/Sambhav255/cost_current.git`.
 
-## What belongs in the initial commit
+## Current Git state
 
-Track source, tests, public assets, package metadata and lockfile, configurations, CI, README, agent instructions, both original planning briefs and maintained documentation. `.gitignore` excludes dependencies, builds, browser downloads/profiles, local test/PDF/screenshot artifacts, caches, logs, editor state and environment files. No application credentials or environment file are needed to run this project.
+During preparation, `git init -b main` was denied by this session's `.git` write restriction. A separate workflow then initialized and linked the repository while file cleanup was in progress. Read-only inspection found initial commit `144526d` and merge `624e728` incorporating the remote placeholder. The latest documentation/formatting changes remain local and uncommitted at this checkpoint.
 
-No source license has been chosen. Do not add an open-source license on the owner's behalf. A new private repository is a reasonable starting point while visibility, licensing and contributed data rights are decided.
-
-## Initialize and inspect locally
-
-Run these commands in a regular terminal with write access to this folder:
+Do not reinitialize the repository or add a second `origin`. Run the following from a regular terminal with `.git` write access after reviewing the changes:
 
 ```sh
 cd /Users/sambhav/cost_current
-git init -b main
-git add .
-git status --short
-git diff --cached --stat
-git diff --cached --check
-```
-
-Review the staged file list before committing. Generated directories such as `node_modules`, `dist`, `.playwright`, `test-results` and `output` should not appear. Commit identity was not configured in this session. If Git asks for an identity, set the real author's name and email for this repository using `git config user.name` and `git config user.email` before continuing; avoid inventing an identity or changing global settings unnecessarily.
-
-```sh
+git status --short --branch
+git diff --stat
+git diff --check
 npm run check
 npm run test:e2e
-git commit -m "Initialize Cost Current prototype and intake foundation"
+git add .
+git diff --cached --stat
+git diff --cached --check
+git commit -m "Organize build plan, handoff docs and repository checks"
+git push origin main
 ```
 
-The optional test browser must be installed as described in [README](../README.md).
+Commit identity was absent from the configuration inspected by this session. If Git asks, set the real author's name and email locally with `git config user.name` and `git config user.email`; avoid inventing an identity or changing global settings unnecessarily. See [README](../README.md) for the optional browser installation required by `test:e2e`.
 
-## Push to a new remote
+## Files that belong in Git
 
-Create an **empty** repository on your chosen Git host. Leave remote README, license and ignore templates unchecked because these files already exist locally. Then replace the example URL below with the actual new repository URL:
+Track source, tests, public assets, package metadata and lockfile, configurations, CI, README, agent instructions, both planning briefs and maintained documentation. `.gitignore` excludes dependencies, builds, browser downloads/profiles, local test/PDF/screenshot artifacts, caches, logs, editor state and environment files. No application credentials or environment file are required to run the project.
 
-```sh
-git remote add origin https://github.com/YOUR_ACCOUNT/cost-current.git
-git push -u origin main
-```
+No source license has been chosen. Do not add a license on the owner's behalf. Repository visibility and rights to third-party data are separate decisions; verify the chosen remote's visibility before adding real company information.
 
-GitHub Actions is already configured for formatting, documentation links, lint, TypeScript, unit tests, production build and browser tests. Hosted CI results will only exist after the repository is pushed. Do not treat a workflow file as evidence of a passing hosted run.
+## After pushing
 
-## Before later commits
+GitHub Actions is configured for formatting, local documentation links, lint, TypeScript, unit tests, production build and browser tests. Its hosted execution has not been verified in this session. Check the actual run after pushing; a workflow file alone is not a passing hosted run.
 
-Run checks appropriate to the change, update [Progress](PROGRESS.md), inspect `git diff`, and keep commits focused. Keep real importer files, quotes, secrets and generated browser artifacts out of version control. The CSV sample bundled in the app is explicitly fictional.
+For later changes, run appropriate checks, update [Progress](PROGRESS.md), inspect the diff and keep commits focused. Keep actual importer files, private quotes, secrets and generated browser artifacts out of version control. The CSV sample bundled in the app is fictional.

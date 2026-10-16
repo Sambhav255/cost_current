@@ -1,10 +1,15 @@
 # Cost Current
+
 ## Business concept and prototype brief for Codex
 
-**Status:** Working product concept and founder demonstration, not a deployed forecasting service  
-**Prepared:** October 15, 2026  
-**Immediate goal:** A convincing, interactive prototype for a mentor demonstration by October 16, 2026  
-**Longer goal:** Validate the business and technical thesis ahead of the October 26 Fowler Business Concept Challenge deadline  
+**Status:** Working product concept and founder demonstration, not a deployed forecasting service
+
+**Prepared:** October 15, 2026
+
+**Immediate goal:** A convincing, interactive prototype for a mentor demonstration by October 16, 2026
+
+**Longer goal:** Validate the business and technical thesis ahead of the October 26 Fowler Business Concept Challenge deadline
+
 **Working tagline:** **Know the cost. See the risk. Make the move.**
 
 > **Instructions to Codex:** Treat this as the product vision and UX brief, not as an implementation specification. You should plan the architecture, design system, technical stack, implementation sequence, and tests yourself. Prioritize a polished and genuinely interactive demonstration by tomorrow. Use transparent, reproducible example assumptions wherever verified live data or trained models do not yet exist. Do not fabricate model performance, customers, pricing validation, regulatory coverage, live feeds, or historical backtests.
@@ -13,7 +18,7 @@
 
 ## 1. What the business is
 
-**Cost Current** helps small and midsize US importers understand how changing tariffs, shipping costs, transit delays, and geopolitical events could affect the *landed cost* of the goods they import. More importantly, it compares the financial consequences of concrete decisions such as buying inventory earlier, waiting, using another freight route, or exploring a different supplier.
+**Cost Current** helps small and midsize US importers understand how changing tariffs, shipping costs, transit delays, and geopolitical events could affect the _landed cost_ of the goods they import. More importantly, it compares the financial consequences of concrete decisions such as buying inventory earlier, waiting, using another freight route, or exploring a different supplier.
 
 The central question it answers is:
 
@@ -50,13 +55,16 @@ The prototype should be a **beautiful, polished, responsive web application** wi
 
 ### The main screens
 
-**A. Landing / welcome**  
+**A. Landing / welcome**
+
 A clear explanation of the service, a subtle globe preview, and a prominent **Try an example shipment** action. No login should be required for the demo.
 
-**B. Overview / global exposure**  
+**B. Overview / global exposure**
+
 The interactive globe, several sample routes, a summary of modeled exposure across demo shipments, and 2 or 3 risk stories or scenarios. Clicking any route opens a contextual panel with origin, destination, product, customs value, freight assumptions, scenario probabilities, and the main next action. Risks shown on the globe should be linked to actual sample scenarios, not random red dots or invented real time threat scores.
 
-**C. Add or import a shipment**  
+**C. Add or import a shipment**
+
 A simple guided form, plus optional upload of a small CSV. Ask for:
 
 - Shipment or product name, supplier, country of origin, and optional HTS code.
@@ -67,24 +75,28 @@ A simple guided form, plus optional upload of a small CSV. Ask for:
 
 Provide at least one fully populated sample. Let users edit the assumptions and immediately see a recomputation. If CSV is too time consuming, implement sample CSV support with useful errors, but never sacrifice the main workflow for it.
 
-**D. Shipment risk / cost analysis (the most important screen)**  
+**D. Shipment risk / cost analysis (the most important screen)**
+
 Show the estimated base landed cost and potential extra cost in dollars. Split exposure into **tariff**, **freight**, and optionally **delay / inventory** components. Include a range such as median and high cost scenario; however, do not present P50 or P90 as a calibrated forecast unless the distribution is grounded in a stated and reproducible scenario method. Give the period and applicable shipment clearly. Show the assumptions directly next to the estimate, with a button to edit them.
 
-**E. Decision comparison**  
+**E. Decision comparison**
+
 Compare **Order now**, **Wait**, **Consider a different freight route**, and **Explore a different supplier** whenever enough inputs exist. Present:
 
 - Estimated expected total cost under each option.
 - Upfront cash, carrying or expediting costs, timing implications, and important operational constraints.
 - Potential expected savings **relative to a named baseline**, not a vague number.
-- Best current option *under the stated assumptions*, with plain English reasons.
+- Best current option _under the stated assumptions_, with plain English reasons.
 - A simple sensitivity control: change tariff event probability, possible tariff increase, freight shock, holding cost, or target date and watch the preferred decision change.
 
 Do not claim that rerouting goods through a third country legally changes their country of origin or avoids duties. Supplier country changes are different from a shipment route change. Avoid presenting futures, event contracts, or hedging trades as execution recommendations in this prototype.
 
-**F. One page decision memo**  
+**F. One page decision memo**
+
 A professional printable page with shipment details, assumptions, scenario table, decision comparison, caveats, and timestamp. Offer print or save as PDF through the browser. This is valuable for showing prospective customers and for business validation.
 
-**G. Methods and evidence**  
+**G. Methods and evidence**
+
 A short, approachable page that explains where the estimates come from, what is a demo assumption, what remains unvalidated, and what the three planned modeling components will do. Include links to official tariff sources and future historical case studies. Do not fill it with fake accuracy statistics.
 
 ---
@@ -97,7 +109,7 @@ The long term technical ambition is **not** just to call an LLM and ask it to gu
 
 **Proposed methods:** Event studies, distributed lag regressions, and a SARIMAX time series benchmark with external variables.
 
-**Question:** *When a tariff announcement or shipping disruption occurs, how much did freight costs and delays change, for how long, and on which lanes?*
+**Question:** _When a tariff announcement or shipping disruption occurs, how much did freight costs and delays change, for how long, and on which lanes?_
 
 **Potential inputs:** Historical freight benchmarks where legally available, past shipment rate histories, dated disruption events, route information, and trade policy timelines. Candidate historical episode: the Red Sea disruption beginning in late 2023.
 
@@ -111,7 +123,7 @@ The long term technical ambition is **not** just to call an LLM and ask it to gu
 
 **Proposed methods:** Gradient boosted decision trees such as LightGBM or CatBoost, with **quantile regression** to estimate a range rather than only a single number. Compare to seasonal naive forecasting and SARIMAX baselines.
 
-**Question:** *What could freight price or transit time look like for this lane over the next few weeks, given the history and known context?*
+**Question:** _What could freight price or transit time look like for this lane over the next few weeks, given the history and known context?_
 
 **Potential inputs:** Historical lane level freight quotes or indexes with permitted use rights, origin and destination, calendar effects, lagged costs, seasonality, and available shipping context. Train separate targets or models for freight prices and lead times if appropriate.
 
@@ -125,7 +137,7 @@ The long term technical ambition is **not** just to call an LLM and ask it to gu
 
 **Proposed methods:** An interpretable calibrated logistic model or Bayesian probability update for specific, well defined events; Monte Carlo simulation for cost distributions; and explicit expected value / cash flow decision rules. Prediction market odds may be a signal **only when an event's resolution criteria align with the business risk and the market is sufficiently liquid**.
 
-**Question:** *Given uncertain events and the importer’s actual exposure, which option minimizes expected cost, and how bad could the downside be?*
+**Question:** _Given uncertain events and the importer’s actual exposure, which option minimizes expected cost, and how bad could the downside be?_
 
 **Potential inputs:** User entered scenarios at first. Later: dated policy announcements, historical event frequencies, relevant public information, qualified market probabilities, and estimated shock size distributions from Models 1 and 2.
 
@@ -133,7 +145,7 @@ The long term technical ambition is **not** just to call an LLM and ask it to gu
 
 **Why economics matters:** This converts forecasts into decisions. A predicted risk is useful only if the expected benefits of changing an action exceed financing, storage, shipping, and execution costs. Accounting for uncertainty and different cash flow dates matters.
 
-**Validation:** Backtest event probability calibration with Brier score when enough observations exist. Evaluate decision rules against realistic passive baselines using *information that was known at each historical decision date*, rather than perfect hindsight. If events are too rare, publish illustrative case studies and build a prospective track record rather than inventing statistical precision.
+**Validation:** Backtest event probability calibration with Brier score when enough observations exist. Evaluate decision rules against realistic passive baselines using _information that was known at each historical decision date_, rather than perfect hindsight. If events are too rare, publish illustrative case studies and build a prospective track record rather than inventing statistical precision.
 
 **Important distinction:** Monte Carlo is a simulation method, not itself a trained machine learning model. The probability component is predictive; the simulation and decision calculation consume predictions and user assumptions.
 
@@ -151,16 +163,16 @@ A transparent **rule based cost calculator** underlies all three. Correct arithm
 
 Use an explicitly fictional company such as **Northstar Home Goods** importing goods from China to Los Angeles. The following values are **illustrative inputs, not observed market prices or forecast probabilities**:
 
-| Input | Demo assumption |
-|---|---:|
-| Shipment customs value | $100,000 |
-| Current assumed duty rate | 10% |
-| Current estimated freight | $7,000 |
-| Hypothetical additional duty if event occurs | 15 percentage points |
-| User assumed chance of this tariff event | 40% |
-| Hypothetical freight disruption surcharge | $3,000 |
-| User assumed chance of freight disruption | 20% |
-| Total earlier purchase carrying and execution cost | $3,500 |
+| Input                                              |      Demo assumption |
+| -------------------------------------------------- | -------------------: |
+| Shipment customs value                             |             $100,000 |
+| Current assumed duty rate                          |                  10% |
+| Current estimated freight                          |               $7,000 |
+| Hypothetical additional duty if event occurs       | 15 percentage points |
+| User assumed chance of this tariff event           |                  40% |
+| Hypothetical freight disruption surcharge          |               $3,000 |
+| User assumed chance of freight disruption          |                  20% |
+| Total earlier purchase carrying and execution cost |               $3,500 |
 
 For demonstration purposes only, assume both events are independent and the direct cost changes apply in full to this shipment if it is exposed at the relevant time.
 
@@ -205,7 +217,7 @@ Suggested demo path:
 5. SARIMAX as an econometric / time series candidate: https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html
 6. Quantile gradient boosted regression implementation: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html
 
-These references support the *technical feasibility of methods or data sources*, not claims that Cost Current has tested or deployed them.
+These references support the _technical feasibility of methods or data sources_, not claims that Cost Current has tested or deployed them.
 
 ---
 

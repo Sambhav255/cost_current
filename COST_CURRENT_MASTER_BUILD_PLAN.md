@@ -2,11 +2,16 @@
 
 Mentor prototype requirements and staged product blueprint.
 
-**Version:** 1.1 | **Prepared / updated:** October 15, 2026  
-**Immediate deadline:** Mentor demonstration on October 16, 2026  
-**Next milestone:** Fowler Business Concept Challenge, October 26, 2026  
-**Product status:** Local mentor prototype complete; first post-demo engineering milestone (CSV intake, cost ledger, source evidence) implemented. Commercial viability, live forecast quality, and willingness to pay remain unvalidated.  
-**Working positioning:** **Cost Current helps importers understand what trade disruption could cost them and which decisions are worth making.**  
+**Version:** 1.1 | **Prepared / updated:** October 15, 2026
+
+**Immediate deadline:** Mentor demonstration on October 16, 2026
+
+**Next milestone:** Fowler Business Concept Challenge, October 26, 2026
+
+**Product status:** Local mentor prototype complete; first post-demo engineering milestone (CSV intake, cost ledger, source evidence) implemented. Commercial viability, live forecast quality, and willingness to pay remain unvalidated.
+
+**Working positioning:** **Cost Current helps importers understand what trade disruption could cost them and which decisions are worth making.**
+
 **Tagline option:** **Know the cost. See the risk. Make the move.**
 
 ## How to use this plan
@@ -32,10 +37,10 @@ Preserve the working, free local demo. Continue Part II in bounded milestones; d
 
 ## Revision record
 
-| Version | Date | Change |
-| --- | --- | --- |
-| 1.0 | October 15, 2026 | Original mentor assignment and long-term product blueprint. |
-| 1.1 | October 15, 2026 | Added navigation and current-state guidance; reconciled completion gates with verification; normalized heading structure and dated roadmap labels. Original product scope and future requirements retained. |
+| Version | Date             | Change                                                                                                                                                                                                      |
+| ------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0     | October 15, 2026 | Original mentor assignment and long-term product blueprint.                                                                                                                                                 |
+| 1.1     | October 15, 2026 | Added navigation and current-state guidance; reconciled completion gates with verification; normalized heading structure and dated roadmap labels. Original product scope and future requirements retained. |
 
 ---
 
@@ -59,7 +64,7 @@ The mentor should see the answer to five questions:
 
 **Provisional ideal customer:** An owner, purchasing manager, operations lead, or finance manager at a US importer making repeat overseas purchases, with enough inventory and cash exposure that a few thousand dollars could change a real decision. Initial candidate segments are consumer goods and ecommerce brands, furniture, apparel, and aftermarket components. These are customer hypotheses, not confirmed target markets.
 
-**Demo customer:** *Northstar Home Goods*, an explicitly **fictional** US importer buying goods from a supplier in China and receiving them in Los Angeles.
+**Demo customer:** _Northstar Home Goods_, an explicitly **fictional** US importer buying goods from a supplier in China and receiving them in Los Angeles.
 
 **Narrative:** The company is planning a $100,000 shipment. Management fears a hypothetical additional 15 percentage point tariff and a possible $3,000 freight surcharge. Should it move its shipment earlier or wait? What is the break even probability? What is the cost of being wrong?
 
@@ -81,15 +86,15 @@ The globe must allow a user to rotate, zoom, click a route or endpoint, and open
 
 #### Seven simple views, arranged to reuse the same data
 
-| View | What a mentor sees | What actually works tomorrow | What can wait |
-|---|---|---|---|
-| 1. Welcome | Cost Current promise and 'Try a sample shipment' | CTA opens the demo | SEO, CMS, waitlist automation |
-| 2. Global view | Interactive globe, selectable lanes, three top exposure cards | Route click selects the sample shipment and updates its details | Live vessel tracking, real routing optimization |
-| 3. Shipment input | Editable shipment assumptions in a clean form | Values validate and recalculate; a preset restores the example | Full shipping document parser, enterprise integrations |
-| 4. Cost analysis | Base cost, tariff and freight scenario costs, a compact distribution | Deterministic arithmetic and a transparent scenario table | Trained risk distributions, authenticated HTS engine |
-| 5. Decision studio | Wait versus move shipment earlier, expected total cost for each, threshold | Recommendation changes when assumptions change | Full portfolio stochastic optimization |
-| 6. Decision memo | A printable one page summary | Browser print or PDF, built from current values | Automated email, branded enterprise reports |
-| 7. How it works | Human explanation of planned economics and models | Honest methods text and source links | Real published model performance before training |
+| View               | What a mentor sees                                                         | What actually works tomorrow                                    | What can wait                                          |
+| ------------------ | -------------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------ |
+| 1. Welcome         | Cost Current promise and 'Try a sample shipment'                           | CTA opens the demo                                              | SEO, CMS, waitlist automation                          |
+| 2. Global view     | Interactive globe, selectable lanes, three top exposure cards              | Route click selects the sample shipment and updates its details | Live vessel tracking, real routing optimization        |
+| 3. Shipment input  | Editable shipment assumptions in a clean form                              | Values validate and recalculate; a preset restores the example  | Full shipping document parser, enterprise integrations |
+| 4. Cost analysis   | Base cost, tariff and freight scenario costs, a compact distribution       | Deterministic arithmetic and a transparent scenario table       | Trained risk distributions, authenticated HTS engine   |
+| 5. Decision studio | Wait versus move shipment earlier, expected total cost for each, threshold | Recommendation changes when assumptions change                  | Full portfolio stochastic optimization                 |
+| 6. Decision memo   | A printable one page summary                                               | Browser print or PDF, built from current values                 | Automated email, branded enterprise reports            |
+| 7. How it works    | Human explanation of planned economics and models                          | Honest methods text and source links                            | Real published model performance before training       |
 
 A separate full dashboard is **not needed**. The global view can serve as the initial dashboard.
 
@@ -123,22 +128,22 @@ A separate full dashboard is **not needed**. The global view can serve as the in
 
 #### Sample inputs, all fictional or illustrative
 
-| Field | Example value | Explanation |
-|---|---:|---|
-| Importing business | Northstar Home Goods | Fictional company |
-| Product | Home goods | Illustrative |
-| Country of origin | China | Illustrative; no classification claim |
-| Destination | Los Angeles, US | Example |
-| Customs value | $100,000 | Assumed value on the affected shipment |
-| Existing duty rate | 10% | **User assumption, not a legal rate quote** |
-| Freight baseline | $7,000 | Assumed amount paid by this importer |
-| Additional tariff if scenario occurs | 15 percentage points | Hypothetical policy event |
-| Probability of additional tariff | 40% | User entered scenario probability, **not** a market forecast |
-| Additional freight cost if event occurs | $3,000 | Hypothetical surcharge |
-| Probability of freight event | 20% | User entered assumption |
-| Extra cost to bring the shipment forward | $3,500 | All inclusive assumed incremental cost |
-| Early shipment avoids | Additional tariff only | Explicit hypothetical feasibility assumption |
-| Early shipment does not avoid | Freight surcharge | Hold same freight risk for both options |
+| Field                                    |          Example value | Explanation                                                  |
+| ---------------------------------------- | ---------------------: | ------------------------------------------------------------ |
+| Importing business                       |   Northstar Home Goods | Fictional company                                            |
+| Product                                  |             Home goods | Illustrative                                                 |
+| Country of origin                        |                  China | Illustrative; no classification claim                        |
+| Destination                              |        Los Angeles, US | Example                                                      |
+| Customs value                            |               $100,000 | Assumed value on the affected shipment                       |
+| Existing duty rate                       |                    10% | **User assumption, not a legal rate quote**                  |
+| Freight baseline                         |                 $7,000 | Assumed amount paid by this importer                         |
+| Additional tariff if scenario occurs     |   15 percentage points | Hypothetical policy event                                    |
+| Probability of additional tariff         |                    40% | User entered scenario probability, **not** a market forecast |
+| Additional freight cost if event occurs  |                 $3,000 | Hypothetical surcharge                                       |
+| Probability of freight event             |                    20% | User entered assumption                                      |
+| Extra cost to bring the shipment forward |                 $3,500 | All inclusive assumed incremental cost                       |
+| Early shipment avoids                    | Additional tariff only | Explicit hypothetical feasibility assumption                 |
+| Early shipment does not avoid            |      Freight surcharge | Hold same freight risk for both options                      |
 
 #### Transparent base cost and expected exposure
 
@@ -151,21 +156,21 @@ A separate full dashboard is **not needed**. The global view can serve as the in
 - Probability weighted freight exposure = 20% × $3,000 = **$600**.
 - **Expected incremental exposure from waiting** = **$6,600**.
 - **Expected total modeled cost if waiting** = $117,000 + $6,600 = **$123,600**.
-- **Expected total modeled cost if brought forward** = $117,000 + $3,500 + $600 = **$121,100**, *only if the early shipment actually clears before the hypothetical duty becomes effective and does not change freight exposure*.
+- **Expected total modeled cost if brought forward** = $117,000 + $3,500 + $600 = **$121,100**, _only if the early shipment actually clears before the hypothetical duty becomes effective and does not change freight exposure_.
 - **Expected advantage of bringing forward** = $123,600 − $121,100 = **$2,500**.
 - **Tariff event break even probability** = $3,500 / $15,000 = **23.33%**, under those restrictive assumptions. Below that probability, waiting costs less in expectation; above it, bringing forward does.
 - At **10%** tariff probability: waiting = $117,000 + $1,500 + $600 = **$119,100**; bringing forward remains **$121,100**; waiting now saves **$2,000**.
 
-**Important accounting:** The $3,500 is assumed to be *the entire incremental early action expense*, not an added carrying expense on top of a separate holding cost. Do not double count any fee. Also, **ordering earlier does not necessarily reduce duty**; the legally relevant entry and effective dates must be satisfied. Phrase the action as 'move eligible arrival or customs entry earlier' when necessary, and require users to confirm real feasibility.
+**Important accounting:** The $3,500 is assumed to be _the entire incremental early action expense_, not an added carrying expense on top of a separate holding cost. Do not double count any fee. Also, **ordering earlier does not necessarily reduce duty**; the legally relevant entry and effective dates must be satisfied. Phrase the action as 'move eligible arrival or customs entry earlier' when necessary, and require users to confirm real feasibility.
 
 #### Four exact states, if the two event scenarios are independent
 
-| Scenario | Probability | Total cost when waiting |
-|---|---:|---:|
-| Neither event | 48% | $117,000 |
-| Freight only | 12% | $120,000 |
-| Tariff only | 32% | $132,000 |
-| Both events | 8% | $135,000 |
+| Scenario      | Probability | Total cost when waiting |
+| ------------- | ----------: | ----------------------: |
+| Neither event |         48% |                $117,000 |
+| Freight only  |         12% |                $120,000 |
+| Tariff only   |         32% |                $132,000 |
+| Both events   |          8% |                $135,000 |
 
 The probabilities sum to 100% and the expected value equals **$123,600**. Under the simple discrete model, the lower 50th percentile is **$120,000**, the lower 90th percentile is **$132,000**, and the 95th percentile is **$135,000**. These are **illustrative scenario percentiles**, not learned or calibrated forecasts. If displaying P50 or P90, show a small tooltip saying how they were computed. Scenario event **independence is a convenience assumption**, not a realistic universal property; the full product must model dependencies.
 
@@ -227,15 +232,15 @@ Codex should **write a plan before coding**, then complete one P0 feature at a t
 
 #### Suggested order if time is limited
 
-| Block | Priority | Goal |
-|---|---|---|
-| 1 | P0 | Project boots; sample data model; pure cost and decision functions |
-| 2 | P0 | Editable shipment and clear live recalculation |
-| 3 | P0 | Decision comparison and scenario chart, with correct labels |
-| 4 | P0 | Memo, methods, README, tests |
-| 5 | P1 | Globe connected to route selection; fallback route list |
-| 6 | P1 | Responsive polish, second example, CSV if time |
-| 7 | P2 | Experimental data preview or optional browser persistence |
+| Block | Priority | Goal                                                               |
+| ----- | -------- | ------------------------------------------------------------------ |
+| 1     | P0       | Project boots; sample data model; pure cost and decision functions |
+| 2     | P0       | Editable shipment and clear live recalculation                     |
+| 3     | P0       | Decision comparison and scenario chart, with correct labels        |
+| 4     | P0       | Memo, methods, README, tests                                       |
+| 5     | P1       | Globe connected to route selection; fallback route list            |
+| 6     | P1       | Responsive polish, second example, CSV if time                     |
+| 7     | P2       | Experimental data preview or optional browser persistence          |
 
 The globe is important to the founder's presentation. If build time permits, prioritize it after the calculation workflow rather than leaving it until the last five minutes.
 
@@ -296,7 +301,7 @@ Competition includes **doing nothing** and asking a customs broker. The unique p
 
 #### Business model hypotheses
 
-- Early **one off memo** or assisted pilot, possibly **$99** as a *test offer*, with tailored shipment assumptions and optional broker review.
+- Early **one off memo** or assisted pilot, possibly **$99** as a _test offer_, with tailored shipment assumptions and optional broker review.
 - Potential SMB subscription starting near **$99 per month**, requiring validation of recurring usage and value.
 - Higher tiers based on supplier count, shipment volume, number of routes, analytics refresh cadence, multiuser access, and audit/reporting needs.
 - Later broker or forwarder subscription, reseller, or branded report offering only if distribution economics support it.
@@ -310,7 +315,7 @@ A customer paying $99 for one urgent memo is **not evidence** they will pay $99 
 
 **Features:** Workspace and importer profile; company and multiuser settings; permissions and audit history; supplier directory; product and SKU catalog; countries of actual origin; validated 8 or 10 digit HTS codes and classification confidence; purchase orders; invoices; container or shipment list; origin/destination ports; alternative lanes; transport mode; planned shipping and entry dates; lead times; transit variability; Incoterms; customs value; currencies and exchange assumptions; brokers; carrier/forwarder; landed cost allocation by unit and shipment; demand and stock levels; editable carrying costs; optional margins, retail prices, and operating constraints.
 
-**Decision value:** The platform learns *what can be affected* and *what the importer is actually allowed and able to change*. If confidence in HTS, supplier origin, tariffs, or Incoterms is insufficient, flag it before calculating false precision.
+**Decision value:** The platform learns _what can be affected_ and _what the importer is actually allowed and able to change_. If confidence in HTS, supplier origin, tariffs, or Incoterms is insufficient, flag it before calculating false precision.
 
 **Release priority:** Early after demo, because every model depends on good inputs.
 
@@ -338,18 +343,18 @@ A customer paying $99 for one urgent memo is **not evidence** they will pay $99 
 
 Compare actual feasible actions, not generic tips:
 
-| Action | Requires | Main tradeoffs / gating condition |
-|---|---|---|
-| Wait / current plan | Current plan | Baseline and reference for comparisons |
-| Move eligible entry earlier | Ability to alter schedule, supplier readiness, legal effective date | Financing, storage, cancellation, demand, inventory, whether customs entry actually precedes change |
-| Bring forward purchase but not entry | Purchase cash date and shipping timetable | May not avoid tariff at all, can increase inventory carrying expense |
-| Build safety stock | Demand distribution, holding and stockout economics | Obsolescence and working capital |
-| Reroute freight | Available genuine routing quotes and carrier slots | More freight, transshipment, insurance, legal, lead time, no automatic change in origin duty |
-| Change transport mode | Available capacity and quotes | Air versus ocean cost, carbon effect, time to destination |
-| Qualify alternative supplier | Product equivalence, compliance, qualification time, origin, quote | Switching costs, quality, credit terms, tooling, origin documentation |
-| Renegotiate terms / pricing | Contract flexibility, target margin, supplier constraints | Who bears tariffs, freight and timing costs |
-| Delay or cancel procurement | Inventory availability, penalties, demand | Stockouts, customer churn, fulfillment |
-| Investigate risk transfer or hedge | Underlying exposure, legal analysis, suitable contract | Basis risk, fees, market access, product suitability, CTA/IB concerns |
+| Action                               | Requires                                                            | Main tradeoffs / gating condition                                                                   |
+| ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Wait / current plan                  | Current plan                                                        | Baseline and reference for comparisons                                                              |
+| Move eligible entry earlier          | Ability to alter schedule, supplier readiness, legal effective date | Financing, storage, cancellation, demand, inventory, whether customs entry actually precedes change |
+| Bring forward purchase but not entry | Purchase cash date and shipping timetable                           | May not avoid tariff at all, can increase inventory carrying expense                                |
+| Build safety stock                   | Demand distribution, holding and stockout economics                 | Obsolescence and working capital                                                                    |
+| Reroute freight                      | Available genuine routing quotes and carrier slots                  | More freight, transshipment, insurance, legal, lead time, no automatic change in origin duty        |
+| Change transport mode                | Available capacity and quotes                                       | Air versus ocean cost, carbon effect, time to destination                                           |
+| Qualify alternative supplier         | Product equivalence, compliance, qualification time, origin, quote  | Switching costs, quality, credit terms, tooling, origin documentation                               |
+| Renegotiate terms / pricing          | Contract flexibility, target margin, supplier constraints           | Who bears tariffs, freight and timing costs                                                         |
+| Delay or cancel procurement          | Inventory availability, penalties, demand                           | Stockouts, customer churn, fulfillment                                                              |
+| Investigate risk transfer or hedge   | Underlying exposure, legal analysis, suitable contract              | Basis risk, fees, market access, product suitability, CTA/IB concerns                               |
 
 For each option provide **expected incremental cost versus current plan**, expected cash outlay and timing, worst reasonable modeled loss, constraints, reason for recommendation, sensitivity, and 'what information could reverse this answer'. Do not imply an action is executable if inventory, permits, quotes or counterparties are missing.
 
@@ -408,22 +413,22 @@ Preserve historical snapshots so that a cost forecast issued on a particular dat
 
 ### 12. Data sources, access and licensing plan
 
-| Source / category | Potential role | Practical status and due diligence |
-|---|---|---|
-| USITC HTS current and archive | Official tariff classifications, general and historical schedule rates | Public official documents and machine readable revisions; verify which revision applies; not a complete legal import duty determination |
-| CBP CSMS and official CBP guidance | Operational enforcement guidance and policy implementation | Watch relevant notices; regulatory applicability requires review |
-| Federal Register / official policy | Effective tariff changes, announcements, exclusions, program status | Store original text, publication/effective times, version and legal scope |
-| Commerce / ITA and USITC trade remedy information | AD/CVD case and rate context | Case/producer specific, complex and not safely generalized |
-| Census import trade statistics | Market context and research | Aggregate statistics do not substitute for customer level demand |
-| Importer freight invoices and provider quotes | Actual executable cost and realized outcomes | Best target for accuracy; customer permission, cleaning and privacy required |
-| Freightos FBX, Drewry WCI, Xeneta | Benchmarks and historical freight regime data | **Check licenses before model training, redistribution, derived indexes or commercial use.** Do not assume public charts confer model development rights |
-| FRED | Macro variables such as fuel/credit indicators where appropriate | Check series publication lag and revisions |
-| Caldara and Iacoviello GPR | Broad geopolitical risk context | Context feature, not direct lane closure probability; verify file format and use rights |
-| GDELT, authoritative news, port authority bulletins | Dated detection and corroboration of disruptions | Noise, duplicates, publication timestamps, region entity mapping and relevance filters |
-| Kalshi public market data | Probability signal for a precisely matched event | Contract question, outcome, depth, bid/ask, fees, settlement date, market status and permission checks |
-| Polymarket public market data | Same, for a matching event | Correct yes token/outcome mapping, depth and jurisdiction; trading access is distinct from read access |
-| Weather and transport authorities | Storm / hazard or port disruptions | Weather forecast is not automatically a shipment delay forecast |
-| Importer inventory and sales records | Demand, stockout cost, inventory financing | Optional integration later; high privacy sensitivity |
+| Source / category                                   | Potential role                                                         | Practical status and due diligence                                                                                                                       |
+| --------------------------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| USITC HTS current and archive                       | Official tariff classifications, general and historical schedule rates | Public official documents and machine readable revisions; verify which revision applies; not a complete legal import duty determination                  |
+| CBP CSMS and official CBP guidance                  | Operational enforcement guidance and policy implementation             | Watch relevant notices; regulatory applicability requires review                                                                                         |
+| Federal Register / official policy                  | Effective tariff changes, announcements, exclusions, program status    | Store original text, publication/effective times, version and legal scope                                                                                |
+| Commerce / ITA and USITC trade remedy information   | AD/CVD case and rate context                                           | Case/producer specific, complex and not safely generalized                                                                                               |
+| Census import trade statistics                      | Market context and research                                            | Aggregate statistics do not substitute for customer level demand                                                                                         |
+| Importer freight invoices and provider quotes       | Actual executable cost and realized outcomes                           | Best target for accuracy; customer permission, cleaning and privacy required                                                                             |
+| Freightos FBX, Drewry WCI, Xeneta                   | Benchmarks and historical freight regime data                          | **Check licenses before model training, redistribution, derived indexes or commercial use.** Do not assume public charts confer model development rights |
+| FRED                                                | Macro variables such as fuel/credit indicators where appropriate       | Check series publication lag and revisions                                                                                                               |
+| Caldara and Iacoviello GPR                          | Broad geopolitical risk context                                        | Context feature, not direct lane closure probability; verify file format and use rights                                                                  |
+| GDELT, authoritative news, port authority bulletins | Dated detection and corroboration of disruptions                       | Noise, duplicates, publication timestamps, region entity mapping and relevance filters                                                                   |
+| Kalshi public market data                           | Probability signal for a precisely matched event                       | Contract question, outcome, depth, bid/ask, fees, settlement date, market status and permission checks                                                   |
+| Polymarket public market data                       | Same, for a matching event                                             | Correct yes token/outcome mapping, depth and jurisdiction; trading access is distinct from read access                                                   |
+| Weather and transport authorities                   | Storm / hazard or port disruptions                                     | Weather forecast is not automatically a shipment delay forecast                                                                                          |
+| Importer inventory and sales records                | Demand, stockout cost, inventory financing                             | Optional integration later; high privacy sensitivity                                                                                                     |
 
 #### Official and product references worth starting from
 
@@ -459,7 +464,7 @@ An event contract must map to a semantic record with:
 - Valid mapping to affected shipment(s), direction of effect, event timing, conditional cost amount, and mapping confidence.
 - Market and API availability, permitted commercial use and applicable jurisdiction restrictions.
 
-**An announcement market is not necessarily a payable duty market.** A maritime closure is not identical to a freight surcharge. The model must map the *resolution event* to an intermediate operational and economic channel before affecting importer cost.
+**An announcement market is not necessarily a payable duty market.** A maritime closure is not identical to a freight surcharge. The model must map the _resolution event_ to an intermediate operational and economic channel before affecting importer cost.
 
 #### Source quality and treatment
 
@@ -592,7 +597,7 @@ Large geopolitically driven ocean lane disruptions and major tariff changes are 
 
 #### Proposed historical workstream
 
-**Experiment 1: A Red Sea disruption cost impact case study.** Choose one clearly defined lane and target metric, establish data rights, freeze a pre event training cutoff, estimate the naïve expected rate and alternative econometric forecasts, then compare with later observations. Use unaffected or differently affected lanes as possible controls, examine seasonality/fuel/demand, and explicitly identify confounders. If you cannot obtain lawful historical lane quotes or benchmark data with sufficient quality, publish a *methodology prototype* rather than a fabricated historical result.
+**Experiment 1: A Red Sea disruption cost impact case study.** Choose one clearly defined lane and target metric, establish data rights, freeze a pre event training cutoff, estimate the naïve expected rate and alternative econometric forecasts, then compare with later observations. Use unaffected or differently affected lanes as possible controls, examine seasonality/fuel/demand, and explicitly identify confounders. If you cannot obtain lawful historical lane quotes or benchmark data with sufficient quality, publish a _methodology prototype_ rather than a fabricated historical result.
 
 **Experiment 2: A dated tariff scenario case.** Recreate a historical duty schedule as understood at the decision date and show how a fictional sample importer’s costs change under legally applicable rules. Separate duty arithmetic from price pass through and do not assume any particular importer could have cleared goods early.
 
@@ -600,15 +605,15 @@ Large geopolitically driven ocean lane disruptions and major tariff changes are 
 
 #### Evaluation table to implement over time
 
-| Question | Metric | Baseline or control | Primary risk |
-|---|---|---|---|
-| Is the cost forecast useful? | MAE, WAPE, pinball loss | Last observation, seasonal naive, no change | Benchmark vs invoice mismatch |
-| Is the probability useful? | Brier/log score, calibration, count | Base event frequency or qualified market | Rare events, contract resolution mismatch |
-| Is the interval credible? | Coverage, interval width | Historical rolling quantile | Too narrow when regime shifts |
-| Does action advice save money? | Realized incremental cost, regret, avoided loss | Current procurement practice | Hindsight, unobserved counterfactual |
-| Can a user act? | Feasible action rate, time to decision | Broker or spreadsheet | Wrong timing, missing quotes |
-| Can a user trust it? | Correct explanation, completeness, accuracy of sources | Manual review | Regulatory errors |
-| Is the business viable? | Paid conversion, retention, revenue per account, support cost | Existing workflow | Too few recurring decisions |
+| Question                       | Metric                                                        | Baseline or control                         | Primary risk                              |
+| ------------------------------ | ------------------------------------------------------------- | ------------------------------------------- | ----------------------------------------- |
+| Is the cost forecast useful?   | MAE, WAPE, pinball loss                                       | Last observation, seasonal naive, no change | Benchmark vs invoice mismatch             |
+| Is the probability useful?     | Brier/log score, calibration, count                           | Base event frequency or qualified market    | Rare events, contract resolution mismatch |
+| Is the interval credible?      | Coverage, interval width                                      | Historical rolling quantile                 | Too narrow when regime shifts             |
+| Does action advice save money? | Realized incremental cost, regret, avoided loss               | Current procurement practice                | Hindsight, unobserved counterfactual      |
+| Can a user act?                | Feasible action rate, time to decision                        | Broker or spreadsheet                       | Wrong timing, missing quotes              |
+| Can a user trust it?           | Correct explanation, completeness, accuracy of sources        | Manual review                               | Regulatory errors                         |
+| Is the business viable?        | Paid conversion, retention, revenue per account, support cost | Existing workflow                           | Too few recurring decisions               |
 
 Historical validation must use time ordered splits, source publication lags, known at time snapshots, no train/test leakage, no easy cherry picked examples, documented failed cases, and reproducible versions of code and outputs. The backtest should never pretend to prove an entire service is accurate from a handful of major shocks.
 
@@ -652,24 +657,26 @@ These are **conceptual responsibilities**, not prescribed code signatures. Codex
 
 ### 18. How to reuse Vigil, based on the GitHub repository inspected on October 15
 
-**Repo:** https://github.com/Sambhav255/Vigil  
-**Observed default branch:** `main` (inspection snapshot; recheck if it changes).  
+**Repo:** https://github.com/Sambhav255/Vigil
+
+**Observed default branch:** `main` (inspection snapshot; recheck if it changes).
+
 **App:** `vigil-app/` with Next.js 16, React 19, TypeScript, Vitest, CSS modules/Tailwind, optional Convex, and a geopolitical intelligence dashboard. This is an actual repo review, **not merely an assumption from the previous chat**.
 
 #### Actual code components worth examining
 
-| Vigil path | What it does today | Reuse idea | Caveat |
-|---|---|---|---|
-| `vigil-app/lib/data/kalshi.ts` | Fetches markets and matches some macro titles against existing seeded threats | General fetch and parsing patterns, timeout/error handling | Current filter targets macro topics, not importer event semantics; no full discovery or contract resolution checks |
-| `vigil-app/lib/data/polymarket.ts` | Fetches Gamma events and maps titles to seeded threats | API client skeleton, HTTP and parsing patterns | Currently requests a small `events?limit=5` sample; fallback picks max outcome price rather than provably the YES contract in ambiguous shapes |
-| `vigil-app/lib/data/gpr.ts` | Fetches a GPR `.xls` path and attempts text parsing with hardcoded fallback | Candidate geopolitical context integration | Verify response encoding and source format; it may be a binary spreadsheet; **fallback of 120 must not appear as a measured live GPR index** |
-| `vigil-app/lib/data/gdelt.ts` | Contextual news volume/threat updates | Source client ideas | News volume is not policy probability or actual cost; requires geographic/HTS relevance and deduplication |
-| `vigil-app/lib/data/sources.ts` | Combines seed threats with multiple optional feeds | Graceful degradation patterns | Seed threats are not known live facts; source status and precedence need redesign |
-| `vigil-app/lib/pipeline.ts` | Composite threat scoring, title deduplication, probability corrections | Reusable code layout, pipeline ergonomics and monitoring ideas | Equity sector sensitivity scores and arbitrary blending are not a sound importer exposure model |
-| `vigil-app/app/api/dashboard/route.ts` | Serves a cached dashboard snapshot | Server data caching pattern | It initializes from seeded values and does background refresh; do not conflate seed with real external data |
-| `vigil-app/lib/backtesting/harness.ts` | Computes directional hit rates for alerts | Test harness structure as inspiration | Neutral outcomes are counted as hits; **not a freight or importer cost backtest**; must be replaced for this use |
-| `vigil-app/tests/` | Vitest coverage of scoring and pipeline logic | Test layout and CI discipline | Cost Current requires economics and import specific tests |
-| `vigil-app/components/` | Dark terminal design, charts and panels | Design patterns if useful | Do not copy a financial threat dashboard wholesale; prioritize import actions |
+| Vigil path                             | What it does today                                                            | Reuse idea                                                     | Caveat                                                                                                                                         |
+| -------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vigil-app/lib/data/kalshi.ts`         | Fetches markets and matches some macro titles against existing seeded threats | General fetch and parsing patterns, timeout/error handling     | Current filter targets macro topics, not importer event semantics; no full discovery or contract resolution checks                             |
+| `vigil-app/lib/data/polymarket.ts`     | Fetches Gamma events and maps titles to seeded threats                        | API client skeleton, HTTP and parsing patterns                 | Currently requests a small `events?limit=5` sample; fallback picks max outcome price rather than provably the YES contract in ambiguous shapes |
+| `vigil-app/lib/data/gpr.ts`            | Fetches a GPR `.xls` path and attempts text parsing with hardcoded fallback   | Candidate geopolitical context integration                     | Verify response encoding and source format; it may be a binary spreadsheet; **fallback of 120 must not appear as a measured live GPR index**   |
+| `vigil-app/lib/data/gdelt.ts`          | Contextual news volume/threat updates                                         | Source client ideas                                            | News volume is not policy probability or actual cost; requires geographic/HTS relevance and deduplication                                      |
+| `vigil-app/lib/data/sources.ts`        | Combines seed threats with multiple optional feeds                            | Graceful degradation patterns                                  | Seed threats are not known live facts; source status and precedence need redesign                                                              |
+| `vigil-app/lib/pipeline.ts`            | Composite threat scoring, title deduplication, probability corrections        | Reusable code layout, pipeline ergonomics and monitoring ideas | Equity sector sensitivity scores and arbitrary blending are not a sound importer exposure model                                                |
+| `vigil-app/app/api/dashboard/route.ts` | Serves a cached dashboard snapshot                                            | Server data caching pattern                                    | It initializes from seeded values and does background refresh; do not conflate seed with real external data                                    |
+| `vigil-app/lib/backtesting/harness.ts` | Computes directional hit rates for alerts                                     | Test harness structure as inspiration                          | Neutral outcomes are counted as hits; **not a freight or importer cost backtest**; must be replaced for this use                               |
+| `vigil-app/tests/`                     | Vitest coverage of scoring and pipeline logic                                 | Test layout and CI discipline                                  | Cost Current requires economics and import specific tests                                                                                      |
+| `vigil-app/components/`                | Dark terminal design, charts and panels                                       | Design patterns if useful                                      | Do not copy a financial threat dashboard wholesale; prioritize import actions                                                                  |
 
 Relevant links:
 
@@ -710,11 +717,11 @@ Reading a benchmark publicly does not authorize commercial redisplay, redistribu
 
 #### Three potential company killing assumptions
 
-| Risk | Fastest meaningful test | Evidence to continue | Signal to pause or pivot |
-|---|---|---|---|
-| **Customers do not act or pay** | Show a real decision memo to 5 to 10 owners/operators with actual upcoming imports; ask them to compare against current workflow and make a real pilot purchase | At least some provide a real shipment and pay or commit to a defined paid pilot; they can name decisions changed | All agree 'interesting' but cannot name a budget, time sensitive choice or owner |
-| **No legal / affordable data at lane level** | Build one complete lane dataset from lawfully usable rates or customer invoices, with date, quote basis and missingness; benchmark a naive forecast | Enough observations and rights to train/evaluate; lane level errors small relative to economics of actions | Only paywalled indexes, misaligned lanes or inaccessible historical data |
-| **Recommendations unsafe or unreliable** | Recreate 3 to 5 concrete tariff and supply chain cases with broker review and observable feasible actions | Key exposures reconcile and the decision changes rationally under sensitivity tests | Incorrect duty stacking, false claims of early clearance, decisions depend on unavailable alternatives |
+| Risk                                         | Fastest meaningful test                                                                                                                                         | Evidence to continue                                                                                             | Signal to pause or pivot                                                                               |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Customers do not act or pay**              | Show a real decision memo to 5 to 10 owners/operators with actual upcoming imports; ask them to compare against current workflow and make a real pilot purchase | At least some provide a real shipment and pay or commit to a defined paid pilot; they can name decisions changed | All agree 'interesting' but cannot name a budget, time sensitive choice or owner                       |
+| **No legal / affordable data at lane level** | Build one complete lane dataset from lawfully usable rates or customer invoices, with date, quote basis and missingness; benchmark a naive forecast             | Enough observations and rights to train/evaluate; lane level errors small relative to economics of actions       | Only paywalled indexes, misaligned lanes or inaccessible historical data                               |
+| **Recommendations unsafe or unreliable**     | Recreate 3 to 5 concrete tariff and supply chain cases with broker review and observable feasible actions                                                       | Key exposures reconcile and the decision changes rationally under sensitivity tests                              | Incorrect duty stacking, false claims of early clearance, decisions depend on unavailable alternatives |
 
 Do not define a business victory as a mentor liking the UI. Track actual usage and dollars at stake.
 
@@ -735,12 +742,18 @@ Do not define a business victory as a mentor liking the UI. Track actual usage a
 
 #### One page paid pilot memo format
 
-Header: customer and shipment anonymized ID, as of date and decision date.  
-Inputs: product/origin/HTS status, customs value, current quote, Incoterms, constraints, event definitions and where assumptions came from.  
-Analysis: base costs, each added risk, probability sources, total expected costs and downside cases.  
-Actions: status quo, only feasible alternatives, total and incremental dollars, timing and conditions.  
-Bottom line: preferred action **under stated assumptions**, flip threshold, what would change the view.  
-Limitations: duty verification needed, no legal/financial advice, no guaranteed savings.  
+Header: customer and shipment anonymized ID, as of date and decision date.
+
+Inputs: product/origin/HTS status, customs value, current quote, Incoterms, constraints, event definitions and where assumptions came from.
+
+Analysis: base costs, each added risk, probability sources, total expected costs and downside cases.
+
+Actions: status quo, only feasible alternatives, total and incremental dollars, timing and conditions.
+
+Bottom line: preferred action **under stated assumptions**, flip threshold, what would change the view.
+
+Limitations: duty verification needed, no legal/financial advice, no guaranteed savings.
+
 Sources: links, rule dates, quote timestamps, preparer and method version.
 
 ### 20A. First customers, market sizing and distribution plan
@@ -917,27 +930,36 @@ Verified locally on October 15, 2026; see [Progress](docs/PROGRESS.md) for comma
 
 These categories were carried forward from the original blueprint. Only the Cost Current implementation and the scoped Vigil inspection have been checked in this work session; recheck external source statements before relying on them.
 
-| Type | Statement |
-|---|---|
-| Confirmed from existing Cost Current conversation | Cost Current is the working brand, the immediate goal is a mentor prototype by October 16, and an interactive globe is important. |
-| Confirmed from a GitHub repository inspection | `Sambhav255/Vigil` contains separate Kalshi, Polymarket, GPR and GDELT modules, a Next.js application, caching and tests. |
-| Verified from official or primary source pages | USITC publishes historical HTS revisions, Kalshi publishes market data APIs, Polymarket publishes Gamma API documentation, Freightos posts restrictive data terms, and CFTC publishes intermediaries definitions. |
-| Illustrative demo assumption | A $100,000 customs value with assumed tariff and freight scenarios generates the example numbers in Part I. |
-| Research hypothesis | Qualified market odds and past shipping shocks will measurably improve importer decisions over simple scenarios. |
-| Business hypothesis | SMB importers will pay for recurring decision support or one off risk memos. |
-| Unknown / needs validation | Access to affordable, legally usable lane history; exact buyer and pricing; operational controls that make suggested actions feasible; production tariff coverage and insurance costs. |
+| Type                                              | Statement                                                                                                                                                                                                         |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Confirmed from existing Cost Current conversation | Cost Current is the working brand, the immediate goal is a mentor prototype by October 16, and an interactive globe is important.                                                                                 |
+| Confirmed from a GitHub repository inspection     | `Sambhav255/Vigil` contains separate Kalshi, Polymarket, GPR and GDELT modules, a Next.js application, caching and tests.                                                                                         |
+| Verified from official or primary source pages    | USITC publishes historical HTS revisions, Kalshi publishes market data APIs, Polymarket publishes Gamma API documentation, Freightos posts restrictive data terms, and CFTC publishes intermediaries definitions. |
+| Illustrative demo assumption                      | A $100,000 customs value with assumed tariff and freight scenarios generates the example numbers in Part I.                                                                                                       |
+| Research hypothesis                               | Qualified market odds and past shipping shocks will measurably improve importer decisions over simple scenarios.                                                                                                  |
+| Business hypothesis                               | SMB importers will pay for recurring decision support or one off risk memos.                                                                                                                                      |
+| Unknown / needs validation                        | Access to affordable, legally usable lane history; exact buyer and pricing; operational controls that make suggested actions feasible; production tariff coverage and insurance costs.                            |
 
 ## Appendix B. Terms in plain English
 
-**Landed cost:** The chosen accounting scope of what it costs to acquire and receive imported goods, with specific inclusions depending on shipment terms.  
-**HTS code:** US Harmonized Tariff Schedule classification used to determine applicable tariff categories and rates, among other information.  
-**Incoterms:** Standard trade terms that help allocate transport and other obligations between buyer and seller; they do not themselves decide every legal tax obligation.  
-**Freight lane:** A comparable origin to destination or corridor definition, with transport mode and rate basis.  
-**Event probability:** Estimated chance a *precisely defined event* occurs in a specified time window.  
-**Shock impact:** Expected difference in cost or delay conditional on an event, requiring its own evidence.  
-**Quantile forecast:** Estimate of a point in a future outcome distribution, e.g. a forecasted 90th percentile cost.  
-**Calibration:** Whether events forecast at, say, 30% tend to occur about 30% of the time over an appropriate set of repeated, comparable forecasts.  
-**Backtest:** Historical evaluation using information available at that time, not future knowledge.  
+**Landed cost:** The chosen accounting scope of what it costs to acquire and receive imported goods, with specific inclusions depending on shipment terms.
+
+**HTS code:** US Harmonized Tariff Schedule classification used to determine applicable tariff categories and rates, among other information.
+
+**Incoterms:** Standard trade terms that help allocate transport and other obligations between buyer and seller; they do not themselves decide every legal tax obligation.
+
+**Freight lane:** A comparable origin to destination or corridor definition, with transport mode and rate basis.
+
+**Event probability:** Estimated chance a _precisely defined event_ occurs in a specified time window.
+
+**Shock impact:** Expected difference in cost or delay conditional on an event, requiring its own evidence.
+
+**Quantile forecast:** Estimate of a point in a future outcome distribution, e.g. a forecasted 90th percentile cost.
+
+**Calibration:** Whether events forecast at, say, 30% tend to occur about 30% of the time over an appropriate set of repeated, comparable forecasts.
+
+**Backtest:** Historical evaluation using information available at that time, not future knowledge.
+
 **Decision regret:** How much more a chosen action costs relative to the best feasible comparator, assessed appropriately and without fabricated hindsight.
 
 **End of build plan.**

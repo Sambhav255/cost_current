@@ -34,36 +34,47 @@ export function matchExposure(event: RiskEvent, shipment: Shipment): ExposureLin
         'freight',
       ]);
     }
-    if (!route?.viaCorridor) {
+    const evidence = shipment.routeEvidence;
+    if (!evidence || evidence.corridorId !== event.corridorId || evidence.state === 'unknown') {
       return link(
         event,
         shipment,
-        'not_applicable',
-        `${route?.origin ?? 'Origin'} → ${route?.destination ?? 'destination'} has no declared ${event.corridorId} corridor. Origin and destination alone do not imply that itinerary.`,
-        'declared-corridor-required',
-        [],
+        'unknown',
+        `${route?.origin ?? 'Origin'} → ${route?.destination ?? 'destination'} has no confirmed ${event.corridorId} itinerary. Check the carrier or forwarder.`,
+        'itinerary-unknown',
+        ['freight', 'delay'],
       );
     }
-    if (route.viaCorridor !== event.corridorId) {
+    if (evidence.state === 'known_avoids') {
       return link(
         event,
         shipment,
         'not_applicable',
-        `Shipment declares corridor "${route.viaCorridor}", not "${event.corridorId}".`,
-        'corridor-mismatch',
+        `${evidence.source === 'reviewed_demo' ? 'Reviewed fictional sample' : 'Customer-confirmed itinerary'} avoids ${event.corridorId}.`,
+        'documented-corridor-avoidance',
         [],
       );
     }
     return link(
       event,
       shipment,
-      'reviewed',
-      `Shipment declares the ${event.corridorId} corridor on the schematic ${route.origin} → ${route.destination} lane.`,
-      'declared-corridor-match',
+      evidence.source === 'reviewed_demo' ? 'reviewed' : 'confirmed',
+      `${evidence.source === 'reviewed_demo' ? 'Reviewed fictional sample' : 'Customer-confirmed itinerary'} traverses ${event.corridorId}; map line remains schematic.`,
+      'documented-corridor-traversal',
       ['freight', 'delay'],
     );
   }
   if (event.kind === 'trade_policy') {
+    if (!event.isDemoScenario) {
+      return link(
+        event,
+        shipment,
+        'unknown',
+        'Official product and effective-date scope requires reviewed source evidence and broker confirmation.',
+        'official-policy-scope-unreviewed',
+        ['duty'],
+      );
+    }
     if (!event.originCountries.length) {
       return link(
         event,
@@ -197,12 +208,12 @@ export function conditionalImpact(
       eventId: event.id,
       shipmentId: shipment.id,
       estimatedExtraCostCents: surcharge,
-      estimatedDelayDays: shipment.holdingDays || null,
+      estimatedDelayDays: shipment.assumedDisruptionDelayDays ?? null,
       estimateStatus: surcharge === null ? 'unavailable' : 'illustrative',
       unitsAndBasis:
         surcharge === null
           ? 'Needs an entered freight surcharge / delay cost; no carrier quote invented'
-          : 'USD cents · entered freight surcharge assumption; delay days from holdingDays input',
+          : 'USD cents · entered freight surcharge assumption; disruption delay, if shown, is user-entered and separate from holding days',
       modelVersion: 'engine-conditional-v1',
       assumptions: [
         'Conditional on the corridor event occurring and the surcharge applying to this booking.',

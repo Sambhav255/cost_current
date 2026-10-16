@@ -116,6 +116,14 @@ export default function Memo({
             </>
           )}
         </p>
+        {snapshot.eventContext && (
+          <p className="memo-provenance">
+            Event context: {snapshot.eventContext.event.name} ({snapshot.eventContext.event.id}),
+            source as of {snapshot.eventContext.event.observedAsOf}; linked to shipment{' '}
+            {snapshot.eventContext.shipmentId} at {snapshot.eventContext.capturedAt}. This is an
+            illustrative scenario, with no automatic event odds or operational delay estimate.
+          </p>
+        )}
         <div className="memo-summary">
           <div>
             <span>BASE MODELED COST</span>

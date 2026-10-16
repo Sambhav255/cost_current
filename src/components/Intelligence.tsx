@@ -2,6 +2,7 @@ import { Radar } from 'lucide-react';
 import { routes } from '../lib/data';
 import { listDemoEvents, probabilityFor, zonesForEvent } from '../lib/riskEvents';
 import { dateLabel, percent } from '../lib/format';
+import { exposuresForEvent } from '../lib/riskExposure';
 import type { Shipment } from '../lib/types';
 import RouteGlobe from './RouteGlobe';
 import { Eyebrow, SectionHeading } from './ui';
@@ -31,10 +32,12 @@ export default function Intelligence({
   const events = listDemoEvents();
   const event = events.find((e) => e.id === selectedEventId) ?? events[0];
   const zones = event ? zonesForEvent(event) : [];
-  const focusRoute =
-    shipments.find((s) => s.id === 'nordic-home')?.routeId ??
-    shipments.find((s) => s.id === 'northstar')?.routeId ??
-    routes[0].id;
+  const focusShipment = event
+    ? exposuresForEvent(event, shipments).find((link) =>
+        ['confirmed', 'reviewed'].includes(link.relationship),
+      )
+    : undefined;
+  const focusRoute = shipments.find((s) => s.id === focusShipment?.shipmentId)?.routeId ?? '';
 
   return (
     <>
@@ -92,7 +95,7 @@ export default function Intelligence({
         <div className="intelligence-map">
           <SectionHeading
             title="Geographic context"
-            description="Schematic lanes and corridor watch zones — not vessel tracks."
+            description="Schematic lanes and illustrative watch locations — not vessel tracks or hazard boundaries."
           />
           <RouteGlobe
             routes={routes}

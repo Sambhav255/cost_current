@@ -41,7 +41,7 @@ export default function App() {
   const [view, setView] = useState<View>('welcome'),
     [tab, setTab] = useState<'analysis' | 'details'>('analysis');
   const [selectedEventId, setSelectedEventId] = useState('demo-tariff-china-home');
-  const [decisionContextEventId, setDecisionContextEventId] = useState<string | null>(null);
+  const [decisionContext, setDecisionContext] = useState<MemoSnapshot['eventContext'] | null>(null);
   const [mode, setMode] = useState<'forecast' | 'what-if'>('forecast');
   const [signals, setSignals] = useState(loadSeries);
   const [horizon, setHorizon] = useState<28 | 56>(28);
@@ -109,6 +109,7 @@ export default function App() {
               ...s,
               ...invalidateEvidenceForEdit(s, field),
               [field]: value,
+              ...(field === 'routeId' ? { routeEvidence: undefined, knownAsset: undefined } : {}),
               ...(['tariffProbabilityBps', 'freightProbabilityBps'].includes(field) &&
               !s.scenarioOverride
                 ? {
@@ -148,8 +149,17 @@ export default function App() {
     navigate('intelligence');
   };
   const openDecisionsFromEvent = (shipmentId: string, eventId: string) => {
+    const event = getEvent(eventId);
+    if (!event) return;
     setSelectedId(shipmentId);
-    setDecisionContextEventId(eventId);
+    setDecisionContext(
+      structuredClone({
+        shipmentId,
+        event,
+        signal: probabilityFor(eventId) ?? null,
+        capturedAt: new Date().toISOString(),
+      }),
+    );
     setMode('what-if');
     setTab('analysis');
     navigate('shipment');
@@ -183,6 +193,7 @@ export default function App() {
         shipment: selected,
         route,
         analysis,
+        eventContext: decisionContext?.shipmentId === selected.id ? decisionContext : undefined,
         timestamp: new Date().toISOString(),
         calculatorVersion: '2.0.0-ledger',
       }),
@@ -222,6 +233,9 @@ export default function App() {
       earlyCostCents: 0,
       tariffAvoidance: 'unknown',
       edited: ['name'],
+      routeEvidence: undefined,
+      knownAsset: undefined,
+      assumedDisruptionDelayDays: undefined,
     });
     setShipments((s) => [...s, next]);
     setSelectedId(next.id);
@@ -245,8 +259,10 @@ export default function App() {
         onImport={() => navigate('import')}
       />
     );
-  const contextEvent = decisionContextEventId ? getEvent(decisionContextEventId) : undefined;
-  const contextSignal = decisionContextEventId ? probabilityFor(decisionContextEventId) : undefined;
+  const contextEvent =
+    decisionContext?.shipmentId === selected.id ? decisionContext.event : undefined;
+  const contextSignal =
+    decisionContext?.shipmentId === selected.id ? decisionContext.signal : undefined;
   const pageName =
     view === 'intelligence'
       ? 'Intelligence'
@@ -330,7 +346,10 @@ export default function App() {
             <select
               aria-label="Selected shipment"
               value={selected.id}
-              onChange={(event) => setSelectedId(event.target.value)}
+              onChange={(event) => {
+                setSelectedId(event.target.value);
+                setDecisionContext(null);
+              }}
             >
               {shipments.map((item) => (
                 <option key={item.id} value={item.id}>
@@ -436,8 +455,8 @@ export default function App() {
               </div>
               {contextEvent && (
                 <div className="notice event-context-banner" data-testid="event-context-banner">
-                  Opened from illustrative event: <strong>{contextEvent.name}</strong>. Occurrence
-                  odds are{' '}
+                  Opened from illustrative event <strong>{contextEvent.name}</strong> (
+                  {contextEvent.id}, as of {contextEvent.observedAsOf}). Occurrence odds are{' '}
                   {contextSignal?.probabilityBps === null ||
                   contextSignal?.probabilityBps === undefined
                     ? 'unavailable'
@@ -446,7 +465,7 @@ export default function App() {
                   <button
                     type="button"
                     className="text-button"
-                    onClick={() => setDecisionContextEventId(null)}
+                    onClick={() => setDecisionContext(null)}
                   >
                     Dismiss
                   </button>

@@ -15,6 +15,14 @@ The [unified external-intelligence plan](../COST_CURRENT_UNIFIED_INTELLIGENCE_IN
 
 **Next:** P0.5 semantic corrections: unknown corridor state, separate delay assumption, demo-only policy matching, geographic evidence and immutable event context. Then rerun the gates before P1.
 
+## Unified integration milestone P0.5 — semantic corrections
+
+Shipment itinerary evidence now explicitly says `known_traverses`, `known_avoids`, or `unknown`. Northstar's fictional reviewed route avoids Suez and Nordic's fictional reviewed route traverses it; imported, manually added and older saved shipments lack that evidence and remain unknown until the user confirms an itinerary. Changing the selected route clears its prior itinerary and asset evidence. The form exposes the confirmation state. Non-demo policy events do not reuse the demo product-word rule. The optional `assumedDisruptionDelayDays` field is separate from early-order `holdingDays`; missing delay stays null. A selected event is frozen with its ID, source date, signal and linked shipment when opening Decisions, and the event context is included in What if? memo snapshots. Map focus follows the selected event's supported exposure rather than a hard-coded shipment; corridor dots are described as illustrative watch locations.
+
+**Verified locally:** `npm run check` passed with 71 unit tests and build; the full 26-case desktop/narrow Playwright suite passed, then the modified Intelligence spec passed 6/6 on both viewports. A legacy v1 storage fixture without itinerary evidence loads, and imported shipments do not inherit demo route evidence. The existing Northstar calculation remains unchanged. **Hosted CI for this new tree is pending a commit/push.** Known asset fields have a validated additive storage shape, but the user-entry and observed-event matching flow belongs to P1. No event odds, delay days or official tariff applicability are inferred.
+
+**Next:** P1 USGS source registry, bounded adapter, honest feed status and known-asset proximity → user-entered conditional cost flow.
+
 ---
 
 ## Current state

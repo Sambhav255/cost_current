@@ -63,6 +63,27 @@ export default function ShipmentForm({
             </select>
           </Field>
           <Field
+            label="Suez / Red Sea itinerary evidence"
+            hint="Choose only if a carrier or forwarder has confirmed the itinerary; lane endpoints alone do not establish it."
+          >
+            <select
+              value={
+                s.routeEvidence?.corridorId === 'suez-red-sea' ? s.routeEvidence.state : 'unknown'
+              }
+              onChange={(e) =>
+                update('routeEvidence', {
+                  corridorId: 'suez-red-sea',
+                  state: e.target.value as 'known_traverses' | 'known_avoids' | 'unknown',
+                  source: 'customer_confirmed',
+                })
+              }
+            >
+              <option value="unknown">Unknown</option>
+              <option value="known_traverses">Confirmed: traverses</option>
+              <option value="known_avoids">Confirmed: avoids</option>
+            </select>
+          </Field>
+          <Field
             label="Country of origin"
             hint="Origin determines applicable duty assumptions; routing does not change it."
           >
@@ -308,6 +329,26 @@ export default function ShipmentForm({
             description="Explicit assumptions, not live odds or model predictions."
           />
           <div className="form-grid">
+            <Field
+              label="Assumed disruption delay"
+              hint="Optional user scenario. Separate from days held earlier; an event does not supply delay days."
+            >
+              <input
+                type="number"
+                aria-label="Assumed disruption delay"
+                min={0}
+                max={365}
+                step={1}
+                placeholder="Unknown"
+                value={s.assumedDisruptionDelayDays ?? ''}
+                onChange={(e) =>
+                  update(
+                    'assumedDisruptionDelayDays',
+                    e.target.value === '' ? null : Number(e.target.value),
+                  )
+                }
+              />
+            </Field>
             <Field label="Tariff event probability">
               <NumberInput
                 label="Tariff event probability"

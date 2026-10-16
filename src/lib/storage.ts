@@ -12,7 +12,9 @@ function compatible(value: unknown): value is Shipment[] {
       (s) =>
         s &&
         Object.entries(sample).every(
-          ([k, v]) => typeof s[k] === typeof v && (typeof v !== 'number' || Number.isFinite(s[k])),
+          ([k, v]) =>
+            (k === 'routeEvidence' && s[k] === undefined) ||
+            (typeof s[k] === typeof v && (typeof v !== 'number' || Number.isFinite(s[k]))),
         ) &&
         (s.scenarioOverride === undefined ||
           (s.scenarioOverride &&
@@ -21,6 +23,24 @@ function compatible(value: unknown): value is Shipment[] {
             ) &&
             typeof s.scenarioOverride.capturedAt === 'string' &&
             s.scenarioOverride.originalForecast?.modelId === 'last-observation')) &&
+        (s.routeEvidence === undefined ||
+          (typeof s.routeEvidence.corridorId === 'string' &&
+            ['known_traverses', 'known_avoids', 'unknown'].includes(s.routeEvidence.state) &&
+            ['reviewed_demo', 'customer_confirmed'].includes(s.routeEvidence.source))) &&
+        (s.assumedDisruptionDelayDays === undefined ||
+          s.assumedDisruptionDelayDays === null ||
+          (Number.isInteger(s.assumedDisruptionDelayDays) &&
+            s.assumedDisruptionDelayDays >= 0 &&
+            s.assumedDisruptionDelayDays <= 365)) &&
+        (s.knownAsset === undefined ||
+          (['port', 'supplier_site'].includes(s.knownAsset.type) &&
+            typeof s.knownAsset.name === 'string' &&
+            s.knownAsset.name.trim().length > 0 &&
+            Number.isFinite(s.knownAsset.latitude) &&
+            Math.abs(s.knownAsset.latitude) <= 90 &&
+            Number.isFinite(s.knownAsset.longitude) &&
+            Math.abs(s.knownAsset.longitude) <= 180 &&
+            ['reviewed_demo', 'customer_confirmed'].includes(s.knownAsset.source))) &&
         Array.isArray(s.edited) &&
         s.edited.every((v: unknown) => typeof v === 'string') &&
         ['assumed', 'unknown', 'not-avoided'].includes(s.tariffAvoidance) &&

@@ -1,4 +1,5 @@
 import type { ForecastSnapshot } from './forecast';
+import type { RiskEvent, ProbabilitySignal } from './riskEvents';
 import type { InputEvidence } from './evidence';
 import type { AdditionalCostLine, LedgerLine } from './ledger';
 export type SourceKind = 'Illustrative assumption' | 'User assumption';
@@ -48,6 +49,21 @@ export interface Shipment {
   product: string;
   supplier: string;
   routeId: string;
+  /** Explicit itinerary evidence; absent on imported and legacy customer shipments. */
+  routeEvidence?: {
+    corridorId: string;
+    state: 'known_traverses' | 'known_avoids' | 'unknown';
+    source: 'reviewed_demo' | 'customer_confirmed';
+  };
+  /** A user-entered disruption scenario, independent of early-purchase holding days. */
+  assumedDisruptionDelayDays?: number | null;
+  knownAsset?: {
+    type: 'port' | 'supplier_site';
+    name: string;
+    latitude: number;
+    longitude: number;
+    source: 'reviewed_demo' | 'customer_confirmed';
+  };
   originCountry: string;
   htsCode: string;
   incoterm: string;
@@ -142,6 +158,12 @@ export interface MemoSnapshot {
   route: Route;
   analysis: ValidAnalysis;
   timestamp: string;
+  eventContext?: {
+    shipmentId: string;
+    event: RiskEvent;
+    signal: ProbabilitySignal | null;
+    capturedAt: string;
+  };
 }
 export interface ForecastMemoSnapshot {
   mode: 'forecast';

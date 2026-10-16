@@ -19,12 +19,18 @@ describe('event exposure matching', () => {
   it('does not expose Shanghai → Los Angeles to a Red Sea corridor event', () => {
     const link = matchExposure(suez, northstar);
     expect(link.relationship).toBe('not_applicable');
-    expect(link.rationale).toMatch(/no declared suez-red-sea corridor/i);
+    expect(link.rationale).toMatch(/avoids suez-red-sea/i);
   });
 
   it('exposes only the declared Suez corridor shipment', () => {
     expect(matchExposure(suez, nordic).relationship).toBe('reviewed');
-    expect(matchExposure(suez, fieldwork).relationship).toBe('not_applicable');
+    expect(matchExposure(suez, fieldwork).relationship).toBe('unknown');
+    expect(matchExposure(suez, { ...fieldwork, routeEvidence: undefined }).relationship).toBe(
+      'unknown',
+    );
+    expect(matchExposure(suez, { ...nordic, routeEvidence: undefined }).relationship).toBe(
+      'unknown',
+    );
   });
 
   it('keeps automatic probability unavailable for the corridor event', () => {
@@ -63,6 +69,22 @@ describe('event exposure matching', () => {
     const impact = conditionalImpact(suez, bare, link);
     expect(impact.estimatedExtraCostCents).toBeNull();
     expect(impact.estimateStatus).toBe('unavailable');
+  });
+
+  it('never treats inventory holding days as disruption delay', () => {
+    const link = matchExposure(suez, nordic);
+    expect(conditionalImpact(suez, nordic, link).estimatedDelayDays).toBeNull();
+    expect(
+      conditionalImpact(suez, { ...nordic, assumedDisruptionDelayDays: 3 }, link)
+        .estimatedDelayDays,
+    ).toBe(3);
+  });
+
+  it('keeps official policy product scope unknown without source review', () => {
+    expect(
+      matchExposure({ ...tariff, id: 'official:policy-1', isDemoScenario: false }, northstar)
+        .relationship,
+    ).toBe('unknown');
   });
 
   it('attaches a geographic watch zone only to corridor events', () => {

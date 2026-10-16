@@ -253,6 +253,9 @@ export function previewCsv(
       names.map((name, j) => [name, cells[j]?.trim() ?? '']),
     ) as Record<Column, string>;
     const s = freshSamples()[0];
+    delete s.routeEvidence;
+    delete s.knownAsset;
+    delete s.assumedDisruptionDelayDays;
     s.alternativeRoute.enabled = false;
     s.alternativeSupplier.enabled = false;
     s.costLines = [];

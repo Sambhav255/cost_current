@@ -33,6 +33,8 @@ test('intelligence links tariff exposure to Northstar decisions', async ({ page 
   );
   await expect(page.getByTestId('decision-wait')).toContainText('$123,600');
   await expect(page.getByTestId('decision-early')).toContainText('$121,100');
+  await navigate(page, 'Decision memo');
+  await expect(page.getByTestId('decision-memo')).toContainText('demo-tariff-china-home');
 });
 
 test('Suez corridor event exposes Nordic Home only', async ({ page }) => {

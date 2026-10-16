@@ -37,6 +37,7 @@ describe('strict local CSV intake', () => {
     expect(a.expectedCents).toBe(12_360_000);
     expect(s.evidence?.freightCents.state).toBe('scenario_assumption');
     expect(s.intake?.sourceType).toBe('scenario_assumption');
+    expect(s.routeEvidence).toBeUndefined();
   });
   it('records quote reference, claimed source date, capture time and customer provenance', () => {
     const s = imported({
@@ -225,6 +226,10 @@ describe('additive local storage compatibility', () => {
     try {
       expect(saveShipments(freshSamples())).toBe(true);
       expect(loadShipments()[0].id).toBe('northstar');
+      const legacy = freshSamples();
+      for (const shipment of legacy) delete shipment.routeEvidence;
+      memory.set('cost-current-demo-v1', JSON.stringify({ version: 1, shipments: legacy }));
+      expect(loadShipments()[0].routeEvidence).toBeUndefined();
       const s = imported({ source_type: 'customer_supplied', insurance_usd: '100' });
       expect(saveShipments([s])).toBe(true);
       expect(loadShipments()[0]).toEqual(s);

@@ -26,14 +26,13 @@ Honest curated events → exposure match → conditional dollars via existing en
 
 Preserve: `engine.ts` Northstar arithmetic, CSV intake, ledger/evidence, Forecast/What if? separation, memos, local persistence.
 
-## Later stages
+## Current sequence and later stages
 
-The unified plan's **P1 USGS observed-event slice is implemented locally**; see [Progress](PROGRESS.md) for exact verification and hosted status. The older stage labels below describe product themes and do not override the unified P2 NOAA/NHC then P3 PortWatch order.
+The unified plan's P1 USGS observed-event and P2 NHC forecast-cone slices are implemented; see [Progress](PROGRESS.md) for exact verification. P3 has a typed PortWatch research boundary, but actual history, anomalies and backtest scores are blocked by unresolved data rights and unavailable release vintages. The [research note](PORTWATCH_RESEARCH.md) defines the vessel-count target and reproducible fixture script. This target remains separate from the USD/FEU freight baseline.
 
-1. **P2** — Real read-only signal path with exact IDs, timestamps, failure states
-2. **P3** — One rights-reviewed time-ordered forecast study vs naive baseline
-3. **P4** — Decision journal + customer interviews
-4. **P5** — Commercial platform
+1. **P3 external gate** — Permissioned daily Suez vintages, then genuine chronological baseline evaluation and only supported descriptive signals.
+2. **P4** — Selective additions when source rights and customer need justify them; decision journal and customer interviews.
+3. **P5** — Calibrated models and commercial platform after data, validation and governance gates.
 
 **Out of current scope:** Python ML training on fictional data, paid feeds without rights, full Vigil scoring shortcuts, UI-only redesign sprints.
 

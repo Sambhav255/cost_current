@@ -18,6 +18,7 @@ import {
 import { quakeExposure, type DelayScenario } from '../lib/quakeExposure';
 import { fetchNHC, nhcExposure, type NHCFeed, type NHCSummary } from '../lib/nhc';
 import NHCPanel from './NHCPanel';
+import PortWatchPanel from './PortWatchPanel';
 
 function likelihoodShort(eventId: string): string {
   const signal = probabilityFor(eventId);
@@ -48,7 +49,9 @@ export default function Intelligence({
   ) => void;
   onOpenForecastDecisions: (shipmentId: string, storm: NHCSummary, scenario: DelayScenario) => void;
 }) {
-  const [sourceMode, setSourceMode] = useState<'demo' | 'official' | 'fixture' | 'weather'>('demo');
+  const [sourceMode, setSourceMode] = useState<
+    'demo' | 'official' | 'fixture' | 'weather' | 'maritime'
+  >('demo');
   const [feed, setFeed] = useState<EarthquakeFeed | null>(null);
   const [nhcFeed, setNhcFeed] = useState<NHCFeed | null>(null);
   const [selectedStormId, setSelectedStormId] = useState('');
@@ -113,7 +116,13 @@ export default function Intelligence({
       ? (shipments.find((s) => s.id === focusShipment?.shipmentId)?.routeId ?? '')
       : sourceMode === 'weather'
         ? (stormMatch?.routeId ?? '')
-        : (quakeMatch?.routeId ?? '');
+        : sourceMode === 'maritime'
+          ? (shipments.find(
+              (s) =>
+                s.routeEvidence?.state === 'known_traverses' &&
+                s.routeEvidence.corridorId === 'suez-red-sea',
+            )?.routeId ?? '')
+          : (quakeMatch?.routeId ?? '');
 
   return (
     <>
@@ -144,8 +153,10 @@ export default function Intelligence({
                 : sourceMode === 'fixture'
                   ? 'Explicit fictional test fixture.'
                   : sourceMode === 'weather'
-                    ? 'NHC official advisory summaries; forecast geometry unavailable.'
-                    : 'USGS past-day observed earthquake reports.'
+                    ? 'NHC official advisories and validated forecast cones.'
+                    : sourceMode === 'maritime'
+                      ? 'PortWatch research gate; no live vessel-count signal.'
+                      : 'USGS past-day observed earthquake reports.'
             }
           />
           <div className="button-row" role="group" aria-label="Intelligence source">
@@ -180,6 +191,14 @@ export default function Intelligence({
               onClick={() => setSourceMode('weather')}
             >
               Official forecasts
+            </button>
+            <button
+              type="button"
+              className="button secondary"
+              aria-pressed={sourceMode === 'maritime'}
+              onClick={() => setSourceMode('maritime')}
+            >
+              Maritime research
             </button>
           </div>
           {sourceMode === 'official' && (
@@ -245,46 +264,48 @@ export default function Intelligence({
                     </button>
                   </li>
                 ))
-              : sourceMode === 'weather'
-                ? nhcFeed?.storms.map((item) => (
-                    <li key={item.id}>
-                      <button
-                        type="button"
-                        className={item.id === storm?.id ? 'event-card active' : 'event-card'}
-                        onClick={() => setSelectedStormId(item.id)}
-                      >
-                        <span className="event-card-kind">NHC official forecast</span>
-                        <strong>
-                          {item.name} · advisory {item.advisoryNumber}
-                        </strong>
-                        <span className="event-card-meta">Issued {item.issuedAt}</span>
-                        <span className="event-card-odds">
-                          {shipments.some((s) => nhcExposure(item, s).state === 'possible')
-                            ? 'Possible known-site overlap'
-                            : 'No verified cone overlap'}
-                        </span>
-                      </button>
-                    </li>
-                  ))
-                : visibleQuakes.slice(0, 30).map((item) => (
-                    <li key={item.id}>
-                      <button
-                        type="button"
-                        className={item.id === quake?.id ? 'event-card active' : 'event-card'}
-                        data-testid={`quake-card-${item.id}`}
-                        onClick={() => setSelectedQuakeId(item.id)}
-                      >
-                        <span className="event-card-kind">
-                          {item.sourceMode === 'observed'
-                            ? 'USGS observed report'
-                            : 'Fictional test'}
-                        </span>
-                        <strong>{item.title}</strong>
-                        <span className="event-card-meta">{item.eventTime}</span>
-                        <span className="event-card-odds">Odds: Not available</span>
-                      </button>
-                    </li>
-                  ))}
+              : sourceMode === 'maritime'
+                ? null
+                : sourceMode === 'weather'
+                  ? nhcFeed?.storms.map((item) => (
+                      <li key={item.id}>
+                        <button
+                          type="button"
+                          className={item.id === storm?.id ? 'event-card active' : 'event-card'}
+                          onClick={() => setSelectedStormId(item.id)}
+                        >
+                          <span className="event-card-kind">NHC official forecast</span>
+                          <strong>
+                            {item.name} · advisory {item.advisoryNumber}
+                          </strong>
+                          <span className="event-card-meta">Issued {item.issuedAt}</span>
+                          <span className="event-card-odds">
+                            {shipments.some((s) => nhcExposure(item, s).state === 'possible')
+                              ? 'Possible known-site overlap'
+                              : 'No verified cone overlap'}
+                          </span>
+                        </button>
+                      </li>
+                    ))
+                  : visibleQuakes.slice(0, 30).map((item) => (
+                      <li key={item.id}>
+                        <button
+                          type="button"
+                          className={item.id === quake?.id ? 'event-card active' : 'event-card'}
+                          data-testid={`quake-card-${item.id}`}
+                          onClick={() => setSelectedQuakeId(item.id)}
+                        >
+                          <span className="event-card-kind">
+                            {item.sourceMode === 'observed'
+                              ? 'USGS observed report'
+                              : 'Fictional test'}
+                          </span>
+                          <strong>{item.title}</strong>
+                          <span className="event-card-meta">{item.eventTime}</span>
+                          <span className="event-card-odds">Odds: Not available</span>
+                        </button>
+                      </li>
+                    ))}
           </ul>
           {(sourceMode === 'official' || sourceMode === 'fixture') &&
             !visibleQuakes.length &&
@@ -324,6 +345,8 @@ export default function Intelligence({
             ) : (
               <p className="notice">No active NHC advisory selected.</p>
             )
+          ) : sourceMode === 'maritime' ? (
+            <PortWatchPanel shipments={shipments} />
           ) : quake ? (
             <EarthquakePanel
               key={quake.id}
@@ -345,7 +368,9 @@ export default function Intelligence({
                 ? 'Schematic lanes and illustrative watch locations — not vessel tracks or hazard boundaries.'
                 : sourceMode === 'weather'
                   ? 'Official NHC forecast cone if validated; shipment lanes remain schematic. The cone is not storm impact extent.'
-                  : 'Reported epicenter point and schematic customer lanes; point is not damage extent.'
+                  : sourceMode === 'maritime'
+                    ? 'Schematic lanes only. No vessel-count or anomaly geography is displayed.'
+                    : 'Reported epicenter point and schematic customer lanes; point is not damage extent.'
             }
           />
           <RouteGlobe

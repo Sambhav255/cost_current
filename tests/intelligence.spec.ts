@@ -50,6 +50,18 @@ test('Suez corridor event exposes Nordic Home only', async ({ page }) => {
   await expect(page.getByTestId('event-zone-suez-red-sea')).toBeVisible();
 });
 
+test('PortWatch research shows the permission gate without a fabricated signal', async ({
+  page,
+}) => {
+  await openIntelligence(page);
+  await page.getByRole('button', { name: 'Maritime research' }).click();
+  const status = page.getByTestId('portwatch-status');
+  await expect(status).toContainText('permission required');
+  await expect(status).toContainText('No PortWatch time series is ingested');
+  await expect(status).toContainText('Nordic Home Imports');
+  await expect(status).toContainText('Actual backtest scores');
+});
+
 test('welcome routes to intelligence and My Exposure opens analysis', async ({ page }) => {
   await openIntelligence(page);
   await navigate(page, 'My Exposure');

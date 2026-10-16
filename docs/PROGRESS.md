@@ -39,11 +39,19 @@ Shipments can save a customer-confirmed port or supplier-site coordinate; Norths
 
 The **Official forecasts** Intelligence filter reads NHC's current-storm summary through a fixed same-origin endpoint and fetches only linked official cone KMZs. The endpoint bounds time, bytes, storm count and extracted geometry; KML is checked against the storm and advisory version. The client keeps issuance time, retrieval time, basin and source link, and reports fresh, stale, invalid, unavailable and valid-empty states. Missing or mismatched geometry leaves a readable advisory with unknown geographic exposure. Stale cones are suppressed. The 2D map shows a documented official forecast cone and known-asset overlap; a cone describes potential storm-center location, not wind extent or port closure. The user supplies delay/cost assumptions before conditional dollars appear, and the advisory context is frozen into the What if? memo.
 
-**Verified locally:** `npm run check` passed (format, docs, lint, types, **83 unit tests**, production build). The full Playwright desktop/narrow suite passed **34/34**; targeted Intelligence tests passed 14/14. Unit cases cover empty/outage/malformed/stale responses, ambiguous basin, advisory mismatch, polygon holes and antimeridian crossing. A read-only local GET of the same-origin endpoint returned two active NHC advisories with version-matched cone geometry on October 16; the browser rendered them and classified Northstar's fictional test asset outside the selected cone. This is a dated source check, not a forecast of shipment outcome. **Hosted deployment/function behavior remains unverified.**
+**Verified locally:** `npm run check` passed (format, docs, lint, types, **83 unit tests**, production build). The full Playwright desktop/narrow suite passed **34/34**; targeted Intelligence tests passed 14/14. Unit cases cover empty/outage/malformed/stale responses, ambiguous basin, advisory mismatch, polygon holes and antimeridian crossing. A read-only local GET of the same-origin endpoint returned two active NHC advisories with version-matched cone geometry on October 16; the browser rendered them and classified Northstar's fictional test asset outside the selected cone. This is a dated source check, not a forecast of shipment outcome. [Hosted CI for `2539330`](https://github.com/Sambhav255/cost_current/actions/runs/38880091346) passed; hosted deployment/function behavior remains unverified.
 
 **Incomplete:** NHC coverage is limited to supported Atlantic/Eastern/Central Pacific summary items. The app does not ingest forecast point time steps, wind/rain/surge extents, operational closures, international cyclones, or closure probabilities; the 3D globe does not render cone geometry. Source rights for commercial redistribution, retention and model training need separate review. Static hosting without the same-origin endpoint reports unavailable.
 
 **Next:** P3 PortWatch rights and field review, then only permissioned historical ingestion/backtesting. If permission is unavailable, implement a typed research boundary and honest unavailable evidence panel with no claimed model metrics.
+
+## Unified integration milestone P3 — PortWatch research boundary
+
+The official ArcGIS layer metadata confirms a daily Suez `n_container` count field and a 1,000-row page cap, but not a release or revision timestamp. IMF usage terms require a permission determination before systematic automated historical downloading and potential commercial reuse. No bulk history was fetched. The app now has a **Maritime research** evidence panel that reports `permission_required`, names the precise proposed vessels/day target and shows only reviewed route relevance; it displays no current count, anomaly or forecast. The typed page parser leaves availability time unknown. A separate validator and CLI can evaluate explicitly supplied, permissioned vintage snapshots or a labeled synthetic fixture; a final revised download cannot pass the known-at-time evaluation gate. The method and rights questions are recorded in the [research note](PORTWATCH_RESEARCH.md) and [source register](DATA_SOURCE_REGISTER.md).
+
+**Verified locally:** `npm run check` passed with **87 unit tests** and the production build. The full Playwright desktop/narrow suite passed **36/36**, including the permission-gated maritime view on both viewports. `npm run research:portwatch -- --synthetic` produced a labeled 70-row fictional study with 21 later-window chronological folds; its numeric errors are **synthetic mechanics output, not PortWatch model accuracy**. Unit cases cover malformed counts/identity, unknown release time, missing days, duplicate vintages, late-retrieved final snapshots, descriptive anomaly and walk-forward baselines. A single official ArcGIS query confirmed the expected date string, Suez identity and container-count field; no historical series was fetched. Hosted P3 CI remains pending commit/push.
+
+**Incomplete / blocker:** Provider permission for systematic data retrieval, retention, commercial display and training is unresolved; actual release-vintage history is unavailable. Consequently there is **no live PortWatch adapter, genuine anomaly or actual backtest score**. No shipping-count-to-dollar effect model exists. The rights determination and a dated permitted history are the next external inputs. P4/P5 remain conditional backlog rather than automatically authorized integrations.
 
 ---
 
@@ -56,7 +64,10 @@ Local prototype for smaller importers. Core story is **event → exposure → co
 | Mentor demo + deterministic cost engine     | **Implemented and tested**                                    |
 | CSV intake, ledger, evidence, memos         | **Implemented and tested**                                    |
 | Forecast / What if? separation              | **Implemented and tested** (auto event odds stay unavailable) |
-| Illustrative intelligence vertical slice    | **Implemented and tested locally** (curated demo events only) |
+| Illustrative intelligence vertical slice    | **Implemented and tested** (curated fictional demos)          |
+| Observed USGS earthquake intelligence       | **Implemented and tested** (read-only current feed)           |
+| NHC current advisory and forecast cones     | **Implemented and tested locally** (bounded same-origin feed) |
+| PortWatch maritime research boundary        | **Implemented, permission gated** (no actual series or score) |
 | Live market/official event odds             | **Not implemented**                                           |
 | Trained ML / rights-reviewed lane backtests | **Not implemented**                                           |
 | Decision journal, accounts, deployment      | **Not implemented**                                           |
@@ -91,29 +102,29 @@ Local prototype for smaller importers. Core story is **event → exposure → co
 
 ## Tested and verified
 
-| Check              | Status                                                                                      |
-| ------------------ | ------------------------------------------------------------------------------------------- |
-| `npm run check`    | **PASSED** — format, docs (16 Markdown docs), lint, types, 69 unit tests, production build. |
-| `npm run test:e2e` | **PASSED** — 26/26 desktop+mobile (intelligence + hardened forecast specs).                 |
+| Check              | Status                                                                          |
+| ------------------ | ------------------------------------------------------------------------------- |
+| `npm run check`    | **PASSED for P3** — format, docs, lint, types, 87 unit tests, production build. |
+| `npm run test:e2e` | **PASSED for P3** — 36/36 desktop+mobile.                                       |
 
-**Last pushed `main`:** `bc20e9c` — Hosted CI [38861182119](https://github.com/Sambhav255/cost_current/actions/runs/38861182119) **success** (pre-slice hosted baseline). Do not claim hosted CI for this commit until Actions runs after push.
+**Last pushed `main`:** `2539330` (P2), with [hosted CI success](https://github.com/Sambhav255/cost_current/actions/runs/38880091346). P3 changes are not yet pushed.
 
-**Intelligence honesty gates (unit tests, 69):** Suez does not tag Northstar; Suez odds unavailable; tariff demo odds are illustrative assumptions; Northstar wait/early **$123,600 / $121,100**.
+**Intelligence honesty gates:** Suez does not tag Northstar; Suez odds unavailable; tariff demo odds are illustrative assumptions; Northstar wait/early **$123,600 / $121,100**. USGS proximity and NHC cone overlap do not generate loss odds. PortWatch shows a permission gate, not a live signal.
 
 ---
 
 ## Incomplete, experimental, or illustrative only
 
-| Item                                                       | Notes                                                              |
-| ---------------------------------------------------------- | ------------------------------------------------------------------ |
-| Event registry                                             | Curated fictional demos (`isDemoScenario`); not a live threat feed |
-| Automatic event probabilities                              | Always unavailable unless labeled user assumption                  |
-| 3D globe event zones                                       | Not wired; zone markers are 2D-only                                |
-| Real prediction-market / official notice connectors        | Deferred (P2 in predictive plan)                                   |
-| Rights-reviewed freight history + time-ordered model study | Deferred (P3); local last-observation baseline only                |
-| Prospective decision / outcomes journal                    | Deferred (P4)                                                      |
-| Customer interviews / paid pilots                          | Research outside this repo                                         |
-| Accounts, multi-tenant SaaS, licensed feeds                | Deferred (P5)                                                      |
+| Item                                                   | Notes                                                    |
+| ------------------------------------------------------ | -------------------------------------------------------- |
+| Event registry                                         | Curated fictional demos plus separate USGS and NHC feeds |
+| Automatic event probabilities                          | Always unavailable unless labeled user assumption        |
+| 3D globe event zones                                   | Not wired; zone markers are 2D-only                      |
+| Real prediction-market / trade notice connectors       | Deferred; source mapping and rights needed               |
+| Rights-reviewed PortWatch history and genuine backtest | Blocked pending permissions and release-vintage data     |
+| Prospective decision / outcomes journal                | Deferred (P4)                                            |
+| Customer interviews / paid pilots                      | Research outside this repo                               |
+| Accounts, multi-tenant SaaS, licensed feeds            | Deferred (P5)                                            |
 
 Do not describe illustrative cards, Forecast mode, or UI polish as calibrated prediction or legal duty determination.
 
@@ -132,10 +143,9 @@ Do not describe illustrative cards, Forecast mode, or UI polish as calibrated pr
 
 ## Next priorities (predictive intelligence order)
 
-1. **P2 — Real signal path:** one lawful read-only source with exact IDs, timestamps, failure states; never silent demo fallback.
-2. **P3 — One forecast study:** rights-reviewed lane series; naive baseline vs modest model only if sample size justifies; report failures.
-3. **P4 — Journal + customer learning:** immutable known-at-time snapshots; importer/broker interviews.
-4. **Engineering polish (non-blocking):** 3D zone parity; keep calculator regressions green.
+1. **PortWatch access decision:** obtain explicit provider determination for systematic research download, retention, commercial reuse and training; then capture genuine dated vintages and evaluate the vessel-count target.
+2. **P4/P5 only when triggered:** selective source additions, a decision journal, and calibrated models need permissions, evidence and product need.
+3. **Engineering polish:** verify same-origin NHC function on a hosted preview and keep the calculator regressions green.
 
 Do not spend a sprint only on visual redesign. Do not invent live odds or ML accuracy to fill the Intelligence feed.
 

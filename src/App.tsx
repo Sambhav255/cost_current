@@ -34,6 +34,8 @@ import Methods from './components/Methods';
 import Memo from './components/Memo';
 import Intelligence from './components/Intelligence';
 import { getEvent, probabilityFor } from './lib/riskEvents';
+import type { ObservedEarthquake } from './lib/usgs';
+import type { DelayScenario } from './lib/quakeExposure';
 type View = 'welcome' | 'intelligence' | 'overview' | 'shipment' | 'methods' | 'memo' | 'import';
 export default function App() {
   const [shipments, setShipments] = useState(loadShipments),
@@ -42,6 +44,9 @@ export default function App() {
     [tab, setTab] = useState<'analysis' | 'details'>('analysis');
   const [selectedEventId, setSelectedEventId] = useState('demo-tariff-china-home');
   const [decisionContext, setDecisionContext] = useState<MemoSnapshot['eventContext'] | null>(null);
+  const [observedContext, setObservedContext] = useState<MemoSnapshot['observedContext'] | null>(
+    null,
+  );
   const [mode, setMode] = useState<'forecast' | 'what-if'>('forecast');
   const [signals, setSignals] = useState(loadSeries);
   const [horizon, setHorizon] = useState<28 | 56>(28);
@@ -160,6 +165,21 @@ export default function App() {
         capturedAt: new Date().toISOString(),
       }),
     );
+    setObservedContext(null);
+    setMode('what-if');
+    setTab('analysis');
+    navigate('shipment');
+  };
+  const openDecisionsFromObserved = (
+    shipmentId: string,
+    event: ObservedEarthquake,
+    scenario: DelayScenario,
+  ) => {
+    setSelectedId(shipmentId);
+    setDecisionContext(null);
+    setObservedContext(
+      structuredClone({ shipmentId, event, scenario, capturedAt: new Date().toISOString() }),
+    );
     setMode('what-if');
     setTab('analysis');
     navigate('shipment');
@@ -194,6 +214,7 @@ export default function App() {
         route,
         analysis,
         eventContext: decisionContext?.shipmentId === selected.id ? decisionContext : undefined,
+        observedContext: observedContext?.shipmentId === selected.id ? observedContext : undefined,
         timestamp: new Date().toISOString(),
         calculatorVersion: '2.0.0-ledger',
       }),
@@ -349,6 +370,7 @@ export default function App() {
               onChange={(event) => {
                 setSelectedId(event.target.value);
                 setDecisionContext(null);
+                setObservedContext(null);
               }}
             >
               {shipments.map((item) => (
@@ -386,6 +408,7 @@ export default function App() {
               onSelectEvent={setSelectedEventId}
               onSelectShipment={setSelectedId}
               onOpenDecisions={openDecisionsFromEvent}
+              onOpenObservedDecisions={openDecisionsFromObserved}
               onOpenExposure={() => navigate('overview')}
             />
           )}
@@ -466,6 +489,28 @@ export default function App() {
                     type="button"
                     className="text-button"
                     onClick={() => setDecisionContext(null)}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              )}
+              {observedContext?.shipmentId === selected.id && (
+                <div className="notice event-context-banner" data-testid="observed-context-banner">
+                  {observedContext.event.sourceMode === 'observed'
+                    ? 'USGS observed earthquake'
+                    : 'Fictional earthquake fixture'}
+                  : <strong>{observedContext.event.title}</strong> ({observedContext.event.id},
+                  updated {observedContext.event.updatedAt}). User scenario:{' '}
+                  {observedContext.scenario.assumedDelayDays} additional days ×{' '}
+                  {observedContext.scenario.dailyCostCents / 100} USD/day +{' '}
+                  {observedContext.scenario.handlingCents / 100} USD handling ={' '}
+                  {observedContext.scenario.impactCents / 100} USD conditional cost. Earthquake
+                  occurrence odds and operational disruption are not estimated. The tariff/freight
+                  What if? comparison below uses its separate assumptions.
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => setObservedContext(null)}
                   >
                     Dismiss
                   </button>
@@ -556,7 +601,9 @@ export default function App() {
                           name: contextEvent.name,
                           oddsUnavailable: !contextSignal || contextSignal.probabilityBps === null,
                         }
-                      : undefined
+                      : observedContext?.shipmentId === selected.id
+                        ? { name: observedContext.event.title, oddsUnavailable: true }
+                        : undefined
                   }
                   onEdit={() => {
                     setTab('details');

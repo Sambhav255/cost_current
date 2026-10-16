@@ -5,6 +5,7 @@ import { routes } from '../lib/data';
 import { dateLabel, usd } from '../lib/format';
 import { holdingCost, decisionDate } from '../lib/engine';
 import { Field, NumberInput, SectionHeading } from './ui';
+import KnownAssetEditor from './KnownAssetEditor';
 export type UpdateShipment = <K extends keyof Shipment>(field: K, value: Shipment[K]) => void;
 export default function ShipmentForm({
   s,
@@ -103,6 +104,7 @@ export default function ShipmentForm({
             />
           </Field>
         </div>
+        <KnownAssetEditor key={s.id} shipment={s} onSave={(asset) => update('knownAsset', asset)} />
       </section>
       <section className="panel form-panel">
         <SectionHeading

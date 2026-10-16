@@ -166,10 +166,10 @@ export default function IntelligencePanel({
           );
         })}
       </ul>
-      <p className="quiet-caption">
+      <div className="quiet-caption">
         <Eyebrow>ILLUSTRATIVE REGISTRY</Eyebrow> Events are curated demo scenarios. Unsupported odds
         stay unavailable; conditional impacts use your shipment inputs.
-      </p>
+      </div>
     </div>
   );
 }

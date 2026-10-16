@@ -4767,6 +4767,16 @@ table {
 .intelligence-map {
   min-width: 0;
 }
+.intelligence-events > .button-row {
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.intelligence-events > .button-row .button {
+  padding: 8px 10px;
+  white-space: normal;
+  text-align: left;
+}
 .event-list {
   list-style: none;
   margin: 0;

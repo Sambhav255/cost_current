@@ -124,6 +124,25 @@ export default function Memo({
             illustrative scenario, with no automatic event odds or operational delay estimate.
           </p>
         )}
+        {snapshot.observedContext && (
+          <p className="memo-provenance">
+            {snapshot.observedContext.event.sourceMode === 'observed'
+              ? 'USGS observed earthquake'
+              : 'Fictional earthquake fixture'}
+            : {snapshot.observedContext.event.id}; origin {snapshot.observedContext.event.eventTime}
+            ; updated {snapshot.observedContext.event.updatedAt}; retrieved{' '}
+            {snapshot.observedContext.event.retrievedAt}; linked to shipment{' '}
+            {snapshot.observedContext.shipmentId} at {snapshot.observedContext.capturedAt}.
+            User-entered conditional delay {snapshot.observedContext.scenario.assumedDelayDays} days
+            × {usd(snapshot.observedContext.scenario.dailyCostCents)} per day +{' '}
+            {usd(snapshot.observedContext.scenario.handlingCents)} handling ={' '}
+            {usd(snapshot.observedContext.scenario.impactCents)}. No event or shipment-delay
+            probability was inferred.{' '}
+            {snapshot.observedContext.event.sourceUrl && (
+              <a href={snapshot.observedContext.event.sourceUrl}>USGS record</a>
+            )}
+          </p>
+        )}
         <div className="memo-summary">
           <div>
             <span>BASE MODELED COST</span>

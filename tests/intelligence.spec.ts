@@ -57,3 +57,59 @@ test('welcome routes to intelligence and My Exposure opens analysis', async ({ p
   await page.getByRole('button', { name: 'Analyze this shipment' }).click();
   await expect(page.getByRole('button', { name: 'Forecast', exact: true })).toBeVisible();
 });
+
+test('fictional earthquake links a known test asset to a user-entered cost and frozen memo', async ({
+  page,
+}) => {
+  await openIntelligence(page);
+  await page.getByRole('button', { name: 'Fictional test' }).click();
+  await expect(page.getByTestId('quake-exposure-northstar')).toContainText(
+    'Possible — confirm operations',
+  );
+  await expect(page.getByTestId('conditional-delay-cost')).toContainText('Needs your assumptions');
+  await page.getByRole('spinbutton', { name: 'Additional delay days' }).fill('3');
+  await page.getByRole('spinbutton', { name: 'Delay cost per day' }).fill('100');
+  await page.getByRole('spinbutton', { name: 'Additional handling cost' }).fill('25');
+  await expect(page.getByTestId('conditional-delay-cost')).toContainText('$325');
+  await page.getByRole('button', { name: 'Review shipment decisions' }).click();
+  await expect(page.getByTestId('observed-context-banner')).toContainText(
+    'Fictional earthquake fixture',
+  );
+  await expect(page.getByTestId('decision-wait')).toContainText('$123,600');
+  await navigate(page, 'Decision memo');
+  await expect(page.getByTestId('decision-memo')).toContainText('fictional_usgs_like:harbor-test');
+  await expect(page.getByTestId('decision-memo')).toContainText('$325');
+});
+
+test('official observations keep empty and failed feed states honest', async ({ page }) => {
+  await page.route(
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson',
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          type: 'FeatureCollection',
+          metadata: { generated: Date.now() },
+          features: [],
+        }),
+      });
+    },
+  );
+  await openIntelligence(page);
+  await page.getByRole('button', { name: 'Official observations' }).click();
+  await expect(page.getByTestId('usgs-feed-status')).toContainText('fresh');
+  await expect(
+    page.getByText('USGS returned no reported earthquakes in this feed window.'),
+  ).toBeVisible();
+  await page.unrouteAll();
+  await page.route(
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson',
+    async (route) => {
+      await route.fulfill({ status: 503, body: 'unavailable' });
+    },
+  );
+  await page.getByRole('button', { name: 'Refresh' }).click();
+  await expect(page.getByTestId('usgs-feed-status')).toContainText('unavailable');
+  await expect(page.getByTestId('earthquake-detail')).toHaveCount(0);
+});

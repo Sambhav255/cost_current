@@ -13,7 +13,7 @@ function compatible(value: unknown): value is Shipment[] {
         s &&
         Object.entries(sample).every(
           ([k, v]) =>
-            (k === 'routeEvidence' && s[k] === undefined) ||
+            ((k === 'routeEvidence' || k === 'knownAsset') && s[k] === undefined) ||
             (typeof s[k] === typeof v && (typeof v !== 'number' || Number.isFinite(s[k]))),
         ) &&
         (s.scenarioOverride === undefined ||

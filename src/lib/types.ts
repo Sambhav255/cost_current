@@ -1,5 +1,7 @@
 import type { ForecastSnapshot } from './forecast';
 import type { RiskEvent, ProbabilitySignal } from './riskEvents';
+import type { ObservedEarthquake } from './usgs';
+import type { DelayScenario } from './quakeExposure';
 import type { InputEvidence } from './evidence';
 import type { AdditionalCostLine, LedgerLine } from './ledger';
 export type SourceKind = 'Illustrative assumption' | 'User assumption';
@@ -162,6 +164,12 @@ export interface MemoSnapshot {
     shipmentId: string;
     event: RiskEvent;
     signal: ProbabilitySignal | null;
+    capturedAt: string;
+  };
+  observedContext?: {
+    shipmentId: string;
+    event: ObservedEarthquake;
+    scenario: DelayScenario;
     capturedAt: string;
   };
 }

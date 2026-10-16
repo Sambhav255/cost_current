@@ -36,15 +36,17 @@ export default function RouteGlobe({
   onSelect,
   compact = false,
   eventZones,
+  initialFlat = false,
 }: {
   routes: Route[];
   selected: string;
   onSelect: (id: string) => void;
   compact?: boolean;
   eventZones?: { id: string; label: string; points: { lat: number; lng: number }[] }[];
+  initialFlat?: boolean;
 }) {
   const reduced = useSyncExternalStore(subscribe, () => media?.matches ?? false);
-  const [flat, setFlat] = useState(() => !hasWebGL()),
+  const [flat, setFlat] = useState(() => initialFlat || !hasWebGL()),
     [reset, setReset] = useState(0),
     [zoom, setZoom] = useState(1);
   const fallback = (

@@ -28,6 +28,8 @@ Preserve: `engine.ts` Northstar arithmetic, CSV intake, ledger/evidence, Forecas
 
 ## Later stages
 
+The unified plan's **P1 USGS observed-event slice is implemented locally**; see [Progress](PROGRESS.md) for exact verification and hosted status. The older stage labels below describe product themes and do not override the unified P2 NOAA/NHC then P3 PortWatch order.
+
 1. **P2** — Real read-only signal path with exact IDs, timestamps, failure states
 2. **P3** — One rights-reviewed time-ordered forecast study vs naive baseline
 3. **P4** — Decision journal + customer interviews

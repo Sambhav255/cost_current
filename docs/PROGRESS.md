@@ -6,7 +6,53 @@
 
 **Current milestone:** Forecast/What if? separation, local observation registry and automatic last-observation freight baseline, described in the [forecast contract](FORECASTS.md). **Next:** authorized real lane data and time-ordered baseline evaluation; the prospective journal follows.
 
-This is the canonical status record. [Master plan](../COST_CURRENT_MASTER_BUILD_PLAN.md) holds requirements; [engineering guide](IMPLEMENTATION_PLAN.md) holds architecture; [README](../README.md) holds setup and demo instructions. Append dated checkpoints and keep this current-state summary accurate.
+This is the canonical status record. [Master plan](../COST_CURRENT_MASTER_BUILD_PLAN.md) holds requirements; [engineering guide](IMPLEMENTATION_PLAN.md) holds architecture; [README](../README.md) holds the product overview, local commands, and demo walkthrough. Append dated checkpoints and keep this current-state summary accurate.
+
+## October 16 product README
+
+Replaced `README.md` with the supplied product-facing readme and removed the duplicate `README (1).md`. Prettier formatted `README.md`. `node scripts/check-docs.mjs` passed local links and heading anchors in 13 Markdown documents.
+
+The previous source map and Playwright browser-install commands are no longer in the README. The new README points browser setup at the engineering guide, which does not currently document those install commands.
+
+## October 16 UI redesign
+
+Redesigned the local interface without changing the cost engine, forecast math, or persistence. Navigation is a short rail (Overview, Analysis, Import, Decision memo, Methods & evidence) with the selected shipment in the top bar. Welcome states the job and offers the sample shipment or a CSV import. Analysis leads with modeled cost, the assumption-based recommendation, and a comparison list; scenario outcomes and forecast diagnostics sit behind disclosures. Forecast mode still abstains when observations are missing.
+
+Verification: `npx eslint` and `tsc -b` passed; **60** unit tests passed; Playwright **20/20** after fixing mode-button accessible names and a narrow-screen action-row overflow (the mobile forecast case was re-run after that fix and passed). Connected browser checked Welcome, Overview, Forecast unavailable, What if? comparison, the route quote editor, and the decision memo. Canonical Northstar figures shown in What if?: $117,000 base, +$6,600 exposure, $123,600 wait, $121,100 early.
+
+Limits: the comparison list is one column below about 860px wide. Forecast evidence stays collapsed until opened. No new forecast capability was added.
+
+## Resume here — October 16 handoff
+
+The user requested this checkpoint before leaving. **Implementation is committed and pushed through `50512c4` on `main`.** Resume from this section and [FORECASTS.md](FORECASTS.md); do not rebuild the completed calculator or repeat the full audit.
+
+### Commits and ownership
+
+- `8f41da0`: fix confirmed CI formatting failure by excluding bundled third-party skills; record the supplied audit.
+- `a99aa69`: integrated Forecast/What if? modes, strict independent local observation registry, automatic last-observation freight baseline, reversible saved scenario odds, provenance-aware frozen memos and acceptance tests.
+- `50512c4`: correct generation timestamps when the forecast horizon changes; add the browser regression and maintained forecast/data-gate documentation.
+- These three commits are pushed to `origin/main`. The separate untracked `COST_CURRENT_UI_REDESIGN_CODEX_PROMPT.md` appeared during the task and was deliberately excluded from commits. No redesign was implemented. Preserve it for the user's next request.
+- This handoff update to `docs/PROGRESS.md` is local and uncommitted so it does not start another CI run. No agents were delegated work.
+
+### Verification at departure
+
+- Final local `npm run check`: **passed**, including formatting, links/anchors in 13 local Markdown documents, lint, types, **60 unit tests** and production build. The additional local redesign prompt accounts for the extra document.
+- Full local browser suite: **20/20 passed** across desktop and narrow touch. After print/precision refinements, affected demo/forecast flows passed **12/12**; after the final generation-time fix, its flow passed **2/2**. Initial new-test selector failures were corrected; the final timestamp cases pass.
+- Connected Brave inspection confirmed default Forecast mode is unavailable without observations and has no manual sliders. Canonical Northstar arithmetic and date-boundary regressions are unchanged.
+- Forecast and manual memos were exported, rendered with Ghostscript and visually reviewed as one page each. Generated artifacts remain ignored under `output/`; useful files include `output/preview/forecast-baseline.png`, `output/pdf/forecast-evidence-memo.pdf` and `output/pdf/cost-current-decision-memo.pdf`.
+- Hosted [run 38856506608](https://github.com/Sambhav255/cost_current/actions/runs/38856506608) **passed** the complete quality gate and all 20 browser cases on `a99aa69`.
+- Hosted [run 38856961800](https://github.com/Sambhav255/cost_current/actions/runs/38856961800) for final commit **`50512c4` was still in progress at departure**. Do not claim this final run passed until checking it.
+
+### First actions on return
+
+1. Check `gh run view 38856961800 --json status,conclusion,url`. If it failed, inspect `gh run view 38856961800 --log-failed`, fix the specific failure and rerun the relevant checks. If successful, append that result here. No need to rerun already passing checks merely because a session resumed.
+2. Read the latest user request before selecting work. A separate UI-redesign prompt exists but has not been implemented or accepted as the next active task in this conversation.
+3. Under the current audit plan, next obtain **one authorized real lane time series**, document display/training/retention/redistribution rights, measurement basis and known-at-time retrieval/revisions, then run a time-ordered naive evaluation. If no suitable data exist, retain explicit unavailable/illustrative states. Do not train models or invent real-data metrics.
+4. The prospective decision/outcomes journal remains later work. Live exchange adapters, reviewed tariff coverage, accounts and deployment are not implemented by this milestone.
+
+### Important implemented limits
+
+Forecast mode defaults to unavailable event odds and never consumes the sample 40%/20% as automatic predictions. The explicitly selected fictional preview is a reproducible, untrained rate baseline. **Refresh signals** refreshes the saved local registry, not a live feed. Eight usable weekly observations, declared display rights, matching lane/units, cutoff and freshness checks are required. Rate sensitivity remains user-confirmed exploratory math, outside the forecast memo and automatic action rankings. Vigil was inspected but no adapter code or odds heuristic was copied. See [FORECASTS.md](FORECASTS.md) for the exact contract and data gap.
 
 ## Delivered and integrated
 

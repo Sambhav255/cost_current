@@ -18,6 +18,7 @@ test('no-data forecast, explicit fictional baseline, refresh, local persistence 
     }),
   ).toBeVisible();
   await expect(page.getByTestId('decision-wait')).toHaveCount(0);
+  await page.getByText('Forecast evidence & diagnostics', { exact: true }).click();
   const generation = page
     .getByText('As of / generated', { exact: true })
     .locator('..')

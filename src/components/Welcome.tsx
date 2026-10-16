@@ -1,13 +1,15 @@
-import { ArrowRight, ArrowUpRight, Check, ShieldCheck } from 'lucide-react';
-import { Brand, Eyebrow } from './ui';
+import { ArrowRight } from 'lucide-react';
+import { Brand } from './ui';
 import RouteGlobe from './RouteGlobe';
 import { routes } from '../lib/data';
 export default function Welcome({
   onStart,
   onMethods,
+  onImport,
 }: {
   onStart: () => void;
   onMethods: () => void;
+  onImport: () => void;
 }) {
   return (
     <main className="welcome">
@@ -16,80 +18,51 @@ export default function Welcome({
         <div className="welcome-header-right">
           <span className="demo-pill">
             <span />
-            DEMO MODE
+            Illustrative demo
           </span>
           <button className="text-button" onClick={onMethods}>
-            Our methodology <ArrowUpRight size={15} />
+            Methods & evidence
           </button>
         </div>
       </header>
       <div className="welcome-hero">
         <div className="welcome-copy">
-          <Eyebrow>
-            <span className="accent-dash" /> CLARITY IN A CHANGING WORLD
-          </Eyebrow>
-          <h1>
-            A clearer view.
-            <br />A <em>better move.</em>
-          </h1>
-          <p>Tariffs change. Freight shifts. Your next move shouldn’t be a guessing game.</p>
-          <p className="welcome-subcopy">
-            See what uncertainty could cost your shipment—and what you can do about it.
+          <h1>Understand import risk. Decide with confidence.</h1>
+          <p>
+            Enter a shipment&apos;s costs and the trade conditions you are unsure about. Cost
+            Current compares feasible actions in dollars.
           </p>
-          <button className="button primary large" onClick={onStart}>
-            Try an example shipment <ArrowRight size={18} />
-          </button>
-          <div className="welcome-proof">
-            <span>
-              <Check size={14} /> No sign-up
-            </span>
-            <span>
-              <Check size={14} /> Transparent assumptions
-            </span>
+          <div className="button-row">
+            <button className="button primary large" onClick={onStart}>
+              Try an example shipment <ArrowRight size={18} />
+            </button>
+            <button className="button secondary large" onClick={onImport}>
+              Import a CSV
+            </button>
           </div>
+          <p className="welcome-subcopy">
+            Sample routes and prices are fictional. Nothing here is a live forecast or a customs
+            ruling.
+          </p>
         </div>
         <div className="welcome-world">
           <RouteGlobe routes={routes} selected="sha-lax" onSelect={onStart} />
-          <div className="welcome-float">
-            <span className="tiny-label">NORTHSTAR HOME GOODS · FICTIONAL EXAMPLE</span>
-            <div>
-              <span>
-                Shanghai <ArrowRight size={16} /> Los Angeles
-              </span>
-              <span className="route-chip">CNSHA → USLAX</span>
-            </div>
-            <hr />
-            <span className="muted">Order early vs. wait</span>
-            <strong>
-              $2,500 <small>modeled advantage</small>
-            </strong>
-            <p>Under the default illustrative assumptions</p>
-          </div>
         </div>
       </div>
       <div className="welcome-bottom">
         <div>
-          <span className="step-index">01</span>
-          <h2>Know the cost.</h2>
-          <p>Understand your shipment’s starting point.</p>
+          <h2>Landed cost</h2>
+          <p>Goods, duty, freight, and extra charges, without counting the same dollar twice.</p>
         </div>
         <div>
-          <span className="step-index">02</span>
-          <h2>See the risk.</h2>
-          <p>Put a dollar value on your assumptions.</p>
+          <h2>Exposure</h2>
+          <p>Tariff and freight possibilities priced from the assumptions you can see.</p>
         </div>
         <div>
-          <span className="step-index">03</span>
-          <h2>Make the move.</h2>
-          <p>Compare your choices. See the trade-offs.</p>
+          <h2>A comparison</h2>
+          <p>Wait, order early, or a different route or supplier when the quote is comparable.</p>
         </div>
       </div>
-      <footer className="welcome-footer">
-        <span>
-          <ShieldCheck size={14} /> An interactive concept. Not a live forecast or customs ruling.
-        </span>
-        <span>Built for decisions that move your business.</span>
-      </footer>
     </main>
   );
 }

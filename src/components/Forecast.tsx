@@ -58,10 +58,11 @@ export default function Forecast({
   return (
     <>
       <section className="panel form-panel forecast-panel" aria-label="Automatic forecast">
-        <SectionHeading
-          title="Freight baseline & evidence"
-          description="System output from a dated local series. No live data service is connected."
-        />
+        <h2 className="forecast-title">
+          {f.rateCentsPerFeu === null
+            ? 'No supported forecast for this lane yet.'
+            : 'Freight baseline for this lane'}
+        </h2>
         <div className="button-row">
           <button className="button secondary" onClick={onRefresh}>
             Refresh signals
@@ -80,64 +81,11 @@ export default function Forecast({
           {notice}
         </p>
         {error && <p role="alert">{error}</p>}
-        <dl className="shipment-facts forecast-facts">
-          <div>
-            <dt>Status</dt>
-            <dd>{f.status}</dd>
-          </div>
-          <div>
-            <dt>Target</dt>
-            <dd>Ocean freight · USD per FEU · {f.laneId}</dd>
-          </div>
-          <div>
-            <dt>Baseline estimate</dt>
-            <dd>
-              {f.rateCentsPerFeu === null ? 'Unavailable' : usd(f.rateCentsPerFeu) + ' / FEU'}
-            </dd>
-          </div>
-          <div>
-            <dt>Horizon</dt>
-            <dd>
-              {f.horizonStart} → {f.horizonEnd}
-            </dd>
-          </div>
-          <div>
-            <dt>Source</dt>
-            <dd>{f.source ?? 'No relevant observations'}</dd>
-          </div>
-          <div>
-            <dt>Source state</dt>
-            <dd>{f.provenance}</dd>
-          </div>
-          <div>
-            <dt>Observed / retrieved</dt>
-            <dd>
-              {f.observedAt ?? 'Unknown'} / {f.retrievedAt ?? 'Unknown'}
-            </dd>
-          </div>
-          <div>
-            <dt>As of / generated</dt>
-            <dd>
-              {f.asOf} / {f.generatedAt}
-            </dd>
-          </div>
-          <div>
-            <dt>Method</dt>
-            <dd>
-              {f.modelId} v{f.modelVersion} · not trained
-            </dd>
-          </div>
-          <div>
-            <dt>Quote basis</dt>
-            <dd>{f.quoteBasis ?? 'Unknown'}</dd>
-          </div>
-          <div>
-            <dt>Feature source IDs</dt>
-            <dd>{f.featureSourceIds.join(', ') || 'None'}</dd>
-          </div>
-        </dl>
         {f.rateCentsPerFeu === null && (
           <p>No defensible automatic estimate available for this lane/event.</p>
+        )}
+        {f.rateCentsPerFeu !== null && (
+          <p className="forecast-rate">{usd(f.rateCentsPerFeu)} / FEU</p>
         )}
         <p>{f.uncertaintyNote}</p>
         {f.provenance === 'illustrative' && (
@@ -145,25 +93,84 @@ export default function Forecast({
             Illustrative automated baseline · fictional observations · not trained or validated.
           </p>
         )}
-        <div className="form-grid">
-          <Field label="Tariff probability output">
-            <output>Unavailable — {f.tariff.targetDefinition}</output>
-          </Field>
-          <Field label="Freight event probability output">
-            <output>Unavailable — {f.freight.targetDefinition}</output>
-          </Field>
-        </div>
-        <p>
-          {f.tariff.uncertaintyNote} No automatic action ranking is available. Lane context is not
-          assigned to alternative suppliers or routes.
-        </p>
-        <p>
-          Market relevance: no mapped contract. Related trade headlines cannot set shipment duty
-          risk.
-        </p>
+        <details className="disclosure">
+          <summary>Forecast evidence & diagnostics</summary>
+          <dl className="shipment-facts forecast-facts">
+            <div>
+              <dt>Status</dt>
+              <dd>{f.status}</dd>
+            </div>
+            <div>
+              <dt>Target</dt>
+              <dd>Ocean freight · USD per FEU · {f.laneId}</dd>
+            </div>
+            <div>
+              <dt>Baseline estimate</dt>
+              <dd>
+                {f.rateCentsPerFeu === null ? 'Unavailable' : usd(f.rateCentsPerFeu) + ' / FEU'}
+              </dd>
+            </div>
+            <div>
+              <dt>Horizon</dt>
+              <dd>
+                {f.horizonStart} → {f.horizonEnd}
+              </dd>
+            </div>
+            <div>
+              <dt>Source</dt>
+              <dd>{f.source ?? 'No relevant observations'}</dd>
+            </div>
+            <div>
+              <dt>Source state</dt>
+              <dd>{f.provenance}</dd>
+            </div>
+            <div>
+              <dt>Observed / retrieved</dt>
+              <dd>
+                {f.observedAt ?? 'Unknown'} / {f.retrievedAt ?? 'Unknown'}
+              </dd>
+            </div>
+            <div>
+              <dt>As of / generated</dt>
+              <dd>
+                {f.asOf} / {f.generatedAt}
+              </dd>
+            </div>
+            <div>
+              <dt>Method</dt>
+              <dd>
+                {f.modelId} v{f.modelVersion} · not trained
+              </dd>
+            </div>
+            <div>
+              <dt>Quote basis</dt>
+              <dd>{f.quoteBasis ?? 'Unknown'}</dd>
+            </div>
+            <div>
+              <dt>Feature source IDs</dt>
+              <dd>{f.featureSourceIds.join(', ') || 'None'}</dd>
+            </div>
+          </dl>
+          <div className="form-grid">
+            <Field label="Tariff probability output">
+              <output>Unavailable — {f.tariff.targetDefinition}</output>
+            </Field>
+            <Field label="Freight event probability output">
+              <output>Unavailable — {f.freight.targetDefinition}</output>
+            </Field>
+          </div>
+          <p>
+            {f.tariff.uncertaintyNote} No automatic action ranking is available. Lane context is not
+            assigned to alternative suppliers or routes.
+          </p>
+          <p>
+            Market relevance: no mapped contract. Related trade headlines cannot set shipment duty
+            risk.
+          </p>
+        </details>
         <div className="button-row">
           <button className="button primary" onClick={onManual}>
-            Use What if?
+            Explore a what-if scenario
           </button>
           <button className="button secondary" onClick={onMemo}>
             Create forecast memo

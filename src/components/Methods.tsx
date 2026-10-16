@@ -16,9 +16,11 @@ export default function Methods({ onBack }: { onBack: () => void }) {
     <>
       <div className="page-heading">
         <div>
-          <Eyebrow>METHODS & EVIDENCE</Eyebrow>
-          <h1>Confidence starts with clarity.</h1>
-          <p>What works today. What is assumed. What comes next.</p>
+          <h1>Methods and evidence</h1>
+          <p>
+            What Cost Current can calculate today, where assumptions come from, and what it cannot
+            claim.
+          </p>
         </div>
         <button className="button secondary" onClick={onBack}>
           Back to the example <ArrowRight size={15} />

@@ -1,18 +1,10 @@
 import { hasCustomerEvidence } from '../lib/evidence';
-import {
-  ArrowDownRight,
-  ArrowRight,
-  ChevronRight,
-  CircleDollarSign,
-  Package,
-  SlidersHorizontal,
-  FileUp,
-} from 'lucide-react';
+import { ArrowDownRight, ArrowRight, ChevronRight, Package, FileUp } from 'lucide-react';
 import { analyzeShipment } from '../lib/engine';
 import { routes } from '../lib/data';
 import { dateLabel, percent, usd } from '../lib/format';
 import type { Shipment } from '../lib/types';
-import { Eyebrow, Metric, SectionHeading, SourceBadge } from './ui';
+import { Metric, SectionHeading, SourceBadge } from './ui';
 import RouteGlobe from './RouteGlobe';
 export default function Overview({
   shipments,
@@ -46,12 +38,8 @@ export default function Overview({
     <>
       <div className="page-heading">
         <div>
-          <Eyebrow>YOUR IMPORT DECISION DESK</Eyebrow>
-          <h1>
-            A world of change.
-            <br className="mobile-only" /> A clearer picture.
-          </h1>
-          <p>Understand your exposure. Put your next move in perspective.</p>
+          <h1>Import exposure</h1>
+          <p>Modeled cost, extra exposure, and the shipment to inspect next.</p>
         </div>
         <div className="button-row">
           <button className="button secondary" onClick={onImport}>
@@ -80,9 +68,9 @@ export default function Overview({
           detail="Illustrative routes, not vessel tracks"
         />
         <Metric
-          label="Selected early advantage"
+          label="Conditional early advantage"
           value={savings !== null && savings !== undefined ? usd(savings) : 'Needs inputs'}
-          detail="Order early relative to waiting"
+          detail="Only if early entry is eligible. Not a realized saving."
         >
           <ArrowDownRight size={16} />
         </Metric>
@@ -96,11 +84,11 @@ export default function Overview({
       <div className="overview-grid">
         <section className="panel world-panel">
           <SectionHeading
-            title="Your global exposure"
-            description="One connected view of your demo shipments."
+            title="Route context"
+            description="Select a lane to choose its shipment."
             action={<span className="subtle-pill">{activeRoutes.length} ROUTES</span>}
           />
-          <RouteGlobe routes={activeRoutes} selected={r.id} onSelect={selectRoute} />
+          <RouteGlobe compact routes={activeRoutes} selected={r.id} onSelect={selectRoute} />
           <div className="world-footnote">
             <span className="live-dot" /> Schematic route connections, not vessel tracks. Colors
             indicate selection.
@@ -108,7 +96,7 @@ export default function Overview({
         </section>
         <aside className="panel shipment-panel">
           <div className="selected-heading">
-            <Eyebrow>SELECTED SHIPMENT</Eyebrow>
+            <h2 className="selected-kicker">Selected shipment</h2>
             <SourceBadge
               edited={selected.edited.length > 0}
               customer={hasCustomerEvidence(selected)}
@@ -255,48 +243,6 @@ export default function Overview({
               })}
             </tbody>
           </table>
-        </div>
-      </section>
-      <section className="stories-section">
-        <SectionHeading
-          number="02"
-          title="Behind the exposure"
-          description="Scenarios tied to the selected shipment. No live alerts."
-        />
-        <div className="story-grid">
-          <article className="story-card">
-            <span className="story-icon amber">
-              <CircleDollarSign size={20} />
-            </span>
-            <div>
-              <Eyebrow>HYPOTHETICAL TARIFF CHANGE</Eyebrow>
-              <h3>What if duties increase?</h3>
-              <p>
-                A {percent(selected.tariffProbabilityBps / 10000)} assumed probability of an
-                additional {percent(selected.tariffIncreaseBps / 10000)} of customs value.
-              </p>
-              <button className="text-button" onClick={onAnalyze}>
-                Explore {a.valid ? usd(a.tariffExposureCents) : 'this'} expected exposure{' '}
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          </article>
-          <article className="story-card">
-            <span className="story-icon teal">
-              <SlidersHorizontal size={20} />
-            </span>
-            <div>
-              <Eyebrow>HYPOTHETICAL FREIGHT DISRUPTION</Eyebrow>
-              <h3>When the journey costs more.</h3>
-              <p>
-                A {percent(selected.freightProbabilityBps / 10000)} assumed probability of a{' '}
-                {usd(selected.surchargeCents)} freight surcharge.
-              </p>
-              <button className="text-button" onClick={onAnalyze}>
-                Adjust the assumptions <ArrowRight size={14} />
-              </button>
-            </div>
-          </article>
         </div>
       </section>
     </>

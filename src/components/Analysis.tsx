@@ -121,7 +121,7 @@ export default function Analysis({
   const recommendation = a.tied
     ? 'No expected cost advantage'
     : a.best.id === 'early'
-      ? 'A little earlier. A lower expected cost.'
+      ? 'Order early has the lowest expected cost.'
       : a.best.id === 'wait'
         ? 'The numbers favor waiting.'
         : `${a.best.name} has the lowest expected cost.`;
@@ -144,166 +144,10 @@ export default function Analysis({
           value={usd(a.expectedCents)}
           detail="Named comparison baseline"
         />
-        <Metric
-          label="Worst modeled outcome · wait"
-          value={usd(
-            Math.max(...a.outcomes.filter((o) => o.probability > 0).map((o) => o.costCents)),
-          )}
-          detail="Under these scenarios, not a forecast bound"
-        />
       </div>
-      <div className="analysis-main-grid">
-        <section className="panel cost-panel">
-          <SectionHeading
-            number="01"
-            title="Understand the exposure"
-            description={`Baseline: wait for planned entry on ${dateLabel(s.arrivalDate)}.`}
-            action={
-              <button className="text-button" onClick={onEdit}>
-                <Pencil size={13} /> Edit costs
-              </button>
-            }
-          />
-          <div className="cost-equation">
-            <div>
-              <span>Goods</span>
-              <strong>{usd(s.goodsCents)}</strong>
-            </div>
-            <span>+</span>
-            <div>
-              <span>Current duty</span>
-              <strong>{usd(a.dutyCents)}</strong>
-            </div>
-            <span>+</span>
-            <div>
-              <span>Freight & other</span>
-              <strong>{usd(s.freightCents + otherCosts(s))}</strong>
-            </div>
-            <span>=</span>
-            <div className="equation-total">
-              <span>Base cost</span>
-              <strong>{usd(a.baseCents)}</strong>
-            </div>
-          </div>
-          <div className="exposure-components">
-            <div>
-              <div>
-                <span className="component-dot amber" />
-                <strong>Tariff exposure</strong>
-                <span className="small muted">
-                  {percent(s.tariffProbabilityBps / 10000)} × {usd(a.tariffImpactCents)}
-                  {!waitExposed ? ' · not exposed' : ''}
-                </span>
-              </div>
-              <strong>{usd(a.tariffExposureCents)}</strong>
-            </div>
-            <div>
-              <div>
-                <span className="component-dot teal" />
-                <strong>Freight exposure</strong>
-                <span className="small muted">
-                  {percent(s.freightProbabilityBps / 10000)} × {usd(s.surchargeCents)}
-                </span>
-              </div>
-              <strong>{usd(a.freightExposureCents)}</strong>
-            </div>
-          </div>
-          <div className="expected-total">
-            <span>Base + expected extra cost</span>
-            <strong>{usd(a.expectedCents)}</strong>
-          </div>
-          <div className="info-note">
-            <Info size={15} />
-            <span>
-              Expected cost is a probability-weighted average, not the amount you will necessarily
-              pay. Only entered costs are included.
-            </span>
-          </div>
-        </section>
-        <aside className="panel assumptions-panel">
-          <SectionHeading title="Your scenario controls" action={<SlidersHorizontal size={17} />} />
-          <SourceBadge
-            edited={s.edited.some((k) =>
-              [
-                'tariffProbabilityBps',
-                'tariffIncreaseBps',
-                'freightProbabilityBps',
-                'surchargeCents',
-              ].includes(k),
-            )}
-          />
-          <div className="slider-field">
-            <label htmlFor="tariff-probability">
-              Tariff event probability <output>{percent(s.tariffProbabilityBps / 10000)}</output>
-            </label>
-            <input
-              id="tariff-probability"
-              aria-label="Tariff event probability"
-              type="range"
-              min="0"
-              max="10000"
-              step="100"
-              value={s.tariffProbabilityBps}
-              onChange={(e) => update('tariffProbabilityBps', Number(e.target.value))}
-              style={{ '--range-fill': `${s.tariffProbabilityBps / 100}%` } as React.CSSProperties}
-            />
-            <div className="range-ticks">
-              <span>0%</span>
-              <span>100%</span>
-            </div>
-          </div>
-          <Field
-            label="Hypothetical tariff increase"
-            hint="Percentage points added to the current duty rate."
-          >
-            <NumberInput
-              label="Hypothetical tariff increase"
-              value={s.tariffIncreaseBps / 100}
-              onChange={(v) => update('tariffIncreaseBps', Math.round(v * 100))}
-              suffix="pp"
-              max={1000}
-              step={0.5}
-            />
-          </Field>
-          <div className="slider-field">
-            <label htmlFor="freight-probability">
-              Freight event probability <output>{percent(s.freightProbabilityBps / 10000)}</output>
-            </label>
-            <input
-              id="freight-probability"
-              aria-label="Freight event probability"
-              type="range"
-              min="0"
-              max="10000"
-              step="100"
-              value={s.freightProbabilityBps}
-              onChange={(e) => update('freightProbabilityBps', Number(e.target.value))}
-              style={{ '--range-fill': `${s.freightProbabilityBps / 100}%` } as React.CSSProperties}
-            />
-            <div className="range-ticks">
-              <span>0%</span>
-              <span>100%</span>
-            </div>
-          </div>
-          <Field label="Hypothetical freight surcharge">
-            <NumberInput
-              label="Hypothetical freight surcharge"
-              value={s.surchargeCents / 100}
-              onChange={(v) => update('surchargeCents', Math.round(v * 100))}
-              prefix="$"
-              step={100}
-            />
-          </Field>
-          <div className="independence-note">
-            <CircleHelp size={14} /> Two independent events, assumed for this example.
-          </div>
-        </aside>
-      </div>
-      <CostLedger analysis={a} />
       <section className="decision-section">
         <SectionHeading
-          number="02"
-          title="Make the comparison"
+          title="Compare options"
           description="Estimated total costs for the same shipment. Savings are relative to waiting."
         />
         <div className={`recommendation ${awaitingEarly ? 'conditional' : ''}`} aria-live="polite">
@@ -418,11 +262,157 @@ export default function Analysis({
         </div>
         <AlternativeForms s={s} update={update} />
       </section>
+      <div className="analysis-main-grid">
+        <section className="panel cost-panel">
+          <SectionHeading
+            title="Base cost"
+            description={`Baseline: wait for planned entry on ${dateLabel(s.arrivalDate)}.`}
+            action={
+              <button className="text-button" onClick={onEdit}>
+                <Pencil size={13} /> Edit costs
+              </button>
+            }
+          />
+          <div className="cost-equation">
+            <div>
+              <span>Goods</span>
+              <strong>{usd(s.goodsCents)}</strong>
+            </div>
+            <span>+</span>
+            <div>
+              <span>Current duty</span>
+              <strong>{usd(a.dutyCents)}</strong>
+            </div>
+            <span>+</span>
+            <div>
+              <span>Freight & other</span>
+              <strong>{usd(s.freightCents + otherCosts(s))}</strong>
+            </div>
+            <span>=</span>
+            <div className="equation-total">
+              <span>Base cost</span>
+              <strong>{usd(a.baseCents)}</strong>
+            </div>
+          </div>
+          <div className="exposure-components">
+            <div>
+              <div>
+                <span className="component-dot amber" />
+                <strong>Tariff exposure</strong>
+                <span className="small muted">
+                  {percent(s.tariffProbabilityBps / 10000)} × {usd(a.tariffImpactCents)}
+                  {!waitExposed ? ' · not exposed' : ''}
+                </span>
+              </div>
+              <strong>{usd(a.tariffExposureCents)}</strong>
+            </div>
+            <div>
+              <div>
+                <span className="component-dot teal" />
+                <strong>Freight exposure</strong>
+                <span className="small muted">
+                  {percent(s.freightProbabilityBps / 10000)} × {usd(s.surchargeCents)}
+                </span>
+              </div>
+              <strong>{usd(a.freightExposureCents)}</strong>
+            </div>
+          </div>
+          <div className="expected-total">
+            <span>Base + expected extra cost</span>
+            <strong>{usd(a.expectedCents)}</strong>
+          </div>
+          <div className="info-note">
+            <Info size={15} />
+            <span>
+              Expected cost is a probability-weighted average, not the amount you will necessarily
+              pay. Only entered costs are included.
+            </span>
+          </div>
+        </section>
+        <aside className="panel assumptions-panel">
+          <SectionHeading title="Your assumptions" action={<SlidersHorizontal size={17} />} />
+          <SourceBadge
+            edited={s.edited.some((k) =>
+              [
+                'tariffProbabilityBps',
+                'tariffIncreaseBps',
+                'freightProbabilityBps',
+                'surchargeCents',
+              ].includes(k),
+            )}
+          />
+          <div className="slider-field">
+            <label htmlFor="tariff-probability">
+              Tariff event probability <output>{percent(s.tariffProbabilityBps / 10000)}</output>
+            </label>
+            <input
+              id="tariff-probability"
+              aria-label="Tariff event probability"
+              type="range"
+              min="0"
+              max="10000"
+              step="100"
+              value={s.tariffProbabilityBps}
+              onChange={(e) => update('tariffProbabilityBps', Number(e.target.value))}
+              style={{ '--range-fill': `${s.tariffProbabilityBps / 100}%` } as React.CSSProperties}
+            />
+            <div className="range-ticks">
+              <span>0%</span>
+              <span>100%</span>
+            </div>
+          </div>
+          <Field
+            label="Hypothetical tariff increase"
+            hint="Percentage points added to the current duty rate."
+          >
+            <NumberInput
+              label="Hypothetical tariff increase"
+              value={s.tariffIncreaseBps / 100}
+              onChange={(v) => update('tariffIncreaseBps', Math.round(v * 100))}
+              suffix="pp"
+              max={1000}
+              step={0.5}
+            />
+          </Field>
+          <div className="slider-field">
+            <label htmlFor="freight-probability">
+              Freight event probability <output>{percent(s.freightProbabilityBps / 10000)}</output>
+            </label>
+            <input
+              id="freight-probability"
+              aria-label="Freight event probability"
+              type="range"
+              min="0"
+              max="10000"
+              step="100"
+              value={s.freightProbabilityBps}
+              onChange={(e) => update('freightProbabilityBps', Number(e.target.value))}
+              style={{ '--range-fill': `${s.freightProbabilityBps / 100}%` } as React.CSSProperties}
+            />
+            <div className="range-ticks">
+              <span>0%</span>
+              <span>100%</span>
+            </div>
+          </div>
+          <Field label="Hypothetical freight surcharge">
+            <NumberInput
+              label="Hypothetical freight surcharge"
+              value={s.surchargeCents / 100}
+              onChange={(v) => update('surchargeCents', Math.round(v * 100))}
+              prefix="$"
+              step={100}
+            />
+          </Field>
+          <div className="independence-note">
+            <CircleHelp size={14} /> Two independent events, assumed for this example.
+          </div>
+        </aside>
+      </div>
+      <CostLedger analysis={a} />
       <div className="analysis-bottom-grid">
         <section className="panel sensitivity-panel">
           <SectionHeading
-            number="03"
-            title="Find the tipping point"
+            title="Tariff sensitivity"
             description="How much tariff risk makes an early purchase worthwhile?"
           />
           <div className="break-even">
@@ -446,11 +436,8 @@ export default function Analysis({
           </div>
           <SensitivityChart s={s} a={a} />
         </section>
-        <section className="panel outcome-panel">
-          <SectionHeading
-            title="Outcomes under your assumptions"
-            description="Exact enumeration. No random simulation."
-          />
+        <details className="panel outcome-panel disclosure">
+          <summary>Scenario breakdown</summary>
           <table className="outcome-table">
             <thead>
               <tr>
@@ -476,10 +463,10 @@ export default function Analysis({
               are explicit scenario assumptions.
             </span>
           </div>
-          <button className="button secondary full" onClick={onMemo}>
-            <FileText size={16} /> Create decision memo <ArrowUpRight size={15} />
-          </button>
-        </section>
+        </details>
+        <button className="button primary" onClick={onMemo}>
+          <FileText size={16} /> Create decision memo <ArrowUpRight size={15} />
+        </button>
       </div>
       <div className="analysis-disclaimer">
         <Info size={15} />

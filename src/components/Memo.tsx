@@ -10,7 +10,7 @@ import {
 } from '../lib/evidence';
 import { dateLabel, percent, usd } from '../lib/format';
 import type { ForecastMemoSnapshot, MemoSnapshot } from '../lib/types';
-import { Brand, Eyebrow } from './ui';
+import { Brand } from './ui';
 export default function Memo({
   snapshot,
   onBack,
@@ -51,9 +51,8 @@ export default function Memo({
     <>
       <div className="page-heading memo-controls">
         <div>
-          <Eyebrow>YOUR DECISION, DOCUMENTED</Eyebrow>
-          <h1>A clearer conversation.</h1>
-          <p>A frozen snapshot of your analysis. Print it or save as PDF.</p>
+          <h1>Decision memo</h1>
+          <p>A frozen snapshot. It changes only when you refresh it.</p>
         </div>
         <div className="button-row">
           <button className="button secondary" onClick={onBack}>

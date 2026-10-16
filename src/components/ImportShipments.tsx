@@ -11,7 +11,7 @@ import {
 import { analyzeShipment, decisionDate } from '../lib/engine';
 import { dateLabel, usd } from '../lib/format';
 import type { Shipment } from '../lib/types';
-import { Eyebrow, Field, SectionHeading } from './ui';
+import { Field, SectionHeading } from './ui';
 
 export default function ImportShipments({
   shipments,
@@ -90,9 +90,8 @@ export default function ImportShipments({
     <>
       <div className="page-heading">
         <div>
-          <Eyebrow>QUOTE-BACKED SHIPMENT INTAKE</Eyebrow>
-          <h1>Start with the numbers you have.</h1>
-          <p>Preview every row before adding it. Files are processed locally in this browser.</p>
+          <h1>Import shipments</h1>
+          <p>Choose a CSV, preview every row, then confirm. Files stay in this browser.</p>
         </div>
         <button className="button secondary" onClick={onBack}>
           <ArrowLeft size={15} /> Back to overview

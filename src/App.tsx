@@ -8,7 +8,6 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
-  ChevronRight,
   CircleHelp,
   FileText,
   FileUp,
@@ -17,9 +16,7 @@ import {
   LayoutDashboard,
   Menu,
   Package,
-  Plus,
   RotateCcw,
-  ShieldCheck,
   X,
 } from 'lucide-react';
 import { freshSamples, routes } from './lib/data';
@@ -227,11 +224,28 @@ export default function App() {
     );
     navigate('overview');
   };
-  if (view === 'welcome') return <Welcome onStart={start} onMethods={() => navigate('methods')} />;
+  if (view === 'welcome')
+    return (
+      <Welcome
+        onStart={start}
+        onMethods={() => navigate('methods')}
+        onImport={() => navigate('import')}
+      />
+    );
+  const pageName =
+    view === 'overview'
+      ? 'Overview'
+      : view === 'shipment'
+        ? 'Analysis'
+        : view === 'memo'
+          ? 'Decision memo'
+          : view === 'import'
+            ? 'Import'
+            : 'Methods & evidence';
   const nav = [
     { id: 'overview' as View, label: 'Overview', icon: LayoutDashboard },
-    { id: 'shipment' as View, label: 'Shipment analysis', icon: Package },
-    { id: 'import' as View, label: 'Import shipments', icon: FileUp },
+    { id: 'shipment' as View, label: 'Analysis', icon: Package },
+    { id: 'import' as View, label: 'Import', icon: FileUp },
     { id: 'memo' as View, label: 'Decision memo', icon: FileText },
     { id: 'methods' as View, label: 'Methods & evidence', icon: BookOpen },
   ];
@@ -255,14 +269,6 @@ export default function App() {
         >
           <Brand />
         </button>
-        <div className="workspace-switch">
-          <span className="workspace-avatar">N</span>
-          <div>
-            Local workspace<small>Samples & imported shipments</small>
-          </div>
-          <span className="workspace-count">{String(shipments.length).padStart(2, '0')}</span>
-        </div>
-        <span className="nav-label">WORKSPACE</span>
         <nav aria-label="Main navigation">
           {nav.map((item) => (
             <button
@@ -278,43 +284,15 @@ export default function App() {
             </button>
           ))}
         </nav>
-        <div className="sidebar-context">
-          <span className="nav-label">YOUR SHIPMENTS</span>
-          {shipments.slice(0, 6).map((s) => (
-            <button
-              key={s.id}
-              className={s.id === selected.id ? 'selected' : ''}
-              onClick={() => {
-                setSelectedId(s.id);
-                analyze();
-              }}
-            >
-              <span className="shipment-dot" />
-              <span>{s.name}</span>
-            </button>
-          ))}
-          <button className="add-shipment-link" onClick={add}>
-            <Plus size={13} /> Add a shipment
-          </button>
-        </div>
         <div className="sidebar-bottom">
-          <div className="sidebar-note">
-            <ShieldCheck size={18} />
-            <h3>Clarity, with context.</h3>
-            <p>Every estimate starts with an assumption. Yours are always visible.</p>
-            <button onClick={() => navigate('methods')}>
-              Explore our methods <ArrowRight size={13} />
-            </button>
-          </div>
+          <p className="sidebar-status">
+            {shipments.length === 1
+              ? '1 shipment saved in this browser'
+              : `${shipments.length} shipments saved in this browser`}
+          </p>
           <button className="reset-button" onClick={reset}>
             <RotateCcw size={15} /> Reset demo data
           </button>
-          <div className="sidebar-account">
-            <span className="account-avatar">NH</span>
-            <div>
-              Northstar Home Goods<small>Example company</small>
-            </div>
-          </div>
         </div>
       </aside>
       <div className="main-shell">
@@ -327,29 +305,28 @@ export default function App() {
             >
               <Menu size={20} />
             </button>
-            <span>Workspace</span>
-            <ChevronRight size={12} />
-            <strong>
-              {view === 'overview'
-                ? 'Overview'
-                : view === 'shipment'
-                  ? 'Shipment analysis'
-                  : view === 'memo'
-                    ? 'Decision memo'
-                    : view === 'import'
-                      ? 'Import shipments'
-                      : 'Methods & evidence'}
-            </strong>
+            <strong>{pageName}</strong>
           </div>
+          <label className="shipment-select">
+            <span>Shipment</span>
+            <select
+              aria-label="Selected shipment"
+              value={selected.id}
+              onChange={(event) => setSelectedId(event.target.value)}
+            >
+              {shipments.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <div className="topbar-meta">
             <span className="demo-pill">
               <span />
-              DEMO MODE
+              Illustrative
             </span>
-            <span className="topbar-date">
-              AS OF {dateLabel(decisionDate(selected)).toUpperCase()}
-            </span>
-            <span className="topbar-avatar">N</span>
+            <span className="topbar-date">As of {dateLabel(decisionDate(selected))}</span>
           </div>
         </header>
         <main id="main-content" ref={contentRef} className="main-content">
@@ -380,13 +357,17 @@ export default function App() {
               <div className="page-heading shipment-page-heading">
                 <div>
                   <button className="back-link" onClick={() => navigate('overview')}>
-                    <ArrowLeft size={13} /> PORTFOLIO OVERVIEW
+                    <ArrowLeft size={13} /> Overview
                   </button>
                   <h1>{selected.name}</h1>
                   <p>
+                    {selected.product || 'Add product details'}
+                    <span className="separator-dot">·</span>
                     {route.origin} <ArrowRight size={14} /> {route.destination}
                     <span className="separator-dot">·</span>
-                    {selected.product || 'Add product details'}
+                    Arrival {dateLabel(selected.arrivalDate)}
+                    <span className="separator-dot">·</span>
+                    {mode === 'forecast' ? 'Forecast' : 'Your assumptions'}
                   </p>
                 </div>
                 <div className="button-row">
@@ -425,25 +406,30 @@ export default function App() {
                   {saveState}
                 </span>
               </div>
-              <div className="button-row mode-controls" role="group" aria-label="Estimate mode">
+              <div className="mode-switch" role="group" aria-label="Estimate mode">
                 <button
-                  className={`button ${mode === 'forecast' ? 'primary' : 'secondary'}`}
+                  className={mode === 'forecast' ? 'active' : ''}
+                  aria-label="Forecast"
                   aria-pressed={mode === 'forecast'}
                   onClick={() => setMode('forecast')}
                 >
                   Forecast
+                  <small>Automatic, when data exists</small>
                 </button>
                 <button
-                  className={`button ${mode === 'what-if' ? 'primary' : 'secondary'}`}
+                  className={mode === 'what-if' ? 'active' : ''}
+                  aria-label="What if?"
                   aria-pressed={mode === 'what-if'}
                   onClick={() => setMode('what-if')}
                 >
                   What if?
+                  <small>Your assumptions</small>
                 </button>
               </div>
               {mode === 'what-if' && (
                 <p className="notice">
-                  What if? · Manual scenario assumptions, not model predictions.
+                  What if? uses your assumptions. Results are conditional, not automatic
+                  predictions.
                   {selected.scenarioOverride && (
                     <>
                       {' '}

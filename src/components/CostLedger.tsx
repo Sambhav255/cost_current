@@ -26,7 +26,7 @@ export function CostLedger({ analysis }: { analysis: ValidAnalysis }) {
   return (
     <section className="panel ledger-panel">
       <SectionHeading
-        title="A cost you can trace"
+        title="Cost breakdown"
         description="Only the added-cost column contributes to the base total. Included charges are never added twice."
       />
       <div className="ledger-scroll">

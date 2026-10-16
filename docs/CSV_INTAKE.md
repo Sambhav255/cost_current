@@ -21,7 +21,7 @@ Implemented as the first engineering milestone after the mentor prototype. Start
 | `product`, `supplier`                                        | Optional text; up to 200 characters each                                                                    |
 | `country_of_origin`                                          | Required country text; actual goods origin is separate from the chosen route                                |
 | `hts_code`                                                   | Optional 8 or 10 digits; dots are removed. Syntactic validation is not classification or duty verification  |
-| `route_id`                                                   | `sha-lax`, `hph-sav`, or `ham-ewr`; these are the three configured schematic lanes                          |
+| `route_id`                                                   | `sha-lax`, `hph-sav`, `ham-ewr`, or `sha-rtm`; these are the three configured schematic lanes               |
 | `currency`                                                   | Required literal `USD`                                                                                      |
 | `incoterm`                                                   | EXW, FCA, FOB, CFR, CIF, DAP, DDP, or `Other / unknown`. This does not automatically determine inclusions   |
 | `decision_date`                                              | Explicit scenario as-of date; lead-time feasibility uses it                                                 |

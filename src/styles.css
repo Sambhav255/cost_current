@@ -4755,3 +4755,140 @@ table {
     overflow-wrap: anywhere;
   }
 }
+
+.intelligence-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) minmax(260px, 320px);
+  gap: 20px;
+  align-items: start;
+}
+.intelligence-events,
+.intelligence-detail,
+.intelligence-map {
+  min-width: 0;
+}
+.event-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.event-card {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: grid;
+  gap: 6px;
+}
+.event-card.active {
+  border-color: #4a6b5f;
+  background: var(--panel2);
+  box-shadow: inset 0 0 0 1px #4a6b5f44;
+}
+.event-card-kind {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.event-card-meta,
+.event-card-odds {
+  font-size: 12px;
+  color: var(--muted);
+}
+.event-body {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: grid;
+  gap: 14px;
+}
+.event-facts {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.event-facts div {
+  display: grid;
+  gap: 4px;
+}
+.event-facts dt {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.event-facts dd {
+  margin: 0;
+}
+.event-evidence {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  display: grid;
+  gap: 6px;
+}
+.exposure-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.exposure-row {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #141c1e;
+  display: grid;
+  gap: 8px;
+}
+.exposure-row-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+}
+.relationship-tag {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--teal);
+  border: 1px solid #385557;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.exposure-row.not_applicable .relationship-tag {
+  color: var(--muted);
+}
+.exposure-rationale {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.exposure-impact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: baseline;
+}
+.source-tag {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--amber);
+}
+.event-context-banner strong {
+  color: var(--green);
+}
+@media (max-width: 1100px) {
+  .intelligence-grid {
+    grid-template-columns: 1fr;
+  }
+}

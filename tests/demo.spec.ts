@@ -2,7 +2,13 @@ import { expect, test, type Page } from '@playwright/test';
 
 async function openAnalysis(page: Page) {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
+  await page.getByRole('button', { name: 'Explore supply-chain risks' }).click();
+  const menu = page.getByRole('button', { name: 'Open navigation' });
+  if (await menu.isVisible()) await menu.click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('button', { name: 'My Exposure', exact: true })
+    .click();
   await page.getByRole('button', { name: 'Analyze this shipment' }).click();
   await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await expect(
@@ -41,9 +47,7 @@ test('default costs, keyboard sensitivity, persistence, and memo stay consistent
   await expect(page.getByRole('heading', { name: 'The numbers favor waiting.' })).toBeVisible();
 
   await page.reload();
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
-  await page.getByRole('button', { name: 'Analyze this shipment' }).click();
-  await page.getByRole('button', { name: 'What if?', exact: true }).click();
+  await openAnalysis(page);
   await expect(page.getByRole('slider', { name: 'Tariff event probability' })).toHaveValue('1000');
   await page.getByRole('button', { name: 'Create decision memo' }).click();
   await expect(page.getByTestId('decision-memo')).toContainText('$119,100');
@@ -88,7 +92,8 @@ test('unknown tariff avoidance and bundled quotes pause unsupported recommendati
 
 test('route selection, 2D fallback, methods, and responsive shell work', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
+  await page.getByRole('button', { name: 'Explore supply-chain risks' }).click();
+  await navigate(page, 'My Exposure');
   const switchTo2D = page.getByRole('button', { name: 'Switch to 2D map' });
   if (await switchTo2D.isVisible()) await switchTo2D.click();
   await expect(page.getByTestId('map-fallback')).toBeVisible();

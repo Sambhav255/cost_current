@@ -35,17 +35,21 @@ export default function RouteGlobe({
   selected,
   onSelect,
   compact = false,
+  eventZones,
 }: {
   routes: Route[];
   selected: string;
   onSelect: (id: string) => void;
   compact?: boolean;
+  eventZones?: { id: string; label: string; points: { lat: number; lng: number }[] }[];
 }) {
   const reduced = useSyncExternalStore(subscribe, () => media?.matches ?? false);
   const [flat, setFlat] = useState(() => !hasWebGL()),
     [reset, setReset] = useState(0),
     [zoom, setZoom] = useState(1);
-  const fallback = <MapFallback routes={routes} selected={selected} onSelect={onSelect} />;
+  const fallback = (
+    <MapFallback routes={routes} selected={selected} onSelect={onSelect} eventZones={eventZones} />
+  );
   return (
     <div className={`route-globe ${compact ? 'compact-globe' : ''}`}>
       <div className="globe-grid" />

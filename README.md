@@ -9,7 +9,7 @@
 > **Project status — October 16, 2026:** This repository contains a working **prototype**, not a production forecasting service. The shipment calculator, comparison workflow, interactive globe, CSV intake, and decision memos work with stated inputs. A separate **Forecast** view can calculate a simple historical freight-rate baseline from a locally imported series. **Trained machine learning, live tariff/freight feeds, independently generated event probabilities, and validated customer savings are not yet implemented.**
 
 **Repository:** [Sambhav255/cost_current](https://github.com/Sambhav255/cost_current)  
-**Current focus:** Validate the customer problem and build the first credible, automatically updated forecast for one shipping lane.
+**Current focus:** Event-led predictive intelligence in the local prototype—illustrative disruption → exposure → decisions. Live odds, calibrated models, and licensed feeds stay gated until authorized data and evidence exist.
 
 ---
 
@@ -204,12 +204,12 @@ Open the local address shown in your terminal, normally **http://127.0.0.1:5173*
 
 ### Suggested five-minute walkthrough
 
-1. Click **Try an example shipment** and select **Northstar Home Goods**.
-2. Explore the **globe**, shipment summary, and cost breakdown.
-3. Open **Shipment analysis → Forecast**. Observe how the application reports missing automatic event odds rather than inventing them. You can optionally preview a clearly labeled fictional freight series.
-4. Switch to **What if?** and see the **$123,600 wait** versus **$121,100 early** comparison.
-5. Change the assumed tariff probability from **40% to 10%**. The preferred action switches from early ordering to waiting; the break-even point remains approximately **23.33%**.
-6. Open **Import shipments** to see CSV preview and validation, and **Decision memo** to print or save the analysis.
+1. Click **Explore supply-chain risks** on the welcome screen.
+2. On **Intelligence**, open the China-origin home-goods tariff event and review **Northstar Home Goods** exposure (conditional extra duty **$15,000** if the event occurs—separate from probability-weighted portfolio totals on **My Exposure**).
+3. Click **Explore options** to open **Decisions** in **What if?** mode. Confirm Northstar: **$123,600** wait versus **$121,100** early under the demo assumptions.
+4. Switch to **Forecast** on the same shipment. Confirm automatic tariff and freight event odds stay **unavailable** rather than invented; optionally preview the clearly labeled fictional freight observation baseline.
+5. Return to **What if?** and change the assumed tariff probability from **40% to 10%**. The preferred action switches from early ordering to waiting; the break-even point remains approximately **23.33%**.
+6. Optional: **My Exposure** for portfolio totals, **Import shipments** for CSV preview and validation, and **Decision memo** to print or save the analysis.
 
 **Note:** Any data you enter is saved in this browser's local storage. It is not synced to collaborators or other devices. Do not put confidential customer material in the prototype without first establishing appropriate security and retention controls.
 
@@ -226,13 +226,14 @@ For browser setup, see the existing [engineering guide](docs/IMPLEMENTATION_PLAN
 
 Our goal is **not** to add more dashboard cards before proving the predictive and economic value.
 
-| Priority | Workstream                              | Definition of progress                                                                                                           |
-| -------- | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| **1**    | **Get one usable real freight dataset** | Licensed or customer-authorized repeated observations for one lane, with units, date, quote scope, and usage rights documented.  |
-| **2**    | **Test forecasting against a baseline** | Time-ordered evaluation of last-observation and seasonal naive methods; only then test more complex models.                      |
-| **3**    | **Prove customer value**                | Interviews with actual importers/brokers and at least one real shipment decision or paid pilot test.                             |
-| **4**    | **Add relevant event signals**          | Exact policy/market event mapping, data-quality gates, honest unavailable states, and calibrated probabilities when possible.    |
-| **5**    | **Make the product repeatable**         | Prospective decision journal, observed outcomes, vetted tariff coverage, trustworthy alerts, shared workspaces and integrations. |
+| Priority | Workstream                                             | Definition of progress                                                                                                                                                                                               |
+| -------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1**    | **Complete event-to-decision intelligence loop**       | Authorized or curated events mapped to shipment exposure with explicit match status, conditional impacts, evidence timestamps, drilldown to **What if?**, and honest **unavailable** odds—not live feeds by default. |
+| **2**    | **Get one usable real freight dataset**                | Licensed or customer-authorized repeated observations for one lane, with units, date, quote scope, and usage rights documented.                                                                                      |
+| **3**    | **Test forecasting against a baseline**                | Time-ordered evaluation of last-observation and seasonal naive methods; only then test more complex models—still without claiming live market feeds in the prototype.                                                |
+| **4**    | **Prove customer value**                               | Interviews with actual importers/brokers and at least one real shipment decision or paid pilot test.                                                                                                                 |
+| **5**    | **Add relevant event signals where evidence supports** | Exact policy/market event mapping, data-quality gates, unavailable states when unmatched, and calibrated probabilities only when sourcing and definitions are defensible.                                            |
+| **6**    | **Make the product repeatable**                        | Prospective decision journal, observed outcomes, vetted tariff coverage, trustworthy alerts, shared workspaces and integrations.                                                                                     |
 
 The initial focus is **one repeat importer segment and one defensible lane**, not a claim to predict every geopolitical shock on earth.
 

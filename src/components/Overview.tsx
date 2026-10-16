@@ -38,8 +38,8 @@ export default function Overview({
     <>
       <div className="page-heading">
         <div>
-          <h1>Import exposure</h1>
-          <p>Modeled cost, extra exposure, and the shipment to inspect next.</p>
+          <h1>My exposure</h1>
+          <p>Portfolio modeled cost, scenario assumptions, and the shipment to inspect next.</p>
         </div>
         <div className="button-row">
           <button className="button secondary" onClick={onImport}>
@@ -57,9 +57,9 @@ export default function Overview({
           detail={`${valid.length} itemized shipments · USD`}
         />
         <Metric
-          label="Expected extra cost"
+          label="Expected extra cost (scenario assumptions)"
           value={usd(totalExposure)}
-          detail="Probability-weighted scenario exposure"
+          detail="Probability-weighted from your entered odds — not a live forecast"
           accent
         />
         <Metric

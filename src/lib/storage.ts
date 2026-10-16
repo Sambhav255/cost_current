@@ -39,12 +39,20 @@ function compatible(value: unknown): value is Shipment[] {
     )
   );
 }
+function withMissingDemoSamples(shipments: Shipment[]): Shipment[] {
+  const ids = new Set(shipments.map((s) => s.id));
+  const missing = freshSamples().filter((s) => s.id === 'nordic-home' && !ids.has(s.id));
+  return missing.length ? [...shipments, ...missing] : shipments;
+}
+
 export function loadShipments(): Shipment[] {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return freshSamples();
     const saved = JSON.parse(raw);
-    return saved.version === 1 && compatible(saved.shipments) ? saved.shipments : freshSamples();
+    return saved.version === 1 && compatible(saved.shipments)
+      ? withMissingDemoSamples(saved.shipments)
+      : freshSamples();
   } catch {
     return freshSamples();
   }

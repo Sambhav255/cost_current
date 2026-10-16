@@ -12,3 +12,5 @@ package-lock.json
 
 # Bundled third-party agent skills are maintained upstream.
 .agents/skills/
+
+.local-checkpoint/

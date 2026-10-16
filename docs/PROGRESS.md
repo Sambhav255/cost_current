@@ -1,159 +1,138 @@
 # Progress and handoff
 
-**Checkpoint:** October 16, 2026 — prediction-first audit implementation and local verification.
+**Updated:** October 16, 2026  
+**Canonical status record.** Prefer this file over dated handoffs, session recovery notes, or older execution-plan “next” sections.
 
-**Overall state:** mentor prototype complete; first post-demo engineering milestone complete. Stage 1 customer/research validation and the commercial product remain unfinished.
+**Primary product direction:** [Predictive intelligence plan](PREDICTIVE_INTELLIGENCE_PLAN.md) and [realignment brief](../COST_CURRENT_PREDICTIVE_INTELLIGENCE_REALIGNMENT_CODEX.md). Older plans ([master build](../COST_CURRENT_MASTER_BUILD_PLAN.md), [master execution](MASTER_EXECUTION_PLAN.md), [forecast contract](FORECASTS.md)) remain references for preserved engines and gates—not higher-priority instructions.
 
-**Current milestone:** Forecast/What if? separation, local observation registry and automatic last-observation freight baseline, described in the [forecast contract](FORECASTS.md). **Next:** authorized real lane data and time-ordered baseline evaluation; the prospective journal follows.
+**Historical detail** (dated checkpoints, superseded handoffs): [PROGRESS_ARCHIVE.md](PROGRESS_ARCHIVE.md).
 
-This is the canonical status record. [Master plan](../COST_CURRENT_MASTER_BUILD_PLAN.md) holds requirements; [engineering guide](IMPLEMENTATION_PLAN.md) holds architecture; [README](../README.md) holds the product overview, local commands, and demo walkthrough. Append dated checkpoints and keep this current-state summary accurate.
+---
 
-## October 16 product README
+## Current state
 
-Replaced `README.md` with the supplied product-facing readme and removed the duplicate `README (1).md`. Prettier formatted `README.md`. `node scripts/check-docs.mjs` passed local links and heading anchors in 13 Markdown documents.
+Local prototype for smaller importers. Core story is **event → exposure → conditional dollars → decisions**, with the existing landed-cost calculator as the downstream engine.
 
-The previous source map and Playwright browser-install commands are no longer in the README. The new README points browser setup at the engineering guide, which does not currently document those install commands.
+| Layer | Status |
+| --- | --- |
+| Mentor demo + deterministic cost engine | **Implemented and tested** |
+| CSV intake, ledger, evidence, memos | **Implemented and tested** |
+| Forecast / What if? separation | **Implemented and tested** (auto event odds stay unavailable) |
+| Illustrative intelligence vertical slice | **Implemented and tested locally** (curated demo events only) |
+| Live market/official event odds | **Not implemented** |
+| Trained ML / rights-reviewed lane backtests | **Not implemented** |
+| Decision journal, accounts, deployment | **Not implemented** |
 
-## October 16 UI redesign
+---
 
-Redesigned the local interface without changing the cost engine, forecast math, or persistence. Navigation is a short rail (Overview, Analysis, Import, Decision memo, Methods & evidence) with the selected shipment in the top bar. Welcome states the job and offers the sample shipment or a CSV import. Analysis leads with modeled cost, the assumption-based recommendation, and a comparison list; scenario outcomes and forecast diagnostics sit behind disclosures. Forecast mode still abstains when observations are missing.
+## Implemented and working
 
-Verification: `npx eslint` and `tsc -b` passed; **60** unit tests passed; Playwright **20/20** after fixing mode-button accessible names and a narrow-screen action-row overflow (the mobile forecast case was re-run after that fix and passed). Connected browser checked Welcome, Overview, Forecast unavailable, What if? comparison, the route quote editor, and the decision memo. Canonical Northstar figures shown in What if?: $117,000 base, +$6,600 exposure, $123,600 wait, $121,100 early.
+### Intelligence (illustrative)
 
-Limits: the comparison list is one column below about 860px wide. Forecast evidence stays collapsed until opened. No new forecast capability was added.
+- Welcome CTA **Explore supply-chain risks** → default **Intelligence** view.
+- Curated demo registry (`src/lib/riskEvents.ts`, `riskExposure.ts`): China-origin tariff scenario; Red Sea/Suez corridor scenario.
+- Event detail: definition, horizon, as-of, likelihood status (`null` → **Not available**), limitations.
+- Exposure matching: reviewed / possible / not applicable / unknown; SHA→LAX is **not** auto-exposed to Suez (declared `viaCorridor` required).
+- Conditional impact only for **reviewed/confirmed** matches; zero duty assumption → unavailable dollars (e.g. Nordic on tariff without increase).
+- **Explore options** → Decisions / What if? with event context banner; existing engine unchanged.
+- Corridor watch zones on **2D** map fallback only.
+- Demo lane/shipment: `sha-rtm` / `nordic-home` (merged into older localStorage demos when missing).
 
-## Resume here — October 16 handoff
+### Decisions and calculator
 
-The user requested this checkpoint before leaving. **Implementation is committed and pushed through `50512c4` on `main`.** Resume from this section and [FORECASTS.md](FORECASTS.md); do not rebuild the completed calculator or repeat the full audit.
+- Northstar canonical arithmetic preserved (see Acceptance numbers).
+- What if?: manual assumptions, reversible overrides, early/wait/alternatives.
+- Forecast: last-observation freight baseline from local registry; never invents event odds; abstains without eligible observations.
+- Import CSV, cost ledger, evidence invalidation, printable/JSON memos, Methods & evidence.
 
-### Commits and ownership
+### Navigation
 
-- `8f41da0`: fix confirmed CI formatting failure by excluding bundled third-party skills; record the supplied audit.
-- `a99aa69`: integrated Forecast/What if? modes, strict independent local observation registry, automatic last-observation freight baseline, reversible saved scenario odds, provenance-aware frozen memos and acceptance tests.
-- `50512c4`: correct generation timestamps when the forecast horizon changes; add the browser regression and maintained forecast/data-gate documentation.
-- These three commits are pushed to `origin/main`. The separate untracked `COST_CURRENT_UI_REDESIGN_CODEX_PROMPT.md` appeared during the task and was deliberately excluded from commits. No redesign was implemented. Preserve it for the user's next request.
-- This handoff update to `docs/PROGRESS.md` is local and uncommitted so it does not start another CI run. No agents were delegated work.
+**Intelligence | My Exposure | Decisions | Methods & evidence**, plus Import and Decision memo in the sidebar. My Exposure labels portfolio “expected extra cost” as scenario-assumption only.
 
-### Verification at departure
+---
 
-- Final local `npm run check`: **passed**, including formatting, links/anchors in 13 local Markdown documents, lint, types, **60 unit tests** and production build. The additional local redesign prompt accounts for the extra document.
-- Full local browser suite: **20/20 passed** across desktop and narrow touch. After print/precision refinements, affected demo/forecast flows passed **12/12**; after the final generation-time fix, its flow passed **2/2**. Initial new-test selector failures were corrected; the final timestamp cases pass.
-- Connected Brave inspection confirmed default Forecast mode is unavailable without observations and has no manual sliders. Canonical Northstar arithmetic and date-boundary regressions are unchanged.
-- Forecast and manual memos were exported, rendered with Ghostscript and visually reviewed as one page each. Generated artifacts remain ignored under `output/`; useful files include `output/preview/forecast-baseline.png`, `output/pdf/forecast-evidence-memo.pdf` and `output/pdf/cost-current-decision-memo.pdf`.
-- Hosted [run 38856506608](https://github.com/Sambhav255/cost_current/actions/runs/38856506608) **passed** the complete quality gate and all 20 browser cases on `a99aa69`.
-- Hosted [run 38856961800](https://github.com/Sambhav255/cost_current/actions/runs/38856961800) for final commit **`50512c4` was still in progress at departure**. Do not claim this final run passed until checking it.
+## Tested and verified
 
-### First actions on return
+Commands run for this documentation cleanup (working tree including the intelligence slice):
 
-1. Check `gh run view 38856961800 --json status,conclusion,url`. If it failed, inspect `gh run view 38856961800 --log-failed`, fix the specific failure and rerun the relevant checks. If successful, append that result here. No need to rerun already passing checks merely because a session resumed.
-2. Read the latest user request before selecting work. A separate UI-redesign prompt exists but has not been implemented or accepted as the next active task in this conversation.
-3. Under the current audit plan, next obtain **one authorized real lane time series**, document display/training/retention/redistribution rights, measurement basis and known-at-time retrieval/revisions, then run a time-ordered naive evaluation. If no suitable data exist, retain explicit unavailable/illustrative states. Do not train models or invent real-data metrics.
-4. The prospective decision/outcomes journal remains later work. Live exchange adapters, reviewed tariff coverage, accounts and deployment are not implemented by this milestone.
+| Check | Result |
+| --- | --- |
+| `npm run check` | Passed — format, docs links, lint, types, **69** unit tests, production build |
+| `npm run test:e2e` | Previously **26/26** (desktop + narrow) after the slice, including `tests/intelligence.spec.ts`; reconfirmed in this session as available |
 
-### Important implemented limits
+**Last pushed `main`:** `bc20e9c` — Hosted CI [38861182119](https://github.com/Sambhav255/cost_current/actions/runs/38861182119) **success** (pre-slice baseline: 60 unit / 20 e2e). Hosted CI for the intelligence + docs commit is not claimed until the Actions run completes after push.
 
-Forecast mode defaults to unavailable event odds and never consumes the sample 40%/20% as automatic predictions. The explicitly selected fictional preview is a reproducible, untrained rate baseline. **Refresh signals** refreshes the saved local registry, not a live feed. Eight usable weekly observations, declared display rights, matching lane/units, cutoff and freshness checks are required. Rate sensitivity remains user-confirmed exploratory math, outside the forecast memo and automatic action rankings. Vigil was inspected but no adapter code or odds heuristic was copied. See [FORECASTS.md](FORECASTS.md) for the exact contract and data gap.
+**Honesty gates covered by unit/e2e:** Suez does not tag Northstar; Suez odds unavailable; tariff demo odds are illustrative assumptions; Northstar wait/early **$123,600 / $121,100**.
 
-## Delivered and integrated
+---
 
-| Area                   | Implemented behavior                                                                                                                                                  |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Mentor prototype       | Welcome, overview, selectable globe/2D fallback, editor, action comparisons, methods and printable memo                                                               |
-| Deterministic engine   | Itemized landed cost, four independent-event states, expected costs, early/wait threshold, feasible same-arrival alternatives and explicit invalid-input rejection    |
-| CSV intake             | Local file/paste/template flow; strict USD numbers/dates/headers; row errors; duplicate and capacity checks; no partial imports                                       |
-| Cost ledger            | Insurance, brokerage, port and inland costs; inclusion in goods/freight versus separate charges; customs value shown as a basis without double counting               |
-| Evidence               | Six-state typed contracts; implemented assumption/customer-supplied/unknown states; dated references and quote scope; sourced value/context edits invalidate evidence |
-| Dates                  | Editable scenario decision date; legacy demo fallback; source-date and arrival feasibility checks                                                                     |
-| Persistence            | Backward-compatible localStorage key `cost-current-demo-v1`; 25-shipment limit; reset restores samples and preserves additions                                        |
-| Memo                   | Frozen input/evidence/results snapshot with calculator version; JSON download; printable cost scope and references                                                    |
-| Repository preparation | Master plan navigation/status, coherent reference docs, Prettier, ESLint, ignore rules, Node pin, documentation check and GitHub Actions configuration                |
+## Incomplete, experimental, or illustrative only
 
-CSV customer references are user claims, not independently verified quotes or official duty determinations. Future official/licensed/model contracts do not establish active providers.
+| Item | Notes |
+| --- | --- |
+| Event registry | Curated fictional demos (`isDemoScenario`); not a live threat feed |
+| Automatic event probabilities | Always unavailable unless labeled user assumption |
+| 3D globe event zones | Not wired; zone markers are 2D-only |
+| Real prediction-market / official notice connectors | Deferred (P2 in predictive plan) |
+| Rights-reviewed freight history + time-ordered model study | Deferred (P3); local last-observation baseline only |
+| Prospective decision / outcomes journal | Deferred (P4) |
+| Customer interviews / paid pilots | Research outside this repo |
+| Accounts, multi-tenant SaaS, licensed feeds | Deferred (P5) |
 
-## October 16 forecast batch
+Do not describe illustrative cards, Forecast mode, or UI polish as calibrated prediction or legal duty determination.
 
-Implemented the user-authorized prediction-first audit priority without changing `engine.ts`, canonical samples or date-boundary regressions. Added a separate typed local freight registry, bounded JSON validation, declared rights and measurement basis, known-at-time retrieval/revision filtering, history-gap and freshness gates, and a versioned 28/56-day last-observation baseline. Automatic event odds remain null. Forecast mode is the default, with no sliders or unsupported action rankings; What if? preserves the manual calculator and saves reversible probability overrides with original forecast context. Local refresh re-reads persisted observations and reports unavailable/corrupt-storage states without sample fallback. An explicitly selected fictional preview remains illustrative. Frozen forecast/manual memo exports preserve source state and as-of context. Baseline evaluation mechanics report only eligible held-out targets and MAE; no trained model or real-data metrics exist.
+---
 
-Confirmed hosted CI run `38853607438` failed on formatting of the bundled frontend skill. Excluded third-party skills from project formatting and formatted the newly supplied audit. Saved the passing existing 50-test local baseline in commit `8f41da0` before forecast changes. The audit's baseline release is a commit, not a release tag.
+## Known limitations
 
-Local verification: full `npm run check` passed with **60 unit tests**, documentation links, lint, typecheck and production build. All **20 desktop/narrow browser cases passed**; after print spacing and integer-precision refinements, the affected demo/forecast subset passed **12/12**. Connected Brave inspection confirms the default unavailable forecast has no manual sliders and preserves the $117,000 entered cost ledger. Forecast and manual memos were exported, rendered with Ghostscript and visually checked as one page each; a long manual provenance badge was shortened to fit the margin. The final timestamp regression confirms a changed horizon receives a new generation time and passed **2/2** on desktop/narrow; its initial locator was corrected to use the visible date field.
+- Browser-only localStorage; no sync, auth, or server persistence.
+- Costs reflect entered scope only; stockouts, financing, and unentered fees omitted.
+- Independence of tariff/freight events is a demo assumption, not a global supply-chain model.
+- CSV customer references are claims, not verified quotes or official duties.
+- Route arcs and corridor zones are schematic, not vessel tracks.
+- Viewport e2e is not physical-device certification.
 
-Current limitations: no rights-reviewed real dataset supplied or present in the repository; no live feed, exact market mapping, seasonal/SARIMAX/LightGBM model, real historical score, learned intervals, automatically estimated event probability, durable decision/outcomes journal or customer validation. The refreshed [Vigil assessment](FORECASTS.md#vigil-integration-assessment) rejects its max-price/title/fallback shortcuts; no adapter code was copied. Rate sensitivity is user-confirmed exploratory math and is excluded from frozen forecast memos. Hosted [GitHub Actions run 38856506608](https://github.com/Sambhav255/cost_current/actions/runs/38856506608) passed `npm run check` and all 20 browser cases on implementation commit `a99aa69`; the timestamp follow-up is additionally verified locally as above.
+---
 
-Next action: obtain one lawful repeated lane series before any empirical model claim. Retain the local naive baseline and explicit unavailable event odds until data and qualified event mapping support more.
+## Next priorities (predictive intelligence order)
 
-## Prior verification actually run
+1. **P2 — Real signal path:** one lawful read-only source with exact IDs, timestamps, failure states; never silent demo fallback.
+2. **P3 — One forecast study:** rights-reviewed lane series; naive baseline vs modest model only if sample size justifies; report failures.
+3. **P4 — Journal + customer learning:** immutable known-at-time snapshots; importer/broker interviews.
+4. **Engineering polish (non-blocking):** 3D zone parity; keep calculator regressions green.
 
-| Check                    | Result                                                                                          |
-| ------------------------ | ----------------------------------------------------------------------------------------------- |
-| `npm run test`           | Passed: **50 tests across 3 files**                                                             |
-| `npm run lint`           | Passed                                                                                          |
-| `npm run typecheck`      | Passed                                                                                          |
-| `npm run build`          | Passed; globe loaded as a separate large bundle                                                 |
-| `npm run test:e2e`       | Passed: **16 cases**, desktop 1440 × 1000 and narrow touch 390 × 844                            |
-| Print export             | Original and intake-fixture memo exported; one-page letter layout checked and visually reviewed |
-| Connected browser        | Globe interaction, demo comparison and CSV preview/import/ledger inspected                      |
-| Dependency install audit | Reported zero vulnerabilities after tooling installation                                        |
-| Runtime                  | Node 22.13.1, npm 10.9.2                                                                        |
+Do not spend a sprint only on visual redesign. Do not invent live odds or ML accuracy to fill the Intelligence feed.
 
-The expanded browser suite covers the canonical flip, persistence, unknown avoidance, import preview/commit, invalid and duplicate batches, extra-charge inclusion, memo consistency, manual required inputs, source invalidation and WebGL fallback. Local runs use installed macOS Brave because the optional browser-download host could not resolve. Viewport coverage is not real-device certification. Generated artifacts are intentionally ignored by Git and recreated by browser tests.
-
-Final post-format verification passed: `npm run check` completed formatting, local links/anchors in 10 Markdown documents, lint (including the documentation-check script), types, all 50 unit tests and production build. The post-format browser rerun passed all 16 cases. `git diff --check` is clean. A review of 56 non-ignored tracked/untracked files found no generated/environment files or credential-pattern matches. Hosted GitHub Actions results have not been verified in this session.
-
-## Open work and product gates
-
-1. Obtain an authorized lane series and run a time-ordered baseline evaluation under the [forecast contract](FORECASTS.md), then implement a bounded prospective decision journal with immutable known-at-time snapshots and separately recorded outcomes.
-2. Founder interviews 5–10 relevant importer/broker decision owners; choose one lane and segment from evidence. No outreach or customer traction is claimed by this work.
-3. Establish lane-data rights and quote comparability; define a historical case study with simple baselines and a frozen cutoff. No historical dataset or backtest result exists yet.
-4. Reconcile a narrowly scoped tariff case against dated official rules and broker review before adding verified-duty claims.
-5. Add trained models, market adapters and secure multi-tenant operations only after the master plan's data, evaluation and customer-value gates.
-
-Known limits: no trained forecasting, live tariff/freight feed, legal classification engine, independently validated prices, accounts, server storage, cross-device sync or payment-date optimization. Costs reflect only the entered scope. Browser storage is local. Long arbitrary text and physical-device print dialogs have not been exhaustively verified. Prototype completion does not establish commercial readiness.
-
-## Git and publishing state
-
-The owner confirmed a **new repository**. This session's initialization attempt was denied by the `.git` write restriction. A separate workflow subsequently created/linked [Sambhav255/cost_current](https://github.com/Sambhav255/cost_current) while cleanup was in progress. Read-only inspection found `main` tracking `origin/main`, initial local commit `144526d` and merge `624e728` incorporating the remote placeholder. The latest documentation and formatting changes remain uncommitted locally; this session has not committed or pushed them. Commit identity was absent from the inspected configuration. [Repository setup](REPOSITORY_SETUP.md) gives the current review, commit and push commands; do not reinitialize or duplicate `origin`.
-
-## Context recovered
-
-The original task, “Review file and plan execution,” was still building UI during recovery. Independent continuation work added timing regressions, verified the integrated prototype, then advanced to the authorized master plan. [SESSION_HANDOFF](../SESSION_HANDOFF.md) is a historical snapshot; do not interpret its original prototype-only scope or unfinished UI as current status. Check for active concurrent tasks before overwriting files.
+---
 
 ## Acceptance numbers to preserve
 
-All values are illustrative and use the Northstar defaults.
+Illustrative Northstar defaults (not a calibrated forecast):
 
-| Metric                                        |      Expected value |
-| --------------------------------------------- | ------------------: |
-| Goods / customs value                         | $100,000 / $100,000 |
-| Current duty / freight                        |    $10,000 / $7,000 |
-| Base landed cost                              |            $117,000 |
-| Tariff event impact / probability             |       $15,000 / 40% |
-| Expected extra tariff cost                    |              $6,000 |
-| Freight surcharge / probability               |        $3,000 / 20% |
-| Expected extra freight cost                   |                $600 |
-| Wait expected total                           |            $123,600 |
-| Early incremental cost                        |              $3,500 |
-| Early expected total                          |            $121,100 |
-| Early savings versus waiting                  |              $2,500 |
-| Break-even tariff probability                 |            23.3333% |
-| Wait expected total at 10% tariff probability |            $119,100 |
-| Wait advantage at 10%                         |              $2,000 |
+| Metric | Expected |
+| --- | ---: |
+| Goods / customs value | $100,000 / $100,000 |
+| Current duty / freight | $10,000 / $7,000 |
+| Base landed cost | $117,000 |
+| Tariff event impact / probability | $15,000 / 40% |
+| Expected extra tariff / freight | $6,000 / $600 |
+| Wait / early expected totals | $123,600 / $121,100 |
+| Early savings vs wait | $2,500 |
+| Break-even tariff probability | 23.3333% |
+| Wait at 10% tariff probability | $119,100 |
 
-The four waiting outcomes are $117,000 (48%), $120,000 (12%), $132,000 (32%), and $135,000 (8%). This is an explicit discrete scenario distribution under independence, not a calibrated forecast.
+Four waiting outcomes under independence: $117,000 (48%), $120,000 (12%), $132,000 (32%), $135,000 (8%).
 
-## Checkpoint history
+---
 
-- **October 15, 22:54–22:57 CDT:** recovered prior task context; found the scaffold and then newly written engine/globe modules; added independent tests; reproduced and corrected three timing defects; calculator suite reached 9 passing tests. Full typecheck remained blocked by incomplete app assembly; one globe typing error was corrected.
-- **October 15, 23:01 CDT:** created the requested durable README, progress log, implementation roadmap, and agent entry point. UI work was still occurring in the earlier task; no successful full build or browser verification is claimed. All local documentation links and code fences were checked. Re-ran the calculator suite: 9/9 pass. Latest typecheck has one remaining failure: the main App module is missing. Analysis, methods, and memo components now exist in source.
+## Document map
 
-- **October 15, UI assembly update (original implementation task):** App.tsx and the complete responsive styles.css are now written. All five views are integrated; invalid edits suppress estimates and expose repair fields; alternatives require matching baseline arrival to avoid ranking late or incomparable delivery. Local dependencies were upgraded to current Vite/Vitest tooling and npm audit reports zero vulnerabilities. First assembled typecheck found only two unused imports, now removed. The separate continuation task owns independent QA, regression fixes, browser tests, and final canonical documentation; preserve its engine date fixes and recovery tests. Original task is completing the initial build and visual inspection. No passing integrated browser or print result is claimed yet.
-
-- **October 15, 23:06–23:15 CDT:** app and styling integrated; production build and calculator checks passed. Added a desktop/narrow-touch browser suite, corrected selectors, used the installed Brave fallback after browser-download DNS failure, and reached 8/8 passing cases. Fixed analysis/memo highlighting so a valid cheaper alternative stays recommended when early entry is unconfirmed; added a regression flow for it. Exported and visually reviewed a one-page memo; enlarged print text and reran the export flow. Added Node type declarations for config typechecking. README and this log now reflect verified local-demo readiness.
-
-- **Master-plan kickoff, October 15:** reread the 910-line master blueprint, rechecked current source and current Vigil connectors read-only, and wrote `docs/MASTER_EXECUTION_PLAN.md` before product changes. Prototype calculations/typecheck/build pass again. Next: close explicit edge-test/lint gaps, then implement strict CSV intake, typed cost evidence, and an auditable cost ledger as the first post-demo milestone. Full commercial readiness remains gated on customer/data/legal evidence.
-
-- **October 15, intake milestone:** delivered strict CSV preview/atomic import, explicit cost inclusion, six-state evidence contracts, customer references and scope, source invalidation, editable decision dates, memo versioning and legacy-compatible storage. Added explicit edge-case regressions; 50 unit tests and 16 browser cases pass. Mobile sidebar overflow was corrected after a real browser failure. Original and intake memo layouts were exported and reviewed. Customer validation, source rights, reviewed duties and trained models remain open.
-
-- **October 15, repository preparation:** organized master plan v1.1 with navigation, status and completion gates; reconciled README, engineering/execution guides and historical handoff; formatted source/config/docs; added Prettier, a local documentation-link check, CI, Node pin and Git hygiene. Full `npm run check` and post-format browser suite pass; diff whitespace and file-inclusion review are clean. A separate workflow established the new `Sambhav255/cost_current` remote during cleanup. Latest changes remain uncommitted; this session cannot write `.git`. Next: review/commit/push using the repository guide, then design the prospective journal milestone.
-
-- **October 16, forecast foundation:** implemented the prediction-first audit milestone in ordered commits (CI baseline `8f41da0`, integrated forecast foundation `a99aa69`, then timestamp/handoff follow-up). Full local checks passed with 60 unit tests; 20 browser cases passed, followed by 12 affected-flow and 2 timestamp-flow passes after refinements. Rendered forecast/manual memos fit one page and were visually reviewed. Hosted Actions run `38856506608` passed its complete check and 20 browser cases. No live feed, trained model, real-data accuracy or customer adoption is claimed. Next: rights-reviewed real lane data and a time-ordered baseline evaluation.
+| Doc | Role |
+| --- | --- |
+| [README](../README.md) | Product overview, setup, walkthrough |
+| [PREDICTIVE_INTELLIGENCE_PLAN](PREDICTIVE_INTELLIGENCE_PLAN.md) | Active stage plan |
+| [FORECASTS](FORECASTS.md) | Freight baseline contract and data gates |
+| [CSV_INTAKE](CSV_INTAKE.md) | Import schema |
+| [IMPLEMENTATION_PLAN](IMPLEMENTATION_PLAN.md) | Architecture and calculation invariants |
+| [MASTER_EXECUTION_PLAN](MASTER_EXECUTION_PLAN.md) | Historical audit / execution notes (superseded priority order) |
+| [PROGRESS_ARCHIVE](PROGRESS_ARCHIVE.md) | Dated handoffs and checkpoint history |

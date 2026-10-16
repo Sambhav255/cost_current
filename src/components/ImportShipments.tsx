@@ -110,8 +110,9 @@ export default function ImportShipments({
         />
         <p className="import-guidance">
           Supported route IDs: <code>sha-lax</code> (Shanghai → Los Angeles), <code>hph-sav</code>{' '}
-          (Haiphong → Savannah), <code>ham-ewr</code> (Hamburg → Newark). Your country-of-origin
-          field stays separate from routing.
+          (Haiphong → Savannah), <code>ham-ewr</code> (Hamburg → Newark), <code>sha-rtm</code>{' '}
+          (Shanghai → Rotterdam via Suez/Red Sea). Your country-of-origin field stays separate from
+          routing.
         </p>
         <p className="import-guidance">
           Use <code>scenario_assumption</code> for fictional examples or{' '}

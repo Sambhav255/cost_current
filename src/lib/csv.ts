@@ -283,7 +283,7 @@ export function previewCsv(
       if (value.length > 200) errors.push(`${name}: limit text to 200 characters.`);
     if (!routes.some((r) => r.id === s.routeId))
       errors.push(
-        'route_id: use sha-lax, hph-sav, or ham-ewr. Other lanes are not configured yet.',
+        'route_id: use sha-lax, hph-sav, ham-ewr, or sha-rtm. Other lanes are not configured yet.',
       );
     if (values.currency !== 'USD')
       errors.push('currency: only explicit USD is supported; no currency conversion is performed.');

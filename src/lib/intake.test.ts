@@ -107,10 +107,10 @@ describe('strict local CSV intake', () => {
     const current = freshSamples(),
       preview = previewCsv(sampleCsv(), current, context);
     const result = commitImport(preview, current);
-    expect(result.shipments).toHaveLength(4);
+    expect(result.shipments).toHaveLength(5);
     expect(commitImport(preview, result.shipments).error).toMatch(/duplicated/);
     preview.rows[0].shipment!.name = 'Mutated preview';
-    expect(result.shipments[3].name).toBe('Northstar CSV Example');
+    expect(result.shipments[4].name).toBe('Northstar CSV Example');
   });
   it('rejects a whole batch when one row fails', () => {
     const good = sampleCsv(),

@@ -12,8 +12,7 @@ function csv(changes: Record<string, string> = {}) {
 }
 async function openImport(page: Page) {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
-  await page.getByRole('button', { name: 'Import CSV', exact: true }).click();
+  await page.getByRole('button', { name: 'Import a CSV' }).click();
 }
 async function preview(page: Page, text: string) {
   await page.getByLabel('CSV contents', { exact: true }).fill(text);
@@ -95,7 +94,13 @@ test('quote CSV → preview → ledger → source edits → memo → persistence
     });
 
   await page.reload();
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
+  await page.getByRole('button', { name: 'Explore supply-chain risks' }).click();
+  const menuAfterReload = page.getByRole('button', { name: 'Open navigation' });
+  if (await menuAfterReload.isVisible()) await menuAfterReload.click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('button', { name: 'My Exposure', exact: true })
+    .click();
   await expect(
     page.getByRole('button', {
       name: 'Importer pilot A Ceramic tableware · Holiday collection',
@@ -130,7 +135,7 @@ test('invalid and duplicate CSV rows never partially import', async ({ page }) =
   );
   await expect(page.getByRole('button', { name: 'Import 1 shipment', exact: true })).toBeDisabled();
   await page.getByRole('button', { name: 'Back to overview', exact: true }).click();
-  await expect(page.locator('.shipment-table tbody tr')).toHaveCount(3);
+  await expect(page.locator('.shipment-table tbody tr')).toHaveCount(4);
 });
 
 test('WebGL unavailability leaves the default cost workflow usable', async ({ page }) => {
@@ -139,7 +144,13 @@ test('WebGL unavailability leaves the default cost workflow usable', async ({ pa
   );
   await page.goto('/');
   await expect(page.getByTestId('map-fallback')).toBeVisible();
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
+  await page.getByRole('button', { name: 'Explore supply-chain risks' }).click();
+  const menu = page.getByRole('button', { name: 'Open navigation' });
+  if (await menu.isVisible()) await menu.click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('button', { name: 'My Exposure', exact: true })
+    .click();
   await page.getByRole('button', { name: 'Analyze this shipment' }).click();
   await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await expect(page.getByTestId('decision-wait')).toContainText('$123,600');
@@ -149,7 +160,13 @@ test('manual intake requires real inputs and route edits preserve goods origin',
   page,
 }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
+  await page.getByRole('button', { name: 'Explore supply-chain risks' }).click();
+  const menuAdd = page.getByRole('button', { name: 'Open navigation' });
+  if (await menuAdd.isVisible()) await menuAdd.click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('button', { name: 'My Exposure', exact: true })
+    .click();
   await page.getByRole('button', { name: 'Add shipment', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Enter the country of origin.');
   await expect(

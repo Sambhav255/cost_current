@@ -14,7 +14,7 @@ A fictional dataset can be explicitly loaded or downloaded as a JSON template. I
 
 Download the JSON template under **Import observations or preview a fictional baseline**. Replace the fictional content with a series you have permission to display, and set `provenance` to `importer_supplied`. No source permissions are independently verified by this app.
 
-- `version`: `1`; `laneId`: `sha-lax`, `hph-sav` or `ham-ewr`.
+- `version`: `1`; `laneId`: `sha-lax`, `hph-sav`, `ham-ewr`, or `sha-rtm`.
 - `source`, `quoteBasis`, `rightsReference`: nonempty text, at most 500 characters each. State the vendor/customer reference, inclusions/exclusions, index versus quote basis and display permission. Keep measurement basis consistent across rows.
 - `unit`: exactly `USD_cents_per_FEU`. Values represent ocean freight per forty-foot-equivalent unit, not shipment totals, TEU prices, booked invoices or duty-inclusive landed costs.
 - `displayRights`: exactly `allowed`, based on the importer's declaration. Unknown/restricted rights block import. This field does not grant training or redistribution rights.

@@ -1,14 +1,22 @@
 import { countries } from '../lib/geography';
 import type { Route } from '../lib/types';
 const point = (lng: number, lat: number) => [(lng + 180) * 2, (90 - lat) * 2];
+export type EventZoneOverlay = {
+  id: string;
+  label: string;
+  points: { lat: number; lng: number }[];
+};
+
 export default function MapFallback({
   routes,
   selected,
   onSelect,
+  eventZones = [],
 }: {
   routes: Route[];
   selected: string;
   onSelect: (id: string) => void;
+  eventZones?: EventZoneOverlay[];
 }) {
   return (
     <div className="flat-map" data-testid="map-fallback">
@@ -51,6 +59,37 @@ export default function MapFallback({
             />
           );
         })}
+        {eventZones.map((zone) => (
+          <g key={zone.id} className="map-event-zone" data-testid={`event-zone-${zone.id}`}>
+            {zone.points.map((pt, i) => {
+              const [cx, cy] = point(pt.lng, pt.lat);
+              return (
+                <g key={i}>
+                  <circle
+                    cx={cx}
+                    cy={cy}
+                    r="6"
+                    fill="#eac18a55"
+                    stroke="#eac18a"
+                    strokeWidth="1.2"
+                  />
+                  <circle cx={cx} cy={cy} r="2.5" fill="#eac18a" />
+                </g>
+              );
+            })}
+            {zone.points[0] && (
+              <text
+                x={point(zone.points[0].lng, zone.points[0].lat)[0]}
+                y={point(zone.points[0].lng, zone.points[0].lat)[1] - 10}
+                fill="#eac18a"
+                fontSize="8"
+                textAnchor="middle"
+              >
+                {zone.label}
+              </text>
+            )}
+          </g>
+        ))}
         {routes.map((r) => {
           const [sx, sy] = point(r.startLng, r.startLat);
           const [rawEx, ey] = point(r.endLng, r.endLat);

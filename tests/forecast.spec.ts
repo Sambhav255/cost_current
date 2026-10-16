@@ -1,12 +1,22 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { exampleSeries } from '../src/lib/forecast';
+
+async function openForecastWorkspace(page: Page) {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Explore supply-chain risks' }).click();
+  const menu = page.getByRole('button', { name: 'Open navigation' });
+  if (await menu.isVisible()) await menu.click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('button', { name: 'My Exposure', exact: true })
+    .click();
+  await page.getByRole('button', { name: 'Analyze this shipment' }).click();
+}
 
 test('no-data forecast, explicit fictional baseline, refresh, local persistence and frozen memo', async ({
   page,
 }, testInfo) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
-  await page.getByRole('button', { name: 'Analyze this shipment' }).click();
+  await openForecastWorkspace(page);
   await expect(page.getByRole('button', { name: 'Forecast', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -64,8 +74,7 @@ test('no-data forecast, explicit fictional baseline, refresh, local persistence 
       printBackground: true,
     });
   await page.reload();
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
-  await page.getByRole('button', { name: 'Analyze this shipment' }).click();
+  await openForecastWorkspace(page);
   await expect(page.getByRole('region', { name: 'Automatic forecast' })).toContainText(
     '$4,700 / FEU',
   );
@@ -76,8 +85,7 @@ test('no-data forecast, explicit fictional baseline, refresh, local persistence 
   await slider.press('ArrowRight');
   await expect(page.getByText('Override saved;', { exact: false })).toBeVisible();
   await page.reload();
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
-  await page.getByRole('button', { name: 'Analyze this shipment' }).click();
+  await openForecastWorkspace(page);
   await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await expect(slider).toHaveValue('100');
   await page.getByRole('button', { name: 'Restore original scenario odds' }).click();
@@ -92,9 +100,7 @@ test('no-data forecast, explicit fictional baseline, refresh, local persistence 
 test('invalid signal import is atomic; refresh failures and lane changes do not substitute sample odds', async ({
   page,
 }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Try an example shipment' }).click();
-  await page.getByRole('button', { name: 'Analyze this shipment' }).click();
+  await openForecastWorkspace(page);
   await page
     .getByText('Import observations or preview a fictional baseline', { exact: true })
     .click();
@@ -111,9 +117,10 @@ test('invalid signal import is atomic; refresh failures and lane changes do not 
     '$4,700 / FEU',
   );
   await page.getByRole('tab', { name: 'Shipment & assumptions' }).click();
-  await page
-    .getByRole('combobox', { name: 'Commercial lane', exact: true })
-    .selectOption('ham-ewr');
+  const lane = page.getByRole('combobox', { name: 'Commercial lane', exact: true });
+  await expect(lane).toBeVisible();
+  await lane.scrollIntoViewIfNeeded();
+  await lane.selectOption({ label: 'Hamburg → Newark' });
   await page.getByRole('tab', { name: 'Cost & decisions' }).click();
   await expect(page.getByRole('region', { name: 'Automatic forecast' })).not.toContainText(
     '$4,700 / FEU',

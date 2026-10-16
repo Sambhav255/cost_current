@@ -2,6 +2,11 @@ import type { ForecastSnapshot } from './forecast';
 import type { InputEvidence } from './evidence';
 import type { AdditionalCostLine, LedgerLine } from './ledger';
 export type SourceKind = 'Illustrative assumption' | 'User assumption';
+export interface RouteWaypoint {
+  label: string;
+  lat: number;
+  lng: number;
+}
 export interface Route {
   id: string;
   origin: string;
@@ -13,6 +18,9 @@ export interface Route {
   startLng: number;
   endLat: number;
   endLng: number;
+  /** Declared schematic corridor; never inferred from origin/destination alone. */
+  viaCorridor?: string | null;
+  waypoints?: RouteWaypoint[];
 }
 export interface AlternativeRoute {
   enabled: boolean;

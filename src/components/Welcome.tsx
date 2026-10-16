@@ -27,22 +27,22 @@ export default function Welcome({
       </header>
       <div className="welcome-hero">
         <div className="welcome-copy">
-          <h1>Understand import risk. Decide with confidence.</h1>
+          <h1>See disruptions coming. Know your exposure.</h1>
           <p>
-            Enter a shipment&apos;s costs and the trade conditions you are unsure about. Cost
-            Current compares feasible actions in dollars.
+            Cost Current connects illustrative supply-chain risks to the shipments and routes you
+            care about, then helps compare practical responses in dollars.
           </p>
           <div className="button-row">
             <button className="button primary large" onClick={onStart}>
-              Try an example shipment <ArrowRight size={18} />
+              Explore supply-chain risks <ArrowRight size={18} />
             </button>
             <button className="button secondary large" onClick={onImport}>
               Import a CSV
             </button>
           </div>
           <p className="welcome-subcopy">
-            Sample routes and prices are fictional. Nothing here is a live forecast or a customs
-            ruling.
+            Sample events, routes, and prices are fictional. Nothing here is a live forecast, market
+            signal, or customs ruling.
           </p>
         </div>
         <div className="welcome-world">
@@ -51,15 +51,17 @@ export default function Welcome({
       </div>
       <div className="welcome-bottom">
         <div>
-          <h2>Landed cost</h2>
-          <p>Goods, duty, freight, and extra charges, without counting the same dollar twice.</p>
+          <h2>Intelligence</h2>
+          <p>
+            Curated demo disruptions with explicit match status and unsupported odds left blank.
+          </p>
         </div>
         <div>
           <h2>Exposure</h2>
-          <p>Tariff and freight possibilities priced from the assumptions you can see.</p>
+          <p>Which shipments might be affected and conditional dollars if an event occurs.</p>
         </div>
         <div>
-          <h2>A comparison</h2>
+          <h2>Decisions</h2>
           <p>Wait, order early, or a different route or supplier when the quote is comparable.</p>
         </div>
       </div>

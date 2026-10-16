@@ -16,6 +16,7 @@ import {
   LayoutDashboard,
   Menu,
   Package,
+  Radar,
   RotateCcw,
   X,
 } from 'lucide-react';
@@ -31,12 +32,16 @@ import ShipmentForm, { type UpdateShipment } from './components/ShipmentForm';
 import Analysis from './components/Analysis';
 import Methods from './components/Methods';
 import Memo from './components/Memo';
-type View = 'welcome' | 'overview' | 'shipment' | 'methods' | 'memo' | 'import';
+import Intelligence from './components/Intelligence';
+import { getEvent, probabilityFor } from './lib/riskEvents';
+type View = 'welcome' | 'intelligence' | 'overview' | 'shipment' | 'methods' | 'memo' | 'import';
 export default function App() {
   const [shipments, setShipments] = useState(loadShipments),
     [selectedId, setSelectedId] = useState(() => shipments[0].id);
   const [view, setView] = useState<View>('welcome'),
     [tab, setTab] = useState<'analysis' | 'details'>('analysis');
+  const [selectedEventId, setSelectedEventId] = useState('demo-tariff-china-home');
+  const [decisionContextEventId, setDecisionContextEventId] = useState<string | null>(null);
   const [mode, setMode] = useState<'forecast' | 'what-if'>('forecast');
   const [signals, setSignals] = useState(loadSeries);
   const [horizon, setHorizon] = useState<28 | 56>(28);
@@ -94,7 +99,7 @@ export default function App() {
     setMobileMenu(false);
   }, [view, selectedId]);
   useEffect(() => {
-    document.title = `${view === 'welcome' ? 'Import decisions, made clear' : view === 'overview' ? 'Overview' : view === 'shipment' ? selected.name : view === 'memo' ? 'Decision memo' : view === 'import' ? 'Import shipments' : 'Methods & evidence'} · Cost Current`;
+    document.title = `${view === 'welcome' ? 'Supply-chain risk intelligence' : view === 'intelligence' ? 'Intelligence' : view === 'overview' ? 'My exposure' : view === 'shipment' ? `Decisions · ${selected.name}` : view === 'memo' ? 'Decision memo' : view === 'import' ? 'Import shipments' : 'Methods & evidence'} · Cost Current`;
   }, [view, selected.name]);
   const update: UpdateShipment = (field, value) =>
     setShipments((all) =>
@@ -139,7 +144,15 @@ export default function App() {
   };
   const start = () => {
     setSelectedId(shipments[0].id);
-    navigate('overview');
+    setSelectedEventId('demo-tariff-china-home');
+    navigate('intelligence');
+  };
+  const openDecisionsFromEvent = (shipmentId: string, eventId: string) => {
+    setSelectedId(shipmentId);
+    setDecisionContextEventId(eventId);
+    setMode('what-if');
+    setTab('analysis');
+    navigate('shipment');
   };
   const analyze = () => {
     setTab('analysis');
@@ -232,22 +245,27 @@ export default function App() {
         onImport={() => navigate('import')}
       />
     );
+  const contextEvent = decisionContextEventId ? getEvent(decisionContextEventId) : undefined;
+  const contextSignal = decisionContextEventId ? probabilityFor(decisionContextEventId) : undefined;
   const pageName =
-    view === 'overview'
-      ? 'Overview'
-      : view === 'shipment'
-        ? 'Analysis'
-        : view === 'memo'
-          ? 'Decision memo'
-          : view === 'import'
-            ? 'Import'
-            : 'Methods & evidence';
+    view === 'intelligence'
+      ? 'Intelligence'
+      : view === 'overview'
+        ? 'My exposure'
+        : view === 'shipment'
+          ? 'Decisions'
+          : view === 'memo'
+            ? 'Decision memo'
+            : view === 'import'
+              ? 'Import'
+              : 'Methods & evidence';
   const nav = [
-    { id: 'overview' as View, label: 'Overview', icon: LayoutDashboard },
-    { id: 'shipment' as View, label: 'Analysis', icon: Package },
+    { id: 'intelligence' as View, label: 'Intelligence', icon: Radar },
+    { id: 'overview' as View, label: 'My Exposure', icon: LayoutDashboard },
+    { id: 'shipment' as View, label: 'Decisions', icon: Package },
+    { id: 'methods' as View, label: 'Methods & evidence', icon: BookOpen },
     { id: 'import' as View, label: 'Import', icon: FileUp },
     { id: 'memo' as View, label: 'Decision memo', icon: FileText },
-    { id: 'methods' as View, label: 'Methods & evidence', icon: BookOpen },
   ];
   return (
     <div className="app-shell">
@@ -342,6 +360,16 @@ export default function App() {
               </button>
             </div>
           )}
+          {view === 'intelligence' && (
+            <Intelligence
+              shipments={shipments}
+              selectedEventId={selectedEventId}
+              onSelectEvent={setSelectedEventId}
+              onSelectShipment={setSelectedId}
+              onOpenDecisions={openDecisionsFromEvent}
+              onOpenExposure={() => navigate('overview')}
+            />
+          )}
           {view === 'overview' && (
             <Overview
               shipments={shipments}
@@ -357,7 +385,7 @@ export default function App() {
               <div className="page-heading shipment-page-heading">
                 <div>
                   <button className="back-link" onClick={() => navigate('overview')}>
-                    <ArrowLeft size={13} /> Overview
+                    <ArrowLeft size={13} /> My exposure
                   </button>
                   <h1>{selected.name}</h1>
                   <p>
@@ -406,6 +434,24 @@ export default function App() {
                   {saveState}
                 </span>
               </div>
+              {contextEvent && (
+                <div className="notice event-context-banner" data-testid="event-context-banner">
+                  Opened from illustrative event: <strong>{contextEvent.name}</strong>. Occurrence
+                  odds are{' '}
+                  {contextSignal?.probabilityBps === null ||
+                  contextSignal?.probabilityBps === undefined
+                    ? 'unavailable'
+                    : 'a scenario assumption only'}
+                  — not a live forecast.{' '}
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => setDecisionContextEventId(null)}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              )}
               <div className="mode-switch" role="group" aria-label="Estimate mode">
                 <button
                   className={mode === 'forecast' ? 'active' : ''}
@@ -485,6 +531,14 @@ export default function App() {
                   s={selected}
                   a={analysis}
                   update={update}
+                  eventContext={
+                    contextEvent
+                      ? {
+                          name: contextEvent.name,
+                          oddsUnavailable: !contextSignal || contextSignal.probabilityBps === null,
+                        }
+                      : undefined
+                  }
                   onEdit={() => {
                     setTab('details');
                     window.scrollTo(0, 0);

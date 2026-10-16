@@ -106,12 +106,14 @@ export default function Analysis({
   update,
   onEdit,
   onMemo,
+  eventContext,
 }: {
   s: Shipment;
   a: ValidAnalysis;
   update: UpdateShipment;
   onEdit: () => void;
   onMemo: () => void;
+  eventContext?: { name: string; oddsUnavailable: boolean };
 }) {
   const early = a.actions[1];
   const bestSavings = a.best.savingsCents || 0;
@@ -127,6 +129,13 @@ export default function Analysis({
         : `${a.best.name} has the lowest expected cost.`;
   return (
     <>
+      {eventContext && (
+        <p className="notice" data-testid="analysis-event-context">
+          Linked illustrative event: <strong>{eventContext.name}</strong>. Occurrence odds are{' '}
+          {eventContext.oddsUnavailable ? 'unavailable' : 'scenario assumptions only'} — not a live
+          forecast.
+        </p>
+      )}
       <div className="metrics-grid analysis-metrics">
         <Metric
           label="Base modeled landed cost"

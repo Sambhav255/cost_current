@@ -1,3 +1,4 @@
+import type { ForecastSnapshot } from './forecast';
 import type { InputEvidence } from './evidence';
 import type { AdditionalCostLine, LedgerLine } from './ledger';
 export type SourceKind = 'Illustrative assumption' | 'User assumption';
@@ -75,6 +76,12 @@ export interface Shipment {
   };
   alternativeRoute: AlternativeRoute;
   alternativeSupplier: AlternativeSupplier;
+  scenarioOverride?: {
+    originalTariffBps: number;
+    originalFreightBps: number;
+    originalForecast: ForecastSnapshot;
+    capturedAt: string;
+  };
   edited: string[];
 }
 export interface Outcome {
@@ -120,24 +127,21 @@ export interface InvalidAnalysis {
 }
 export type AnalysisResult = ValidAnalysis | InvalidAnalysis;
 export interface MemoSnapshot {
+  mode?: 'what-if';
+  forecast?: ForecastSnapshot;
   calculatorVersion?: string;
   shipment: Shipment;
   route: Route;
   analysis: ValidAnalysis;
   timestamp: string;
 }
-// Future model adapters must provide evidence as well as values; no adapter is active in the demo.
-export interface ForecastEvidence {
-  modelVersion: string;
-  asOf: string;
-  dataSource: string;
-  evaluationReference: string;
-  laneId: string;
-  horizonDays: number;
-}
-export interface ForecastProvider {
-  forecast(
-    laneId: string,
-    horizonDays: number,
-  ): Promise<{ medianFreightCents: number; upperFreightCents: number; evidence: ForecastEvidence }>;
+export interface ForecastMemoSnapshot {
+  mode: 'forecast';
+  calculatorVersion: string;
+  shipment: Shipment;
+  route: Route;
+  forecast: ForecastSnapshot;
+  baseCents: number;
+  ledger: LedgerLine[];
+  timestamp: string;
 }

@@ -4437,3 +4437,41 @@ table {
   overflow-y: auto;
   overscroll-behavior: contain;
 }
+
+.mode-controls {
+  margin: 16px 0;
+}
+.forecast-panel {
+  margin: 20px 0;
+}
+.forecast-panel details {
+  margin-top: 20px;
+}
+.forecast-facts dd {
+  overflow-wrap: anywhere;
+  max-width: 65%;
+}
+.forecast-panel output {
+  overflow-wrap: anywhere;
+}
+
+.forecast-memo > p {
+  font-size: 12px;
+  line-height: 1.55;
+  margin: 12px 0;
+  font-weight: 400;
+}
+.forecast-memo .memo-title > div:last-child {
+  text-align: left;
+  max-width: none;
+}
+.memo-provenance {
+  line-height: 1.5;
+  margin: 12px 0;
+}
+@media print {
+  .forecast-memo > p {
+    font-size: 11px;
+    margin: 10px 0;
+  }
+}

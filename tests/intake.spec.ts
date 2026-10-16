@@ -53,6 +53,7 @@ test('quote CSV → preview → ledger → source edits → memo → persistence
   await page.getByRole('button', { name: 'Import 1 shipment', exact: true }).click();
   await expect(page.locator('.selected-company')).toContainText('Importer pilot A');
   await page.getByRole('button', { name: 'Analyze this shipment' }).click();
+  await page.getByRole('button', { name: 'What if?', exact: true }).click();
   const ledger = page.getByRole('table', { name: 'Landed cost ledger' });
   await expect(ledger).toContainText('Fictional test quote A-001');
   await expect(ledger).toContainText('Oct 14, 2026');
@@ -67,6 +68,7 @@ test('quote CSV → preview → ledger → source edits → memo → persistence
     .getByRole('combobox', { name: 'Insurance inclusion', exact: true })
     .selectOption('goods');
   await page.getByRole('spinbutton', { name: 'Freight estimate', exact: true }).fill('8000');
+  await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await page.getByRole('button', { name: 'Review cost & decisions' }).click();
   await expect(page.getByTestId('decision-wait')).toContainText('$124,600');
   await expect(
@@ -139,6 +141,7 @@ test('WebGL unavailability leaves the default cost workflow usable', async ({ pa
   await expect(page.getByTestId('map-fallback')).toBeVisible();
   await page.getByRole('button', { name: 'Try an example shipment' }).click();
   await page.getByRole('button', { name: 'Analyze this shipment' }).click();
+  await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await expect(page.getByTestId('decision-wait')).toContainText('$123,600');
 });
 
@@ -164,6 +167,7 @@ test('manual intake requires real inputs and route edits preserve goods origin',
     .fill('Fictional manual invoice B-001');
   await page.getByLabel('Cost source as of', { exact: true }).fill('2026-10-14');
   await page.getByRole('button', { name: 'Attach source to base costs', exact: true }).click();
+  await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await page.getByRole('button', { name: 'Review cost & decisions' }).click();
   await expect(page.getByTestId('decision-wait')).toContainText('$1,200');
   await expect(page.getByRole('table', { name: 'Landed cost ledger' })).toContainText(
@@ -174,6 +178,7 @@ test('manual intake requires real inputs and route edits preserve goods origin',
     .getByRole('combobox', { name: 'Commercial lane', exact: true })
     .selectOption('ham-ewr');
   await expect(page.getByLabel('Country of origin')).toHaveValue('China');
+  await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await page.getByRole('button', { name: 'Review cost & decisions' }).click();
   await expect(page.getByRole('table', { name: 'Landed cost ledger' })).toContainText(
     'Input edited; attach updated source evidence.',

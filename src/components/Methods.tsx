@@ -39,8 +39,10 @@ export default function Methods({ onBack }: { onBack: () => void }) {
             CSV intake records supplied quote references and dates; the cost ledger separates
             additional charges from costs already included elsewhere. Customer-supplied inputs are
             not independently verified, and editing a value or quote context invalidates its
-            attached evidence. No trained model, live freight feed, prediction-market feed, or
-            automated tariff classification is active.
+            attached evidence. Forecast mode adds a dated last-observation freight baseline from
+            explicitly imported or fictional observations; it cannot infer tariff or freight-event
+            odds. What if? keeps manual assumptions separate. No trained model, live freight feed,
+            prediction-market feed, or automated tariff classification is active.
           </p>
         </div>
       </div>

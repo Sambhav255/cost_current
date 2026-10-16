@@ -1,7 +1,9 @@
+import Forecast from './components/Forecast';
+import { baselineForecast, loadSeries, saveSeries, type FreightSeries } from './lib/forecast';
 import { MAX_SHIPMENTS } from './lib/csv';
 import { hasCustomerEvidence, invalidateEvidenceForEdit } from './lib/evidence';
 import ImportShipments from './components/ImportShipments';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -24,7 +26,7 @@ import { freshSamples, routes } from './lib/data';
 import { analyzeShipment, decisionDate, validateShipment } from './lib/engine';
 import { clearShipments, loadShipments, saveShipments } from './lib/storage';
 import { dateLabel } from './lib/format';
-import type { MemoSnapshot, Shipment } from './lib/types';
+import type { MemoSnapshot, ForecastMemoSnapshot, Shipment } from './lib/types';
 import { Brand, SourceBadge } from './components/ui';
 import Welcome from './components/Welcome';
 import Overview from './components/Overview';
@@ -38,7 +40,14 @@ export default function App() {
     [selectedId, setSelectedId] = useState(() => shipments[0].id);
   const [view, setView] = useState<View>('welcome'),
     [tab, setTab] = useState<'analysis' | 'details'>('analysis');
-  const [snapshot, setSnapshot] = useState<MemoSnapshot | null>(null),
+  const [mode, setMode] = useState<'forecast' | 'what-if'>('forecast');
+  const [signals, setSignals] = useState(loadSeries);
+  const [horizon, setHorizon] = useState<28 | 56>(28);
+  const [generatedAt, setGeneratedAt] = useState(() => new Date().toISOString());
+  const [signalNotice, setSignalNotice] = useState(
+    'Local registry only. Refresh re-reads saved observations; it does not fetch a live feed.',
+  );
+  const [snapshot, setSnapshot] = useState<MemoSnapshot | ForecastMemoSnapshot | null>(null),
     [mobileMenu, setMobileMenu] = useState(false),
     [saveState, setSaveState] = useState('Saved in this browser'),
     [message, setMessage] = useState('');
@@ -46,6 +55,34 @@ export default function App() {
   const selected = shipments.find((s) => s.id === selectedId) || shipments[0],
     analysis = analyzeShipment(selected),
     route = routes.find((r) => r.id === selected.routeId) || routes[0];
+  const forecastAsOf = decisionDate(selected);
+  const forecast = useMemo(
+    () => baselineForecast(signals.series, selected.routeId, forecastAsOf, horizon, generatedAt),
+    [signals.series, selected.routeId, forecastAsOf, horizon, generatedAt],
+  );
+  const changeSeries = (series: FreightSeries | null) => {
+    const saved = saveSeries(series);
+    setSignals({ series, error: '' });
+    setGeneratedAt(new Date().toISOString());
+    setSignalNotice(
+      saved
+        ? series
+          ? 'Signals updated from local observations. No live feed was queried.'
+          : 'Observations cleared. Automatic estimates are unavailable.'
+        : 'Session only: signals could not be saved. Refresh will read the last persisted registry.',
+    );
+  };
+  const refreshSignals = () => {
+    const next = loadSeries();
+    setSignals(next);
+    setGeneratedAt(new Date().toISOString());
+    setSignalNotice(
+      next.error ||
+        (next.series
+          ? 'Refreshed from saved local observations. Freshness and cutoff checks were reapplied.'
+          : 'Refresh completed: no saved observations. No sample fallback was used.'),
+    );
+  };
   useEffect(() => {
     if (shipments.some((s) => validateShipment(s).length)) {
       setSaveState('Complete inputs to save');
@@ -70,7 +107,31 @@ export default function App() {
               ...s,
               ...invalidateEvidenceForEdit(s, field),
               [field]: value,
+              ...(['tariffProbabilityBps', 'freightProbabilityBps'].includes(field) &&
+              !s.scenarioOverride
+                ? {
+                    scenarioOverride: {
+                      originalTariffBps: s.tariffProbabilityBps,
+                      originalFreightBps: s.freightProbabilityBps,
+                      originalForecast: structuredClone(forecast),
+                      capturedAt: new Date().toISOString(),
+                    },
+                  }
+                : {}),
               edited: [...new Set([...s.edited, field])],
+            }
+          : s,
+      ),
+    );
+  const restoreOdds = () =>
+    setShipments((all) =>
+      all.map((s) =>
+        s.id === selected.id && s.scenarioOverride
+          ? {
+              ...s,
+              tariffProbabilityBps: s.scenarioOverride.originalTariffBps,
+              freightProbabilityBps: s.scenarioOverride.originalFreightBps,
+              scenarioOverride: undefined,
             }
           : s,
       ),
@@ -89,8 +150,26 @@ export default function App() {
   };
   const openMemo = () => {
     if (!analysis.valid) return;
+    if (mode === 'forecast') {
+      setSnapshot(
+        structuredClone({
+          mode: 'forecast',
+          shipment: selected,
+          route,
+          forecast,
+          baseCents: analysis.baseCents,
+          ledger: analysis.ledger,
+          timestamp: new Date().toISOString(),
+          calculatorVersion: '2.0.0-ledger',
+        }),
+      );
+      navigate('memo');
+      return;
+    }
     setSnapshot(
       structuredClone({
+        mode: 'what-if' as const,
+        forecast,
         shipment: selected,
         route,
         analysis,
@@ -346,6 +425,37 @@ export default function App() {
                   {saveState}
                 </span>
               </div>
+              <div className="button-row mode-controls" role="group" aria-label="Estimate mode">
+                <button
+                  className={`button ${mode === 'forecast' ? 'primary' : 'secondary'}`}
+                  aria-pressed={mode === 'forecast'}
+                  onClick={() => setMode('forecast')}
+                >
+                  Forecast
+                </button>
+                <button
+                  className={`button ${mode === 'what-if' ? 'primary' : 'secondary'}`}
+                  aria-pressed={mode === 'what-if'}
+                  onClick={() => setMode('what-if')}
+                >
+                  What if?
+                </button>
+              </div>
+              {mode === 'what-if' && (
+                <p className="notice">
+                  What if? · Manual scenario assumptions, not model predictions.
+                  {selected.scenarioOverride && (
+                    <>
+                      {' '}
+                      Override saved; original automatic tariff/freight odds: unavailable /
+                      unavailable.{' '}
+                      <button className="text-button" onClick={restoreOdds}>
+                        Restore original scenario odds
+                      </button>
+                    </>
+                  )}
+                </p>
+              )}
               {!analysis.valid && (
                 <div className="validation-panel" role="alert">
                   <CircleHelp size={22} />
@@ -363,11 +473,26 @@ export default function App() {
               {tab === 'details' || !analysis.valid ? (
                 <ShipmentForm
                   s={selected}
+                  manualMode={mode === 'what-if'}
                   update={update}
                   onAnalyze={() => {
                     setTab('analysis');
                     window.scrollTo(0, 0);
                   }}
+                />
+              ) : mode === 'forecast' ? (
+                <Forecast
+                  key={`${selected.id}:${selected.routeId}:${selected.originCountry}:${selected.supplier}`}
+                  s={selected}
+                  a={analysis}
+                  forecast={forecast}
+                  series={signals.series}
+                  onSeries={changeSeries}
+                  onRefresh={refreshSignals}
+                  onHorizon={setHorizon}
+                  onManual={() => setMode('what-if')}
+                  onMemo={openMemo}
+                  notice={signals.error || signalNotice}
                 />
               ) : (
                 <Analysis

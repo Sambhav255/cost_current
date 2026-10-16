@@ -4,6 +4,7 @@ async function openAnalysis(page: Page) {
   await page.goto('/');
   await page.getByRole('button', { name: 'Try an example shipment' }).click();
   await page.getByRole('button', { name: 'Analyze this shipment' }).click();
+  await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await expect(
     page.getByRole('heading', { name: 'Northstar Home Goods', exact: true }),
   ).toBeVisible();
@@ -42,6 +43,7 @@ test('default costs, keyboard sensitivity, persistence, and memo stay consistent
   await page.reload();
   await page.getByRole('button', { name: 'Try an example shipment' }).click();
   await page.getByRole('button', { name: 'Analyze this shipment' }).click();
+  await page.getByRole('button', { name: 'What if?', exact: true }).click();
   await expect(page.getByRole('slider', { name: 'Tariff event probability' })).toHaveValue('1000');
   await page.getByRole('button', { name: 'Create decision memo' }).click();
   await expect(page.getByTestId('decision-memo')).toContainText('$119,100');

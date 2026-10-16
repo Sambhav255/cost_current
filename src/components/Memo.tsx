@@ -1,3 +1,4 @@
+import ForecastMemo from './ForecastMemo';
 import { ArrowLeft, Download, Printer, RefreshCw } from 'lucide-react';
 import { decisionDate } from '../lib/engine';
 import { costCategories, inclusionLabels, otherCosts } from '../lib/ledger';
@@ -8,17 +9,19 @@ import {
   hasCustomerEvidence,
 } from '../lib/evidence';
 import { dateLabel, percent, usd } from '../lib/format';
-import type { MemoSnapshot } from '../lib/types';
+import type { ForecastMemoSnapshot, MemoSnapshot } from '../lib/types';
 import { Brand, Eyebrow } from './ui';
 export default function Memo({
   snapshot,
   onBack,
   onRefresh,
 }: {
-  snapshot: MemoSnapshot;
+  snapshot: MemoSnapshot | ForecastMemoSnapshot;
   onBack: () => void;
   onRefresh: () => void;
 }) {
+  if (snapshot.mode === 'forecast')
+    return <ForecastMemo snapshot={snapshot} onBack={onBack} onRefresh={onRefresh} />;
   const { shipment: s, route: r, analysis: a, timestamp } = snapshot;
   const early = a.actions[1];
   const sourceNotes = [
@@ -77,7 +80,7 @@ export default function Memo({
           <Brand small />
           <div>
             <span>SHIPMENT DECISION MEMO</span>
-            <small>ILLUSTRATIVE SCENARIO · NOT A LIVE FORECAST</small>
+            <small>WHAT IF? · NOT A LIVE FORECAST</small>
           </div>
         </header>
         <div className="memo-title">
@@ -99,6 +102,21 @@ export default function Memo({
             </span>
           </div>
         </div>
+        <p className="memo-provenance">
+          Forecast context: {snapshot.forecast?.status ?? 'unavailable'} · as of{' '}
+          {snapshot.forecast?.asOf ?? decisionDate(s)} ·{' '}
+          {snapshot.forecast?.modelId ?? 'no provider'} v{snapshot.forecast?.modelVersion ?? 'n/a'}.
+          Automatic event odds unavailable; manual tariff/freight odds{' '}
+          {percent(s.tariffProbabilityBps / 10000)} / {percent(s.freightProbabilityBps / 10000)}.
+          {s.scenarioOverride && (
+            <>
+              {' '}
+              Saved override; original scenario odds{' '}
+              {percent(s.scenarioOverride.originalTariffBps / 10000)} /{' '}
+              {percent(s.scenarioOverride.originalFreightBps / 10000)}.
+            </>
+          )}
+        </p>
         <div className="memo-summary">
           <div>
             <span>BASE MODELED COST</span>

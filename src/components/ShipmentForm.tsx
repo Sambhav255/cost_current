@@ -10,8 +10,10 @@ export default function ShipmentForm({
   s,
   update,
   onAnalyze,
+  manualMode = true,
 }: {
   s: Shipment;
+  manualMode?: boolean;
   update: UpdateShipment;
   onAnalyze: () => void;
 }) {
@@ -298,50 +300,53 @@ export default function ShipmentForm({
           </span>
         </div>
       </section>
-      <section className="panel form-panel">
-        <SectionHeading
-          number="04"
-          title="Hypothetical events"
-          description="Explicit assumptions, not live odds or model predictions."
-        />
-        <div className="form-grid">
-          <Field label="Tariff event probability">
-            <NumberInput
-              label="Tariff event probability"
-              value={s.tariffProbabilityBps / 100}
-              onChange={(v) => update('tariffProbabilityBps', Math.round(v * 100))}
-              suffix="%"
-              max={100}
-            />
-          </Field>
-          <Field label="Hypothetical tariff increase">
-            <NumberInput
-              label="Hypothetical tariff increase"
-              value={s.tariffIncreaseBps / 100}
-              onChange={(v) => update('tariffIncreaseBps', Math.round(v * 100))}
-              suffix="pp"
-              max={1000}
-            />
-          </Field>
-          <Field label="Freight event probability">
-            <NumberInput
-              label="Freight event probability"
-              value={s.freightProbabilityBps / 100}
-              onChange={(v) => update('freightProbabilityBps', Math.round(v * 100))}
-              suffix="%"
-              max={100}
-            />
-          </Field>
-          <Field label="Hypothetical freight surcharge">
-            <NumberInput
-              label="Hypothetical freight surcharge"
-              value={s.surchargeCents / 100}
-              onChange={(v) => update('surchargeCents', Math.round(v * 100))}
-              prefix="$"
-            />
-          </Field>
-        </div>
-      </section>
+      {manualMode && (
+        <section className="panel form-panel">
+          <SectionHeading
+            number="04"
+            title="Hypothetical events"
+            description="Explicit assumptions, not live odds or model predictions."
+          />
+          <div className="form-grid">
+            <Field label="Tariff event probability">
+              <NumberInput
+                label="Tariff event probability"
+                value={s.tariffProbabilityBps / 100}
+                onChange={(v) => update('tariffProbabilityBps', Math.round(v * 100))}
+                suffix="%"
+                max={100}
+              />
+            </Field>
+            <Field label="Hypothetical tariff increase">
+              <NumberInput
+                label="Hypothetical tariff increase"
+                value={s.tariffIncreaseBps / 100}
+                onChange={(v) => update('tariffIncreaseBps', Math.round(v * 100))}
+                suffix="pp"
+                max={1000}
+              />
+            </Field>
+            <Field label="Freight event probability">
+              <NumberInput
+                label="Freight event probability"
+                value={s.freightProbabilityBps / 100}
+                onChange={(v) => update('freightProbabilityBps', Math.round(v * 100))}
+                suffix="%"
+                max={100}
+              />
+            </Field>
+            <Field label="Hypothetical freight surcharge">
+              <NumberInput
+                label="Hypothetical freight surcharge"
+                value={s.surchargeCents / 100}
+                onChange={(v) => update('surchargeCents', Math.round(v * 100))}
+                prefix="$"
+              />
+            </Field>
+          </div>
+        </section>
+      )}
+      <p className="field-hint">Event probabilities are editable only in What if? mode.</p>
       <button className="button primary" onClick={onAnalyze}>
         Review cost & decisions <ArrowRight size={16} />
       </button>
